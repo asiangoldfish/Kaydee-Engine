@@ -1,0 +1,10 @@
+# Build
+bin/
+build/
+intermediate/
+Makefile
+
+# Microsoft
+.vs/
+.vscode/
+*.user

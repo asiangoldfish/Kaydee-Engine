@@ -3,15 +3,17 @@
 
 #include "Event.h"
 
-#include <sstream>
+#include "kdpch.h"
 
-namespace Kaydee
-{
+namespace Kaydee {
     class WindowResizeEvent : public Kaydee::Event
     {
-    public:
+      public:
         WindowResizeEvent(unsigned int width, unsigned int height)
-            : width(width), height(height) {}
+          : width(width)
+          , height(height)
+        {
+        }
 
         inline unsigned int getWidth() const { return width; }
         inline unsigned int getHeight() const { return height; }
@@ -25,14 +27,14 @@ namespace Kaydee
 
         EVENT_CLASS_TYPE(WindowResize);
         EVENT_CLASS_CATEGORY(EventCategoryApplication)
-    
-    private:
+
+      private:
         int width, height;
     };
 
     class WindowCloseEvent : public Event
     {
-    public:
+      public:
         WindowCloseEvent() {}
 
         EVENT_CLASS_TYPE(WindowClose)
@@ -41,7 +43,7 @@ namespace Kaydee
 
     class AppTickEvent : public Event
     {
-    public:
+      public:
         AppTickEvent() {}
 
         EVENT_CLASS_TYPE(AppTick)
@@ -50,7 +52,7 @@ namespace Kaydee
 
     class AppUpdateEvent : public Event
     {
-    public:
+      public:
         AppUpdateEvent() {}
 
         EVENT_CLASS_TYPE(AppUpdate)
@@ -59,7 +61,7 @@ namespace Kaydee
 
     class AppRenderEvent : public Event
     {
-    public:
+      public:
         AppRenderEvent() {}
 
         EVENT_CLASS_TYPE(AppRender)

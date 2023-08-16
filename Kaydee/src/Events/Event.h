@@ -3,8 +3,7 @@
 
 #include "Core/Core.h"
 
-#include <string>
-#include <functional>
+#include "kdpch.h"
 
 namespace Kaydee
 {

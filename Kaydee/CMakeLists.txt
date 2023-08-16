@@ -3,10 +3,12 @@ set(MODULE_NAME Engine)
 ####################
 ### Source files ###
 ####################
-set(MODULE_CORE src/Core)
-set(MODULE_EVENTS src/Events)
+set(MODULE_CORE     ${CMAKE_CURRENT_SOURCE_DIR}/src/Core)
+set(MODULE_EVENTS   ${CMAKE_CURRENT_SOURCE_DIR}/src/Events)
 
 add_library(${MODULE_NAME} SHARED
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/kdpch.h
+
     ${MODULE_CORE}/Core.h
 
     ${MODULE_CORE}/Log.h            ${MODULE_CORE}/Log.cpp
@@ -24,6 +26,10 @@ target_include_directories(${MODULE_NAME} PRIVATE
     src
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include
 
+)
+
+target_precompile_headers(${MODULE_NAME} PRIVATE 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/kdpch.h
 )
 
 find_package(spdlog REQUIRED)

@@ -6,7 +6,7 @@ set(MODULE_NAME Engine)
 set(MODULE_CORE     ${CMAKE_CURRENT_SOURCE_DIR}/src/Core)
 set(MODULE_EVENTS   ${CMAKE_CURRENT_SOURCE_DIR}/src/Events)
 
-add_library(${MODULE_NAME} SHARED
+add_library(${MODULE_NAME} STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/kdpch.h
 
     ${MODULE_CORE}/Core.h
@@ -24,16 +24,28 @@ add_library(${MODULE_NAME} SHARED
 
 target_include_directories(${MODULE_NAME} PRIVATE
     src
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include
-
+    #${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include
 )
 
 target_precompile_headers(${MODULE_NAME} PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/src/kdpch.h
 )
 
-find_package(spdlog REQUIRED)
+####################
+### Dependencies ###
+####################
+
+# GLFW
+add_subdirectory(vendor/glfw)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Build GLFW example programs")
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "Build GLFW test programs")
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "Build GLFW documentation")
+set(GLFW_INSTALL OFF CACHE BOOL "Generate installation target")
+
+# spdlog
+add_subdirectory(vendor/spdlog)
 
 target_link_libraries(${MODULE_NAME} PRIVATE
-    spdlog::spdlog
+    spdlog
+    glfw
 )

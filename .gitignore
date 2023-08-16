@@ -1,10 +1,10 @@
 # Build
+Makefile
 bin/
 build/
 intermediate/
-Makefile
+compile_commands/
 
 # Microsoft
 .vs/
-.vscode/
 *.user

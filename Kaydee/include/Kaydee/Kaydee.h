@@ -3,9 +3,10 @@
 
 // For use by Kaydee applications
 
-#include "core/Application.h"
+#include "Core/Application.h"
+#include "Core/Log.h"
 
 // Entry point
-#include "core/EntryPoint.h"
+#include "Core/EntryPoint.h"
 
 #endif

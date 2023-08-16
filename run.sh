@@ -6,4 +6,6 @@
     exit; \
 }
 
-premake5 gmake2 && make && ./bin/Debug-linux-x86_64/Sandbox/Sandbox
+clear
+
+premake5 gmake2 && premake5 export-compile-commands # && make && ./bin/Debug-linux-x86_64/Sandbox/Sandbox

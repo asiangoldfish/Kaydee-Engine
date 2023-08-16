@@ -1,4 +1,4 @@
-#include <Kaydee.h>
+#include <Kaydee/Kaydee.h>
 
 class Sandbox : public Kaydee::Application
 {

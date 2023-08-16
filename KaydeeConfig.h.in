@@ -1,0 +1,2 @@
+#define KAYDEE_VERSION_MAJOR @kaydee-engine_VERSION_MAJOR@
+#define KAYDEE_VERSION_MINOR @kaydee-engine_VERSION_MINOR@

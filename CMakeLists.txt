@@ -73,5 +73,5 @@ set(BITSIZE 64)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${CMAKE_SYSTEM_NAME}${BITSIZE}/${CMAKE_BUILD_TYPE}")
 
 # Add subdirectories
-add_subdirectory(Kaydee)
+add_subdirectory(Engine)
 add_subdirectory(Sandbox)

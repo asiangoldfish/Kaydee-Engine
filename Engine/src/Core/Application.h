@@ -1,15 +1,20 @@
 #ifndef __APPLICATION_H__
 #define __APPLICATION_H__
 
-namespace Kaydee
-{
+#include "Core/Window.h"
+
+namespace Kaydee {
     class Application
     {
     public:
-        Application() = default;
-        virtual ~Application() = default;
+        Application();
+        virtual ~Application();
 
         void run();
+
+    private:
+        std::unique_ptr<Window> window;
+        bool running = true;
     };
 
     // To be defined in the client

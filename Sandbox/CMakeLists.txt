@@ -3,9 +3,9 @@ set(MODULE_NAME Sandbox)
 add_executable(${MODULE_NAME} src/SandboxApp.cpp)
 
 target_include_directories(${MODULE_NAME} PRIVATE
-    "${CMAKE_SOURCE_DIR}/Kaydee/include"
-    "${CMAKE_SOURCE_DIR}/Kaydee/src"
-    "${CMAKE_SOURCE_DIR}/Kaydee/vendor"
+    ${CMAKE_SOURCE_DIR}/Engine/include
+    ${CMAKE_SOURCE_DIR}/Engine/src
+    ${CMAKE_SOURCE_DIR}/Engine/vendor
 )
 
 find_package(spdlog REQUIRED)
@@ -16,4 +16,3 @@ target_link_libraries(${MODULE_NAME}
     PRIVATE spdlog::spdlog 
     PRIVATE Engine
 )
-

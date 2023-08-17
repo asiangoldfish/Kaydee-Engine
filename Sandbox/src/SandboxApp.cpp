@@ -3,18 +3,13 @@
 class Sandbox : public Kaydee::Application
 {
 public:
-    Sandbox()
-    {
+    Sandbox() {}
 
-    }
-
-    virtual ~Sandbox()
-    {
-
-    }
+    virtual ~Sandbox() {}
 };
 
-Kaydee::Application* Kaydee::createApplication()
+Kaydee::Application*
+Kaydee::createApplication()
 {
     return new Sandbox();
 }

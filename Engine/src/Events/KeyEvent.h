@@ -8,11 +8,11 @@
 namespace Kaydee {
     class KeyEvent : public Event
     {
-      public:
+    public:
         inline int getKeyCode() const { return keyCode; }
         EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 
-      protected:
+    protected:
         KeyEvent(int keyCode)
           : keyCode(keyCode)
         {
@@ -23,7 +23,7 @@ namespace Kaydee {
 
     class KeyPressedEvent : public KeyEvent
     {
-      public:
+    public:
         KeyPressedEvent(int keyCode, int repeatCount)
           : KeyEvent(keyCode)
           , repeatCount(repeatCount)
@@ -43,13 +43,13 @@ namespace Kaydee {
 
         EVENT_CLASS_TYPE(KeyPressed)
 
-      private:
+    private:
         int repeatCount;
     };
 
     class KeyReleasedEvent : public KeyEvent
     {
-      public:
+    public:
         KeyReleasedEvent(int keyCode, int repeatCode)
           : KeyEvent(keyCode)
         {
@@ -61,6 +61,8 @@ namespace Kaydee {
             ss << "KeyReleasedEvent: " << keyCode;
             return ss.str();
         }
+
+        EVENT_CLASS_TYPE(KeyReleased)
     };
 }
 

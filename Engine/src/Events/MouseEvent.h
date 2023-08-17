@@ -8,7 +8,7 @@
 namespace Kaydee {
     class MouseMovedEvent : public Event
     {
-      public:
+    public:
         MouseMovedEvent(float x, float y)
           : mouseX(x)
           , mouseY(y)
@@ -27,13 +27,13 @@ namespace Kaydee {
         EVENT_CLASS_TYPE(MouseMoved);
         EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 
-      private:
+    private:
         float mouseX, mouseY;
     };
 
     class MouseScrolledEvent : public Event
     {
-      public:
+    public:
         MouseScrolledEvent(float offsetX, float offsetY)
           : offsetX(offsetX)
           , offsetY(offsetY)
@@ -51,17 +51,22 @@ namespace Kaydee {
             return ss.str();
         }
 
-      private:
+        EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+        EVENT_CLASS_TYPE(MouseScrolled);
+
+    private:
         float offsetX, offsetY;
     };
 
     class MouseButtonEvent : public Event
     {
-      public:
+    public:
         inline int getMouseButton() const { return button; }
-        EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 
-      protected:
+        EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+        EVENT_CLASS_TYPE(MouseButtonPressed);
+
+    protected:
         MouseButtonEvent(int button)
           : button(button)
         {
@@ -72,7 +77,7 @@ namespace Kaydee {
 
     class MouseButtonPressedEvent : public MouseButtonEvent
     {
-      public:
+    public:
         MouseButtonPressedEvent(int button)
           : MouseButtonEvent(button)
         {
@@ -90,13 +95,18 @@ namespace Kaydee {
 
     class MouseButtonReleasedEvent : public MouseButtonEvent
     {
-      public:
+    public:
         MouseButtonReleasedEvent(int button)
           : MouseButtonEvent(button)
         {
         }
 
-        std::string toString() const override { std::stringstream ss; }
+        std::string toString() const override
+        {
+            std::stringstream ss;
+            ss << "MouseButtonReleasedEvent: " << button;
+            return ss.str();
+        }
 
         EVENT_CLASS_TYPE(MouseButtonReleased)
     };

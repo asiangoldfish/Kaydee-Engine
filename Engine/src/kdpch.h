@@ -13,4 +13,6 @@
 #include <unordered_set>
 #include <vector>
 
+#include "Core/Log.h"
+
 #endif

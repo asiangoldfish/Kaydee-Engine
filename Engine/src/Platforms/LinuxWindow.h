@@ -14,17 +14,17 @@ namespace Kaydee {
         void onUpdate() override;
         inline unsigned int getWidth() const override
         {
-            return windowData.Width;
+            return windowData.width;
         }
         inline unsigned int getHeight() const override
         {
-            return windowData.Height;
+            return windowData.height;
         }
 
         // Window attributes
         inline void setEventCallback(const EventCallbackFn& callback) override
         {
-            windowData.EventCallback = callback;
+            windowData.eventCallback = callback;
         }
         void setVSync(bool enabled) override;
         bool isVSync() const override;
@@ -38,11 +38,11 @@ namespace Kaydee {
 
         struct WindowData
         {
-            std::string Title;
-            unsigned int Width, Height;
-            bool VSync;
+            std::string title;
+            unsigned int width, height;
+            bool vSync;
 
-            EventCallbackFn EventCallback;
+            EventCallbackFn eventCallback;
         };
 
         WindowData windowData;

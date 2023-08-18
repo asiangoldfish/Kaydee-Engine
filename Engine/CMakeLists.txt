@@ -34,9 +34,6 @@ add_library(${MODULE_NAME} SHARED
 
     # OpenGL
     ${MODULE_PLATFORMS}/OpenGL/ImGuiOpenGLRenderer.h ${MODULE_PLATFORMS}/OpenGL/ImGuiOpenGLRenderer.cpp
-
-    # ImGui Library
-    ${IMGUI_SOURCES}
     
     # Imgui
     ${MODULE_IMGUI}/ImGuiLayer.h    ${MODULE_IMGUI}/ImGuiLayer.cpp

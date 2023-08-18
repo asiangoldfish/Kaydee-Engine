@@ -43,28 +43,46 @@ target_precompile_headers(${MODULE_NAME} PRIVATE
 ####################
 ### Dependencies ###
 ####################
+set(VENDOR_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 
-# spdlog
-add_subdirectory(vendor/spdlog)
-target_compile_options(spdlog PRIVATE -fPIC)
+# Dear imgui
+set(IMGUI_SOURCE_DIR    ${VENDOR_DIR}/imgui)
+set(IMGUI_BACKENDS_DIR  ${IMGUI_SOURCE_DIR}/backends)
+set(GL3W_SOURCE_DIR     ${IMGUI_LIBS_DIR}/gl3w)
+set(GLFW_INCLUDE_DIR    ${IMGUI_LIBS_DIR}/glfw/include)
+set(GLFW_LIB            ${IMGUI_LIBS_DIR}/glfw/lib-vc2010-64/glfw3.lib)
 
-target_link_libraries(${MODULE_NAME} PUBLIC
-    spdlog
+set(IMGUI_SOURCES
+    ${IMGUI_SOURCE_DIR}/imgui_demo.cpp
+    ${IMGUI_SOURCE_DIR}/imgui_draw.cpp
+    ${IMGUI_SOURCE_DIR}/imgui_tables.cpp
+    ${IMGUI_SOURCE_DIR}/imgui.cpp
+    ${IMGUI_SOURCE_DIR}/imgui_widgets.cpp
+    ${IMGUI_BACKENDS_DIR}/imgui_impl_opengl3.cpp
+    ${IMGUI_BACKENDS_DIR}/imgui_impl_glfw.cpp
 )
 
-# GLFW
-add_subdirectory(vendor/glfw)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Build GLFW example programs")
-set(GLFW_BUILD_TESTS    OFF CACHE BOOL "Build GLFW test programs")
-set(GLFW_BUILD_DOCS     OFF CACHE BOOL "Build GLFW documentation")
-set(GLFW_INSTALL        OFF CACHE BOOL "Generate installation target")
-target_link_libraries(${MODULE_NAME} PUBLIC glfw)
+add_library(imgui STATIC ${IMGUI_SOURCES})
+target_include_directories(imgui PRIVATE
+    ${IMGUI_SOURCE_DIR}
+    ${IMGUI_BACKENDS_DIR}
+    ${GL3W_SOURCE_DIR}
+    ${GLFW_INCLUDE_DIR}
+)
 
-# OpenGL
+# Find dependencies
+
+find_package(spdlog REQUIRED)
+find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
-target_link_libraries(${MODULE_NAME} PUBLIC OpenGL::GL )
 
-# glad
 add_subdirectory(vendor/glad)
 add_compile_definitions(GLFW_INCLUDE_NONE)
-target_link_libraries(${MODULE_NAME} PUBLIC glad)
+
+target_link_libraries(${MODULE_NAME} PUBLIC 
+    glad
+    glfw
+    spdlog::spdlog
+    OpenGL::GL
+    imgui
+)

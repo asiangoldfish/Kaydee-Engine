@@ -1,6 +1,11 @@
 [submodule "Engine/vendor/spdlog"]
+	path = Engine/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
 	active = true
 [submodule "Engine/vendor/glfw"]
-	path = Kaydee/vendor/glfw
+	path = Engine/vendor/glfw
 	url = https://github.com/glfw/glfw
+[submodule "Engine/vendor/imgui"]
+	path = Engine/vendor/imgui
+	url = https://github.com/ocornut/imgui
+	active = true

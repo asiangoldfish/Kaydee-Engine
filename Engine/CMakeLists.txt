@@ -1,6 +1,8 @@
 set(MODULE_NAME Engine)
 project(${MODULE_NAME} VERSION 0.1.0 LANGUAGES CXX)
 
+add_compile_definitions(KD_ENABLE_ASSERTS)
+
 ####################
 ### Source files ###
 ####################
@@ -64,4 +66,5 @@ target_link_libraries(${MODULE_NAME} PUBLIC OpenGL::GL )
 
 # glad
 add_subdirectory(vendor/glad)
+add_compile_definitions(GLFW_INCLUDE_NONE)
 target_link_libraries(${MODULE_NAME} PUBLIC glad)

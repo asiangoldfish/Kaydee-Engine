@@ -26,18 +26,20 @@
         }                                                                      \
     }
 #else
+#include <csignal>
+
 #define KD_ASSERT(x, ...)                                                      \
     {                                                                          \
         if (!(x)) {                                                            \
             KD_ERROR("Assertion Failed: {0}", __VA_ARGS__);                    \
-            raise(SIGTRAP)                                                     \
+            raise(SIGTRAP);                                                    \
         }                                                                      \
     }
 #define KD_CORE_ASSERT(x, ...)                                                 \
     {                                                                          \
         if (!(x)) {                                                            \
             KD_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__);               \
-            raise(SIGTRAP)                                                     \
+            raise(SIGTRAP);                                                    \
         }                                                                      \
     }
 #endif

@@ -8,9 +8,15 @@ public:
     {
     }
 
-    void onUpdate() override { KD_INFO("ExampleLayer::Update"); }
+    void onUpdate() override
+    {
+        // KD_INFO("ExampleLayer::Update");
+    }
 
-    void onEvent(Kaydee::Event& event) override { KD_TRACE("{0}", event); }
+    void onEvent(Kaydee::Event& event) override
+    {
+        // KD_TRACE("{0}", event);
+    }
 };
 
 class Sandbox : public Kaydee::Application

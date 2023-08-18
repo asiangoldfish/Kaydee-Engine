@@ -6,6 +6,8 @@
 #include "Events/MouseEvent.h"
 #include "kdpch.h"
 
+#include <glad/glad.h>
+
 namespace Kaydee {
     static bool glfwInitialized = false;
 
@@ -54,6 +56,8 @@ namespace Kaydee {
                                   nullptr,
                                   nullptr);
         glfwMakeContextCurrent(window);
+        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        KD_CORE_ASSERT(status, "Failed to initialize Glad!");
         glfwSetWindowUserPointer(window, &windowData);
         setVSync(true);
 

@@ -42,21 +42,26 @@ target_precompile_headers(${MODULE_NAME} PRIVATE
 ### Dependencies ###
 ####################
 
-# GLFW
-add_subdirectory(vendor/glfw)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Build GLFW example programs")
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "Build GLFW test programs")
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "Build GLFW documentation")
-set(GLFW_INSTALL OFF CACHE BOOL "Generate installation target")
-
-find_package(OpenGL REQUIRED)
-
 # spdlog
 add_subdirectory(vendor/spdlog)
 target_compile_options(spdlog PRIVATE -fPIC)
 
 target_link_libraries(${MODULE_NAME} PUBLIC
     spdlog
-    glfw
-    OpenGL::GL
 )
+
+# GLFW
+add_subdirectory(vendor/glfw)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Build GLFW example programs")
+set(GLFW_BUILD_TESTS    OFF CACHE BOOL "Build GLFW test programs")
+set(GLFW_BUILD_DOCS     OFF CACHE BOOL "Build GLFW documentation")
+set(GLFW_INSTALL        OFF CACHE BOOL "Generate installation target")
+target_link_libraries(${MODULE_NAME} PUBLIC glfw)
+
+# OpenGL
+find_package(OpenGL REQUIRED)
+target_link_libraries(${MODULE_NAME} PUBLIC OpenGL::GL )
+
+# glad
+add_subdirectory(vendor/glad)
+target_link_libraries(${MODULE_NAME} PUBLIC glad)

@@ -14,6 +14,7 @@ add_library(${MODULE_NAME} SHARED
     # Precompiled header
     ${CMAKE_CURRENT_SOURCE_DIR}/src/kdpch.h
 
+    # Core
     ${MODULE_CORE}/Core.h
     ${MODULE_CORE}/Log.h            ${MODULE_CORE}/Log.cpp
     ${MODULE_CORE}/Application.h    ${MODULE_CORE}/Application.cpp
@@ -21,6 +22,7 @@ add_library(${MODULE_NAME} SHARED
     ${MODULE_CORE}/Layer.h          ${MODULE_CORE}/Layer.cpp
     ${MODULE_CORE}/LayerStack.h     ${MODULE_CORE}/LayerStack.cpp
 
+    # Events
     ${MODULE_EVENTS}/ApplicationEvent.h
     ${MODULE_EVENTS}/Event.h
     ${MODULE_EVENTS}/KeyEvent.h
@@ -28,7 +30,16 @@ add_library(${MODULE_NAME} SHARED
 
     # Window
     ${MODULE_CORE}/Window.h
-    ${MODULE_PLATFORMS}/LinuxWindow.h ${MODULE_PLATFORMS}/LinuxWindow.cpp
+    ${MODULE_PLATFORMS}/Linux/LinuxWindow.h ${MODULE_PLATFORMS}/Linux/LinuxWindow.cpp
+
+    # OpenGL
+    ${MODULE_PLATFORMS}/OpenGL/ImGuiOpenGLRenderer.h ${MODULE_PLATFORMS}/OpenGL/ImGuiOpenGLRenderer.cpp
+
+    # ImGui Library
+    ${IMGUI_SOURCES}
+    
+    # Imgui
+    ${MODULE_IMGUI}/ImGuiLayer.h    ${MODULE_IMGUI}/ImGuiLayer.cpp
 )
 
 target_include_directories(${MODULE_NAME} PRIVATE
@@ -43,35 +54,8 @@ target_precompile_headers(${MODULE_NAME} PRIVATE
 ####################
 ### Dependencies ###
 ####################
-set(VENDOR_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
-
-# Dear imgui
-set(IMGUI_SOURCE_DIR    ${VENDOR_DIR}/imgui)
-set(IMGUI_BACKENDS_DIR  ${IMGUI_SOURCE_DIR}/backends)
-set(GL3W_SOURCE_DIR     ${IMGUI_LIBS_DIR}/gl3w)
-set(GLFW_INCLUDE_DIR    ${IMGUI_LIBS_DIR}/glfw/include)
-set(GLFW_LIB            ${IMGUI_LIBS_DIR}/glfw/lib-vc2010-64/glfw3.lib)
-
-set(IMGUI_SOURCES
-    ${IMGUI_SOURCE_DIR}/imgui_demo.cpp
-    ${IMGUI_SOURCE_DIR}/imgui_draw.cpp
-    ${IMGUI_SOURCE_DIR}/imgui_tables.cpp
-    ${IMGUI_SOURCE_DIR}/imgui.cpp
-    ${IMGUI_SOURCE_DIR}/imgui_widgets.cpp
-    ${IMGUI_BACKENDS_DIR}/imgui_impl_opengl3.cpp
-    ${IMGUI_BACKENDS_DIR}/imgui_impl_glfw.cpp
-)
-
-add_library(imgui STATIC ${IMGUI_SOURCES})
-target_include_directories(imgui PRIVATE
-    ${IMGUI_SOURCE_DIR}
-    ${IMGUI_BACKENDS_DIR}
-    ${GL3W_SOURCE_DIR}
-    ${GLFW_INCLUDE_DIR}
-)
 
 # Find dependencies
-
 find_package(spdlog REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -84,5 +68,4 @@ target_link_libraries(${MODULE_NAME} PUBLIC
     glfw
     spdlog::spdlog
     OpenGL::GL
-    imgui
 )

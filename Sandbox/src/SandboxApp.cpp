@@ -11,6 +11,9 @@ public:
     void onUpdate() override
     {
         // KD_INFO("ExampleLayer::Update");
+        if (Kaydee::Input::isKeyPressed(KD_KEY_TAB)) {
+            KD_TRACE("Tab key is pressed (poll)!");
+        }
     }
 
     void onEvent(Kaydee::Event& event) override
@@ -22,7 +25,11 @@ public:
 class Sandbox : public Kaydee::Application
 {
 public:
-    Sandbox() { pushLayer(new ExampleLayer()); }
+    Sandbox()
+    {
+        pushLayer(new ExampleLayer());
+        pushOverlay(new Kaydee::ImGuiLayer());
+    }
 
     virtual ~Sandbox() {}
 };

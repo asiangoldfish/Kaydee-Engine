@@ -22,6 +22,12 @@ namespace Kaydee {
         void pushLayer(Layer* layer);
         void pushOverlay(Layer* overlay);
 
+        // Window
+        inline Window& getWindow() { return *window; }
+
+        // Singleton
+        inline static Application& get() { return *instance; }
+
     private:
         bool onWindowClose(WindowCloseEvent& e);
 
@@ -31,6 +37,8 @@ namespace Kaydee {
 
         // Application owns layer stack
         LayerStack layerStack;
+
+        static Application* instance;
     };
 
     // To be defined in the client

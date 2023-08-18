@@ -40,6 +40,9 @@ namespace Kaydee {
         virtual void setVSync(bool enabled) = 0;
         virtual bool isVSync() const = 0;
 
+        // Return GLFW window pointer (can be any other API)
+        virtual void* getNativeWindow() const = 0;
+
         static Window* create(const WindowProps& props = WindowProps());
     };
 }

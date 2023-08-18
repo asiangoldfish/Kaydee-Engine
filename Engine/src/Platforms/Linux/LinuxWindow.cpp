@@ -78,6 +78,13 @@ namespace Kaydee {
             data.eventCallback(event);
         });
 
+        glfwSetCharCallback(
+          window, [](GLFWwindow* window, unsigned int keycode) {
+              WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+              KeyTypedEvent event(keycode);
+              data.eventCallback(event);
+          });
+
         glfwSetKeyCallback(
           window,
           [](GLFWwindow* window, int key, int scancode, int action, int mods) {

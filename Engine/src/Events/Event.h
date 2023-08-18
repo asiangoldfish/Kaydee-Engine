@@ -2,8 +2,8 @@
 #define __KAYDEE_EVENT_H__
 
 #include "Core/Core.h"
-#include <functional>
 #include "kdpch.h"
+#include <functional>
 
 namespace Kaydee {
     enum class EventType
@@ -19,6 +19,7 @@ namespace Kaydee {
         AppRender,
         KeyPressed,
         KeyReleased,
+        KeyTyped,
         MouseButtonPressed,
         MouseButtonReleased,
         MouseMoved,

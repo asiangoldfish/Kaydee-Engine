@@ -9,6 +9,7 @@ add_compile_definitions(KD_ENABLE_ASSERTS)
 set(MODULE_CORE     ${CMAKE_CURRENT_SOURCE_DIR}/src/Core)
 set(MODULE_EVENTS   ${CMAKE_CURRENT_SOURCE_DIR}/src/Events)
 set(MODULE_PLATFORMS   ${CMAKE_CURRENT_SOURCE_DIR}/src/Platforms)
+set(MODULE_IMGUI    ${CMAKE_CURRENT_SOURCE_DIR}/src/ImGui)
 
 add_library(${MODULE_NAME} SHARED
     # Precompiled header
@@ -21,6 +22,7 @@ add_library(${MODULE_NAME} SHARED
     ${MODULE_CORE}/EntryPoint.h
     ${MODULE_CORE}/Layer.h          ${MODULE_CORE}/Layer.cpp
     ${MODULE_CORE}/LayerStack.h     ${MODULE_CORE}/LayerStack.cpp
+    ${MODULE_CORE}/Input.h
 
     # Events
     ${MODULE_EVENTS}/ApplicationEvent.h
@@ -28,14 +30,16 @@ add_library(${MODULE_NAME} SHARED
     ${MODULE_EVENTS}/KeyEvent.h
     ${MODULE_EVENTS}/MouseEvent.h
 
-    # Window
+    # OS
     ${MODULE_CORE}/Window.h
     ${MODULE_PLATFORMS}/Linux/LinuxWindow.h ${MODULE_PLATFORMS}/Linux/LinuxWindow.cpp
+    ${MODULE_PLATFORMS}/Linux/LinuxInput.h  ${MODULE_PLATFORMS}/Linux/LinuxInput.cpp
 
     # OpenGL
     ${MODULE_PLATFORMS}/OpenGL/ImGuiOpenGLRenderer.h ${MODULE_PLATFORMS}/OpenGL/ImGuiOpenGLRenderer.cpp
     
     # Imgui
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui # Lib
     ${MODULE_IMGUI}/ImGuiLayer.h    ${MODULE_IMGUI}/ImGuiLayer.cpp
 )
 
@@ -60,9 +64,14 @@ find_package(OpenGL REQUIRED)
 add_subdirectory(vendor/glad)
 add_compile_definitions(GLFW_INCLUDE_NONE)
 
+add_subdirectory(vendor/imgui)
+add_compile_definitions(IMGUI_IMPL_OPENGL_LOADER_CUSTOM)
+target_compile_options(imgui PRIVATE -fPIC)
+
 target_link_libraries(${MODULE_NAME} PUBLIC 
     glad
     glfw
     spdlog::spdlog
     OpenGL::GL
+    imgui
 )

@@ -86,5 +86,6 @@
         "CMAKE_GENERATOR": "Unix Makefiles"
     },
     "cmake.configureArgs": [],
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "mesonbuild.configureOnOpen": false
 }

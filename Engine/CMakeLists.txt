@@ -61,12 +61,17 @@ find_package(spdlog REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
+# glad
 add_subdirectory(vendor/glad)
 add_compile_definitions(GLFW_INCLUDE_NONE)
 
+# ImGui
 add_subdirectory(vendor/imgui)
 add_compile_definitions(IMGUI_IMPL_OPENGL_LOADER_CUSTOM)
 target_compile_options(imgui PRIVATE -fPIC)
+
+# glm
+add_subdirectory(vendor/glm)
 
 target_link_libraries(${MODULE_NAME} PUBLIC 
     glad
@@ -74,4 +79,5 @@ target_link_libraries(${MODULE_NAME} PUBLIC
     spdlog::spdlog
     OpenGL::GL
     imgui
+    glm
 )

@@ -6,22 +6,23 @@ add_compile_definitions(KD_ENABLE_ASSERTS)
 ####################
 ### Source files ###
 ####################
-set(MODULE_CORE     ${CMAKE_CURRENT_SOURCE_DIR}/src/Core)
-set(MODULE_EVENTS   ${CMAKE_CURRENT_SOURCE_DIR}/src/Events)
-set(MODULE_PLATFORMS   ${CMAKE_CURRENT_SOURCE_DIR}/src/Platforms)
-set(MODULE_IMGUI    ${CMAKE_CURRENT_SOURCE_DIR}/src/ImGui)
+set(MODULE_CORE         ${CMAKE_CURRENT_SOURCE_DIR}/src/Core)
+set(MODULE_EVENTS       ${CMAKE_CURRENT_SOURCE_DIR}/src/Events)
+set(MODULE_PLATFORMS    ${CMAKE_CURRENT_SOURCE_DIR}/src/Platforms)
+set(MODULE_IMGUI        ${CMAKE_CURRENT_SOURCE_DIR}/src/ImGui)
+set(MODULE_VENDOR       ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 
-add_library(${MODULE_NAME} SHARED
+add_library(${MODULE_NAME} STATIC
     # Precompiled header
     ${CMAKE_CURRENT_SOURCE_DIR}/src/kdpch.h
 
     # Core
     ${MODULE_CORE}/Core.h
-    ${MODULE_CORE}/Log.h            ${MODULE_CORE}/Log.cpp
-    ${MODULE_CORE}/Application.h    ${MODULE_CORE}/Application.cpp
+    ${MODULE_CORE}/Log.h                                    ${MODULE_CORE}/Log.cpp
+    ${MODULE_CORE}/Application.h                            ${MODULE_CORE}/Application.cpp
     ${MODULE_CORE}/EntryPoint.h
-    ${MODULE_CORE}/Layer.h          ${MODULE_CORE}/Layer.cpp
-    ${MODULE_CORE}/LayerStack.h     ${MODULE_CORE}/LayerStack.cpp
+    ${MODULE_CORE}/Layer.h                                  ${MODULE_CORE}/Layer.cpp
+    ${MODULE_CORE}/LayerStack.h                             ${MODULE_CORE}/LayerStack.cpp
     ${MODULE_CORE}/Input.h
 
     # Events
@@ -32,20 +33,22 @@ add_library(${MODULE_NAME} SHARED
 
     # OS
     ${MODULE_CORE}/Window.h
-    ${MODULE_PLATFORMS}/Linux/LinuxWindow.h ${MODULE_PLATFORMS}/Linux/LinuxWindow.cpp
-    ${MODULE_PLATFORMS}/Linux/LinuxInput.h  ${MODULE_PLATFORMS}/Linux/LinuxInput.cpp
-
-    # OpenGL
-    ${MODULE_PLATFORMS}/OpenGL/ImGuiOpenGLRenderer.h ${MODULE_PLATFORMS}/OpenGL/ImGuiOpenGLRenderer.cpp
+    ${MODULE_PLATFORMS}/Linux/LinuxWindow.h                 ${MODULE_PLATFORMS}/Linux/LinuxWindow.cpp
+    ${MODULE_PLATFORMS}/Linux/LinuxInput.h                  ${MODULE_PLATFORMS}/Linux/LinuxInput.cpp
     
     # Imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui # Lib
-    ${MODULE_IMGUI}/ImGuiLayer.h    ${MODULE_IMGUI}/ImGuiLayer.cpp
+    ${MODULE_IMGUI}/ImGuiLayer.h                            ${MODULE_IMGUI}/ImGuiLayer.cpp
+    ${MODULE_IMGUI}/ImGuiBuild.cpp
+    
+    # Vendor
+    ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.h       ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.cpp
+    ${MODULE_VENDOR}/imgui/backends/imgui_impl_opengl3.h    ${MODULE_VENDOR}/imgui/backends/imgui_impl_opengl3.cpp
 )
 
 target_include_directories(${MODULE_NAME} PRIVATE
     src
-    #${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include
+    vendor
 )
 
 target_precompile_headers(${MODULE_NAME} PRIVATE 

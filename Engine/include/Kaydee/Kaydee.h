@@ -9,6 +9,7 @@
 
 // UI
 #include "ImGui/ImGuiLayer.h"
+#include <imgui/imgui.h>
 
 // Inputs
 #include "Core/Input.h"

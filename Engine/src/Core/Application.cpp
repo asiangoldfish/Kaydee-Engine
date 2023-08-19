@@ -19,6 +19,10 @@ namespace Kaydee {
 
         // Event callback
         window->setEventCallback(BIND_EVENT_FN(onEvent));
+
+        // ImGui
+        imguiLayer = new ImGuiLayer();
+        pushOverlay(imguiLayer);
     }
 
     Application::~Application() {}
@@ -33,8 +37,14 @@ namespace Kaydee {
                 layer->onUpdate();
             }
 
-            auto [x, y] = Input::getMousePosition();
-            // KD_CORE_TRACE("{0}, {1}", x, y);
+            imguiLayer->begin();
+            for (Layer* layer : layerStack) {
+                layer->onImGuiRender();
+            }
+            imguiLayer->end();
+
+            // auto [x, y] = Input::getMousePosition();
+            //  KD_CORE_TRACE("{0}, {1}", x, y);
 
             window->onUpdate();
         }

@@ -1,4 +1,11 @@
 {
+    "cmake.configureSettings": {
+        "CMAKE_BUILD_TYPE": "Debug", // Set your desired build type
+        "CMAKE_GENERATOR": "Unix Makefiles"
+    },
+    "cmake.configureArgs": [],
+    "editor.formatOnSave": true,
+    "mesonbuild.configureOnOpen": false,
     "files.associations": {
         "iostream": "cpp",
         "ostream": "cpp",
@@ -79,13 +86,7 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "valarray": "cpp",
-        "csignal": "cpp"
-    },
-    "cmake.configureSettings": {
-        "CMAKE_BUILD_TYPE": "Debug", // Set your desired build type
-        "CMAKE_GENERATOR": "Unix Makefiles"
-    },
-    "cmake.configureArgs": [],
-    "editor.formatOnSave": true,
-    "mesonbuild.configureOnOpen": false
+        "csignal": "cpp",
+        "*.ipp": "cpp"
+    }
 }

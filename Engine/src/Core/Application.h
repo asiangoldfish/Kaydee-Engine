@@ -6,6 +6,8 @@
 #include "Core/Window.h"
 #include "Events/ApplicationEvent.h"
 
+#include "ImGui/ImGuiLayer.h"
+
 namespace Kaydee {
     class Application
     {
@@ -34,6 +36,9 @@ namespace Kaydee {
     private:
         std::unique_ptr<Window> window;
         bool running = true;
+
+        // ImGui
+        ImGuiLayer* imguiLayer;
 
         // Application owns layer stack
         LayerStack layerStack;

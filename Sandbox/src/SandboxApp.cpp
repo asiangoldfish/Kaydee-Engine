@@ -1,4 +1,5 @@
 #include <Kaydee/Kaydee.h>
+#include <imgui/imgui.h>
 
 class ExampleLayer : public Kaydee::Layer
 {
@@ -20,16 +21,19 @@ public:
     {
         // KD_TRACE("{0}", event);
     }
+
+    virtual void onImGuiRender() override
+    {
+        ImGui::Begin("Test");
+        ImGui::Text("Hello World");
+        ImGui::End();
+    }
 };
 
 class Sandbox : public Kaydee::Application
 {
 public:
-    Sandbox()
-    {
-        pushLayer(new ExampleLayer());
-        pushOverlay(new Kaydee::ImGuiLayer());
-    }
+    Sandbox() { pushLayer(new ExampleLayer()); }
 
     virtual ~Sandbox() {}
 };

@@ -16,21 +16,10 @@ namespace Kaydee {
 
         virtual void onAttach() override;
         virtual void onDetach() override;
-        virtual void onUpdate() override;
-        virtual void onEvent(Event& e) override;
+        virtual void onImGuiRender() override;
 
         void begin();
         void end();
-
-    private:
-        bool OnMouseButtonPressedEvent(MouseButtonPressedEvent& e);
-        bool OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& e);
-        bool OnMouseMovedEvent(MouseMovedEvent& e);
-        bool OnMouseScrolledEvent(MouseScrolledEvent& e);
-        bool OnKeyPressedEvent(KeyPressedEvent& e);
-        bool OnKeyReleasedEvent(KeyReleasedEvent& e);
-        bool OnKeyTypedEvent(KeyTypedEvent& e);
-        bool OnWindowResizeEvent(WindowResizeEvent& e);
 
     private:
         float time;

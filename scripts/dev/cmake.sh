@@ -45,7 +45,7 @@ function cmake_run() {
     BUILDDIR="$DIRPATH/build"
 
     cd "$BUILDDIR"
-    make && ./src/out
+    make && "$OUT"
 }
 
 ####

@@ -2,6 +2,7 @@
 
 DIRPATH="$( echo "$PWD" )"
 SCRIPTS="$DIRPATH/scripts/dev"
+OUT="$DIRPATH/build/bin/Linux64/Debug/Sandbox"
 
 # Imports
 source "$SCRIPTS/help.sh"

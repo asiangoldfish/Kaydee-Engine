@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIRPATH="$( echo "$PWD" )"
-SCRIPTS="$DIRPATH/tools/development_scripts"
+SCRIPTS="$DIRPATH/scripts/dev"
 
 # Imports
 source "$SCRIPTS/help.sh"

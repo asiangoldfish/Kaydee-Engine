@@ -8,8 +8,9 @@ add_compile_definitions(KD_ENABLE_ASSERTS)
 ####################
 set(MODULE_CORE         ${CMAKE_CURRENT_SOURCE_DIR}/src/Core)
 set(MODULE_EVENTS       ${CMAKE_CURRENT_SOURCE_DIR}/src/Events)
-set(MODULE_PLATFORMS    ${CMAKE_CURRENT_SOURCE_DIR}/src/Platforms)
 set(MODULE_IMGUI        ${CMAKE_CURRENT_SOURCE_DIR}/src/ImGui)
+set(MODULE_PLATFORMS    ${CMAKE_CURRENT_SOURCE_DIR}/src/Platforms)
+set(MODULE_RENDERER     ${CMAKE_CURRENT_SOURCE_DIR}/src/Renderer)
 set(MODULE_VENDOR       ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 
 add_library(${MODULE_NAME} STATIC
@@ -25,21 +26,26 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_CORE}/LayerStack.h                             ${MODULE_CORE}/LayerStack.cpp
     ${MODULE_CORE}/Input.h
 
+    ${MODULE_CORE}/Window.h
+    
     # Events
     ${MODULE_EVENTS}/ApplicationEvent.h
     ${MODULE_EVENTS}/Event.h
     ${MODULE_EVENTS}/KeyEvent.h
     ${MODULE_EVENTS}/MouseEvent.h
 
-    # OS
-    ${MODULE_CORE}/Window.h
+    # Platforms
     ${MODULE_PLATFORMS}/Linux/LinuxWindow.h                 ${MODULE_PLATFORMS}/Linux/LinuxWindow.cpp
     ${MODULE_PLATFORMS}/Linux/LinuxInput.h                  ${MODULE_PLATFORMS}/Linux/LinuxInput.cpp
-    
+    ${MODULE_PLATFORMS}/OpenGL/OpenGLContext.h              ${MODULE_PLATFORMS}/OpenGL/OpenGLContext.cpp
+
     # Imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui # Lib
     ${MODULE_IMGUI}/ImGuiLayer.h                            ${MODULE_IMGUI}/ImGuiLayer.cpp
     ${MODULE_IMGUI}/ImGuiBuild.cpp
+
+    # Renderer
+    ${MODULE_RENDERER}/GraphicsContext.h                    ${MODULE_RENDERER}/GraphicsContext.cpp
     
     # Vendor
     ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.h       ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.cpp

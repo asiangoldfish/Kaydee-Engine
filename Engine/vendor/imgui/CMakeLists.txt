@@ -1,4 +1,3 @@
-cmake_minimum_required(VERSION 3.27)
 project(imgui)
 
 file(GLOB IMGUI_SOURCE_FILES

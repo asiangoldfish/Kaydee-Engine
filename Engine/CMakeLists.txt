@@ -67,9 +67,13 @@ target_precompile_headers(${MODULE_NAME} PRIVATE
 ####################
 
 # Find dependencies
-find_package(spdlog REQUIRED)
-find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
+
+# spdlog
+add_subdirectory(vendor/spdlog)
+
+# glfw
+add_subdirectory(vendor/glfw)
 
 # glad
 add_subdirectory(vendor/glad)
@@ -86,7 +90,7 @@ add_subdirectory(vendor/glm)
 target_link_libraries(${MODULE_NAME} PUBLIC 
     glad
     glfw
-    spdlog::spdlog
+    spdlog
     OpenGL::GL
     imgui
     glm

@@ -8,3 +8,6 @@ compile_commands/
 # Microsoft
 .vs/
 *.user
+
+# Doxygen
+doxygen-docs

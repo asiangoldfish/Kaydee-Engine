@@ -8,6 +8,9 @@
 
 #include "ImGui/ImGuiLayer.h"
 
+// Temporary
+#include "Renderer/Shader.h"
+
 namespace Kaydee {
     class Application
     {
@@ -20,7 +23,7 @@ namespace Kaydee {
         // Events
         void onEvent(Event& e);
 
-        // Layers
+        // Layersand there's to go about it
         void pushLayer(Layer* layer);
         void pushOverlay(Layer* overlay);
 
@@ -43,7 +46,11 @@ namespace Kaydee {
         // Application owns layer stack
         LayerStack layerStack;
 
+        std::unique_ptr<Shader> shader;
+
         static Application* instance;
+
+        unsigned int vertexArray, vertexBuffer, indexBuffer;
     };
 
     // To be defined in the client

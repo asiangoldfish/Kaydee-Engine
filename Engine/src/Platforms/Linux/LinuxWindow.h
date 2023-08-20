@@ -2,6 +2,8 @@
 #define __LINUX__WINDOW_H__
 
 #include "Core/Window.h"
+#include "Renderer/GraphicsContext.h"
+
 #include <GLFW/glfw3.h>
 
 namespace Kaydee {
@@ -37,6 +39,7 @@ namespace Kaydee {
 
     private:
         GLFWwindow* window;
+        GraphicsContext* context;
 
         struct WindowData
         {

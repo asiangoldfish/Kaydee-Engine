@@ -1,12 +1,15 @@
 #include "Platforms/Linux/LinuxWindow.h"
+
 #include "Core/Core.h"
 #include "Core/Log.h"
+
 #include "Events/ApplicationEvent.h"
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
-#include "kdpch.h"
 
-#include <glad/glad.h>
+#include "Platforms/OpenGL/OpenGLContext.h"
+
+#include "kdpch.h"
 
 namespace Kaydee {
     static bool glfwInitialized = false;
@@ -28,6 +31,11 @@ namespace Kaydee {
 
     LinuxWindow::~LinuxWindow()
     {
+        if (context) {
+            delete context;
+            context = nullptr;
+        }
+
         shutdown();
     }
 
@@ -55,9 +63,10 @@ namespace Kaydee {
                                   windowData.title.c_str(),
                                   nullptr,
                                   nullptr);
-        glfwMakeContextCurrent(window);
-        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-        KD_CORE_ASSERT(status, "Failed to initialize Glad!");
+
+        context = new OpenGLContext(window);
+        context->init();
+
         glfwSetWindowUserPointer(window, &windowData);
         setVSync(true);
 
@@ -152,7 +161,7 @@ namespace Kaydee {
     void LinuxWindow::onUpdate()
     {
         glfwPollEvents();
-        glfwSwapBuffers(window);
+        context->swapBuffers();
     }
 
     void LinuxWindow::setVSync(bool enabled)

@@ -46,7 +46,8 @@ add_library(${MODULE_NAME} STATIC
 
     # Renderer
     ${MODULE_RENDERER}/GraphicsContext.h                    ${MODULE_RENDERER}/GraphicsContext.cpp
-    
+    ${MODULE_RENDERER}/Shader.h ${MODULE_RENDERER}/Shader.cpp
+
     # Vendor
     ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.h       ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.cpp
     ${MODULE_VENDOR}/imgui/backends/imgui_impl_opengl3.h    ${MODULE_VENDOR}/imgui/backends/imgui_impl_opengl3.cpp

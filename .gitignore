@@ -11,3 +11,6 @@ compile_commands/
 
 # Doxygen
 doxygen-docs
+
+# Clang
+.cache

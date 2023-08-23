@@ -51,8 +51,9 @@ namespace Kaydee {
 
         static Application* instance;
 
-        unsigned int vertexArray, indexBuffer;
+        unsigned int vertexArray;
         std::unique_ptr<VertexBuffer> vertexBuffer;
+        std::unique_ptr<IndexBuffer> indexBuffer;
     };
 
     // To be defined in the client

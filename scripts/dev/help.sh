@@ -7,23 +7,25 @@ if [  "$( basename "$0" )" == "help.sh" ]; then
 fi
 
 display_help() {
-    echo "Usage: ./create_module.sh [options]"
-    echo "Options:"
-    echo "  -b, --build                  Build the project"
-    echo "  -c, --clean                  Clean the build directory"
-    echo "  -cb, --clean-build           Clean and build the project"
-    echo "  --continuous-build           Automatically builds on change"
-    echo "  -d, --doxygen                Generate or update Doxygen documentation"
-    echo "  -do,--doxygen-open           Open Doxygen documentation in default browser"
-    echo "  --docs-local-server          Run local server developing the documentation website"
-    echo "  -h, --help                   Display this help page"
-    echo "  -n, --new-module             Create a new module"
-    echo "  -r, --run                    Compile and run the program"
-    echo ""
-    echo "Examples:"
-    echo "  ./create_module.sh -n             # Create a new module"
-    echo "  ./create_module.sh -d             # Generate or update Doxygen documentation"
-    echo "  ./create_module.sh --help -n      # Get help for the new-module command"
+    echo -n "Usage: ./create_module.sh [options]
+Options:
+  -b, --build                   Build the project
+  -c, --clean                   Clean the build directory
+  -cb, --clean-build            Clean and build the project
+  --continuous-build            Automatically builds on change
+  -d, --doxygen                 Generate or update Doxygen documentation
+  -do,--doxygen-open            Open Doxygen documentation in default browser
+  --docs-local-server           Run local server developing the documentation website
+  -h, --help                    Display this help page
+  -n, --new-module              Create a new module
+  -r, --run                     Compile and run the program
+        --gl-override-version   Override OpenGL version to 4.5
+
+Examples:
+  ./util.sh -n
+  ./util.sh -d
+  ./util.sh --help -n
+"
 }
 
 display_new_module_help() {
@@ -32,7 +34,7 @@ display_new_module_help() {
     echo "  -h, --help          Display help for the new-module command"
     echo ""
     echo "Examples:"
-    echo "  ./create_module.sh --new-module     # Create a new module"
+    echo "  ./util.sh --new-module     # Create a new module"
 }
 
 display_doxygen_help() {
@@ -41,5 +43,5 @@ display_doxygen_help() {
     echo "  -h, --help          Display help for the doxygen command"
     echo ""
     echo "Examples:"
-    echo "  ./create_module.sh --doxygen        # Generate or update Doxygen documentation"
+    echo "  ./util.sh --doxygen        # Generate or update Doxygen documentation"
 }

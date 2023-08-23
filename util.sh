@@ -76,7 +76,7 @@ while [ "$1" != "" ]; do
             ;;
         -r | --run )
             cmake_build &&
-            cmake_run &&
+            cmake_run "$2" &&
             exit 0
             ;;
         --continuous-build )

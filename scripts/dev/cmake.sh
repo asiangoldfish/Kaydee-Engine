@@ -44,6 +44,13 @@ function cmake_run() {
     local BUILDDIR
     BUILDDIR="$DIRPATH/build"
 
+    local override
+    override="$1"
+
+    if [ "$override" == "--gl-version-override" ]; then
+        export MESA_GL_VERSION_OVERRIDE=4.5
+    fi
+
     cd "$BUILDDIR"
     make && "$OUT"
 }

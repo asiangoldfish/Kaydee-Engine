@@ -10,6 +10,7 @@
 
 // Temporary
 #include "Renderer/Shader.h"
+#include "Renderer/Buffer.h"
 
 namespace Kaydee {
     class Application
@@ -50,7 +51,8 @@ namespace Kaydee {
 
         static Application* instance;
 
-        unsigned int vertexArray, vertexBuffer, indexBuffer;
+        unsigned int vertexArray, indexBuffer;
+        std::unique_ptr<VertexBuffer> vertexBuffer;
     };
 
     // To be defined in the client

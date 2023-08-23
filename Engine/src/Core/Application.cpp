@@ -31,18 +31,12 @@ namespace Kaydee {
         glGenVertexArrays(1, &vertexArray);
         glBindVertexArray(vertexArray);
 
-        // Vertex buffer
-        glGenBuffers(1, &vertexBuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-
         float vertices[3 * 3] = { -0.5f, -0.5f, 0.0f, 0.5f, -0.5f,
                                   0.0f,  0.0f,  0.5f, 0.0f };
 
-        // Shader
-        glBufferData(
-          GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        vertexBuffer.reset(VertexBuffer::create(vertices, sizeof(vertices)));
 
-        glad_glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(0);
         glVertexAttribPointer(
           0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
@@ -76,7 +70,7 @@ namespace Kaydee {
             in vec3 v_position;
 
             void main() {
-                color = vec4(v_position, 1.0f);
+                color = vec4(v_position * 0.5f + 0.5f, 1.0f);
             }
         )";
 

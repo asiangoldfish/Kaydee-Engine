@@ -10,11 +10,19 @@ namespace Kaydee {
         OpenGLVertexBuffer(float* vertices, uint32_t size);
         ~OpenGLVertexBuffer() override;
 
-        void bind() const override;
-        void unbind() const override;
+        virtual void bind() const override;
+        virtual void unbind() const override;
+
+        virtual const BufferLayout& getLayout() const { return layout; }
+
+        virtual void setLayout(const BufferLayout& layout)
+        {
+            this->layout = layout;
+        }
 
     private:
         uint32_t rendererID;
+        BufferLayout layout;
     };
 
     class OpenGLIndexBuffer : public IndexBuffer
@@ -26,7 +34,7 @@ namespace Kaydee {
         void bind() const override;
         void unbind() const override;
 
-        uint32_t getCount() const override { return count; }
+        virtual uint32_t getCount() const override { return count; }
 
     private:
         uint32_t rendererID;

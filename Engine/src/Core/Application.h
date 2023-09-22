@@ -11,6 +11,7 @@
 // Temporary
 #include "Renderer/Shader.h"
 #include "Renderer/Buffer.h"
+#include "Renderer/VertexArray.h"
 
 namespace Kaydee {
     class Application
@@ -41,19 +42,19 @@ namespace Kaydee {
         std::unique_ptr<Window> window;
         bool running = true;
 
-        // ImGui
+        // Layers
         ImGuiLayer* imguiLayer;
-
-        // Application owns layer stack
         LayerStack layerStack;
 
-        std::unique_ptr<Shader> shader;
+        std::shared_ptr<Shader> shader;
+        std::shared_ptr<VertexArray> vertexArray;
 
+        std::shared_ptr<Shader> blueShader;
+        std::shared_ptr<VertexArray> squareVA;
+
+
+    private:
         static Application* instance;
-
-        unsigned int vertexArray;
-        std::unique_ptr<VertexBuffer> vertexBuffer;
-        std::unique_ptr<IndexBuffer> indexBuffer;
     };
 
     // To be defined in the client

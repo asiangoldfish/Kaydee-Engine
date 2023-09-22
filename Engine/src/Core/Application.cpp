@@ -13,37 +13,6 @@ namespace Kaydee {
 
     Application* Application::instance = nullptr;
 
-    static GLenum shaderDataTypeToOpenGLBaseType(ShaderDataType type)
-    {
-        switch (type) {
-            case ShaderDataType::Float:
-                return GL_FLOAT;
-            case ShaderDataType::Float2:
-                return GL_FLOAT;
-            case ShaderDataType::Float3:
-                return GL_FLOAT;
-            case ShaderDataType::Float4:
-                return GL_FLOAT;
-            case ShaderDataType::Mat3:
-                return GL_FLOAT;
-            case ShaderDataType::Mat4:
-                return GL_FLOAT;
-            case ShaderDataType::Int:
-                return GL_INT;
-            case ShaderDataType::Int2:
-                return GL_INT;
-            case ShaderDataType::Int3:
-                return GL_INT;
-            case ShaderDataType::Int4:
-                return GL_INT;
-            case ShaderDataType::Bool:
-                return GL_BOOL;
-        }
-
-        KD_CORE_ASSERT(false, "Unknown ShaderDataType!");
-        return 0;
-    }
-
     Application::Application()
     {
         KD_CORE_ASSERT(!instance, "Application already exists!");
@@ -58,41 +27,52 @@ namespace Kaydee {
         imguiLayer = new ImGuiLayer();
         pushOverlay(imguiLayer);
 
-        // Vertex array
-        glGenVertexArrays(1, &vertexArray);
-        glBindVertexArray(vertexArray);
+        vertexArray.reset(VertexArray::create());
 
         float vertices[3 * 7] = { -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
                                   0.5f,  -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
                                   0.0f,  0.5f,  0.0f, 1.0f, 1.0f, 0.0f, 1.0f };
 
+        std::shared_ptr<VertexBuffer> vertexBuffer;
         vertexBuffer.reset(VertexBuffer::create(vertices, sizeof(vertices)));
 
-        {
-            BufferLayout layout = { { ShaderDataType::Float3, "a_position" },
-                                    { ShaderDataType::Float4, "a_color" } };
+        BufferLayout layout = { { ShaderDataType::Float3, "a_position" },
+                                { ShaderDataType::Float4, "a_color" } };
 
-            vertexBuffer->setLayout(layout);
-        }
-
-        uint32_t index = 0;
-        const auto& layout = vertexBuffer->getLayout();
-        for (const auto& element : layout) {
-            glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index,
-                                  element.getComponentCount(),
-                                  shaderDataTypeToOpenGLBaseType(element.type),
-                                  element.normalized ? GL_TRUE : GL_FALSE,
-                                  layout.getStride(),
-                                  (const void*)element.offset);
-
-            index++;
-        }
+        vertexBuffer->setLayout(layout);
+        vertexArray->addVertexBuffer(vertexBuffer);
 
         // Index buffer
         unsigned int indices[3] = { 0, 1, 2 };
+        std::shared_ptr<IndexBuffer> indexBuffer;
         indexBuffer.reset(
           IndexBuffer::create(indices, sizeof(indices) / sizeof(uint32_t)));
+        vertexArray->setIndexBuffer(indexBuffer);
+
+        squareVA.reset(VertexArray::create());
+
+        float squareVertices[3 * 4] = {
+            -0.5f, -0.5f, 0.0f, 0.5f,  -0.5f, 0.0f,
+            0.5f,  0.5f,  0.0f, -0.5f, 0.5f,  0.0f
+        };
+
+        std::shared_ptr<VertexBuffer> squareVB;
+        squareVB.reset(
+          VertexBuffer::create(squareVertices, sizeof(squareVertices)));
+
+        squareVB->setLayout({
+          { ShaderDataType::Float3, "a_position" },
+        });
+
+        squareVA->addVertexBuffer(squareVB);
+
+        unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
+        std::shared_ptr<IndexBuffer> squareIB;
+
+        squareIB.reset(IndexBuffer::create(
+          squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+
+        squareVA->setIndexBuffer(squareIB);
 
         std::string vertexShaderSrc = R"(
             #version 330 core
@@ -125,6 +105,34 @@ namespace Kaydee {
         )";
 
         shader.reset(new Shader(vertexShaderSrc, fragmentShaderSrc));
+
+        std::string blueVertexSrc = R"(
+            #version 330 core
+            
+            layout(location = 0) in vec3 a_position;
+
+            out vec3 v_position;
+            out vec4 v_color;
+
+            void main() {
+                v_position = a_position;
+                gl_Position = vec4(a_position, 1);
+            }
+        )";
+
+        std::string blueFragmentSrc = R"(
+            #version 330 core
+            
+            layout(location = 0) out vec4 color;
+
+            in vec3 v_position;
+
+            void main() {
+                color = vec4(0.2, 0.3, 0.8, 1.0);
+            }
+        )";
+
+        blueShader.reset(new Shader(blueVertexSrc, blueFragmentSrc));
     }
 
     Application::~Application() {}
@@ -135,10 +143,19 @@ namespace Kaydee {
             glClearColor(0.1f, 0.1f, 0.1f, 1);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            blueShader->bind();
+            squareVA->bind();
+            glDrawElements(GL_TRIANGLES,
+                           squareVA->getIndexBuffer()->getCount(),
+                           GL_UNSIGNED_INT,
+                           nullptr);
+
             shader->bind();
-            glBindVertexArray(vertexArray);
-            glDrawElements(
-              GL_TRIANGLES, indexBuffer->getCount(), GL_UNSIGNED_INT, nullptr);
+            vertexArray->bind();
+            glDrawElements(GL_TRIANGLES,
+                           vertexArray->getIndexBuffer()->getCount(),
+                           GL_UNSIGNED_INT,
+                           nullptr);
 
             for (Layer* layer : layerStack) {
                 layer->onUpdate();

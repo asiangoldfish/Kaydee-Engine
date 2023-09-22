@@ -1,8 +1,6 @@
 #ifndef __BUFFER_H__
 #define __BUFFER_H__
 
-#include "Renderer/Renderer.h"
-
 #include <vector>
 
 namespace Kaydee {

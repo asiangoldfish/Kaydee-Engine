@@ -39,6 +39,7 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_PLATFORMS}/Linux/LinuxInput.h                  ${MODULE_PLATFORMS}/Linux/LinuxInput.cpp
     ${MODULE_PLATFORMS}/OpenGL/OpenGLContext.h              ${MODULE_PLATFORMS}/OpenGL/OpenGLContext.cpp
     ${MODULE_PLATFORMS}/OpenGL/OpenGLBuffer.h               ${MODULE_PLATFORMS}/OpenGL/OpenGLBuffer.cpp
+    ${MODULE_PLATFORMS}/OpenGL/OpenGLRendererAPI.h          ${MODULE_PLATFORMS}/OpenGL/OpenGLRendererAPI.cpp
     ${MODULE_PLATFORMS}/OpenGL/OpenGLVertexArray.h          ${MODULE_PLATFORMS}/OpenGL/OpenGLVertexArray.cpp
 
     # Imgui
@@ -50,8 +51,10 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_RENDERER}/Buffer.h                             ${MODULE_RENDERER}/Buffer.cpp
     ${MODULE_RENDERER}/GraphicsContext.h                    ${MODULE_RENDERER}/GraphicsContext.cpp
     ${MODULE_RENDERER}/Renderer.h                           ${MODULE_RENDERER}/Renderer.cpp
-    ${MODULE_RENDERER}/Shader.h                             ${MODULE_RENDERER}/Shader.cpp
     ${MODULE_RENDERER}/VertexArray.h                        ${MODULE_RENDERER}/VertexArray.cpp
+    ${MODULE_RENDERER}/RendererAPI.h                        ${MODULE_RENDERER}/RendererAPI.cpp
+    ${MODULE_RENDERER}/Shader.h                             ${MODULE_RENDERER}/Shader.cpp
+    ${MODULE_RENDERER}/RenderCommand.h                      ${MODULE_RENDERER}/RenderCommand.cpp
 
     # Vendor
     ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.h       ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.cpp

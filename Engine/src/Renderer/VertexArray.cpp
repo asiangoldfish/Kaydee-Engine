@@ -2,6 +2,7 @@
 
 #include "kdpch.h"
 #include "Renderer/Renderer.h"
+#include "Renderer/RendererAPI.h"
 
 #include "Platforms/OpenGL/OpenGLVertexArray.h"
 
@@ -9,12 +10,12 @@ namespace Kaydee {
     VertexArray* VertexArray::create()
     {
         switch (Renderer::getAPI()) {
-            case RendererAPI::NONE:
+            case RendererAPI::API::None:
                 KD_CORE_ASSERT(false,
                                "RendererAPI::NONE is currently not supported!");
                 return nullptr;
 
-            case RendererAPI::OPENGL:
+            case RendererAPI::API::OpenGL:
                 return new OpenGLVertexArray();
         }
 

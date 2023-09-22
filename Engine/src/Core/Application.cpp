@@ -1,11 +1,7 @@
 #include "Core/Application.h"
 
-#include <glad/glad.h>
-
 #include "Core/Input.h"
-
-// Temporary
-#include "Renderer/Shader.h"
+#include "Renderer/Renderer.h"
 
 namespace Kaydee {
 
@@ -140,22 +136,18 @@ namespace Kaydee {
     void Application::run()
     {
         while (running) {
-            glClearColor(0.1f, 0.1f, 0.1f, 1);
-            glClear(GL_COLOR_BUFFER_BIT);
+            RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+            RenderCommand::clear();
 
-            blueShader->bind();
-            squareVA->bind();
-            glDrawElements(GL_TRIANGLES,
-                           squareVA->getIndexBuffer()->getCount(),
-                           GL_UNSIGNED_INT,
-                           nullptr);
+            Renderer::beginScene();
+            {
+                blueShader->bind();
+                Renderer::submit(squareVA);
 
-            shader->bind();
-            vertexArray->bind();
-            glDrawElements(GL_TRIANGLES,
-                           vertexArray->getIndexBuffer()->getCount(),
-                           GL_UNSIGNED_INT,
-                           nullptr);
+                shader->bind();
+                Renderer::submit(vertexArray);
+            }
+            Renderer::endScene();
 
             for (Layer* layer : layerStack) {
                 layer->onUpdate();

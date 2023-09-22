@@ -3,17 +3,18 @@
 #include "Renderer/Buffer.h"
 #include "Renderer/Renderer.h"
 #include "Platforms/OpenGL/OpenGLBuffer.h"
+#include "Renderer/RendererAPI.h"
 
 namespace Kaydee {
     VertexBuffer* VertexBuffer::create(float* vertices, uint32_t size)
     {
         switch (Renderer::getAPI()) {
-            case RendererAPI::NONE:
+            case RendererAPI::API::None:
                 KD_CORE_ASSERT(false,
                                "RendererAPI::NONE is currently not supported!");
                 return nullptr;
 
-            case RendererAPI::OPENGL:
+            case RendererAPI::API::OpenGL:
                 return new OpenGLVertexBuffer(vertices, size);
         }
 
@@ -24,12 +25,12 @@ namespace Kaydee {
     IndexBuffer* IndexBuffer::create(uint32_t* indices, uint32_t size)
     {
         switch (Renderer::getAPI()) {
-            case RendererAPI::NONE:
+            case RendererAPI::API::None:
                 KD_CORE_ASSERT(false,
                                "RendererAPI::NONE is currently not supported!");
                 return nullptr;
 
-            case RendererAPI::OPENGL:
+            case RendererAPI::API::OpenGL:
                 return new OpenGLIndexBuffer(indices, size);
         }
 

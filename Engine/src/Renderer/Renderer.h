@@ -1,20 +1,23 @@
 #ifndef __RENDERER_H__
 #define __RENDERER_H__
 
-namespace Kaydee {
-    enum class RendererAPI
-    {
-        NONE = 0,
-        OPENGL = 1
-    };
+#include "Renderer/RenderCommand.h"
+#include "Renderer/RendererAPI.h"
+#include <memory>
 
+namespace Kaydee {
     class Renderer
     {
     public:
-        static inline RendererAPI getAPI() { return rendererAPI; }
+        static void beginScene();
+        static void endScene();
 
-    private:
-        static RendererAPI rendererAPI;
+        static void submit(const std::shared_ptr<VertexArray>& VertexArray);
+
+        static inline RendererAPI::API getAPI()
+        {
+            return RendererAPI::getAPI();
+        }
     };
 }
 

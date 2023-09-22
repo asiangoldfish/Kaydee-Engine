@@ -13,6 +13,8 @@
 #include "Renderer/Buffer.h"
 #include "Renderer/VertexArray.h"
 
+#include "Renderer/OrthographicCamera.h"
+
 namespace Kaydee {
     class Application
     {
@@ -52,6 +54,7 @@ namespace Kaydee {
         std::shared_ptr<Shader> blueShader;
         std::shared_ptr<VertexArray> squareVA;
 
+        OrthographicCamera camera;
 
     private:
         static Application* instance;

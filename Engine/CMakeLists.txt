@@ -55,6 +55,7 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_RENDERER}/RendererAPI.h                        ${MODULE_RENDERER}/RendererAPI.cpp
     ${MODULE_RENDERER}/Shader.h                             ${MODULE_RENDERER}/Shader.cpp
     ${MODULE_RENDERER}/RenderCommand.h                      ${MODULE_RENDERER}/RenderCommand.cpp
+    ${MODULE_RENDERER}/OrthographicCamera.h                 ${MODULE_RENDERER}/OrthographicCamera.cpp
 
     # Vendor
     ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.h       ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.cpp

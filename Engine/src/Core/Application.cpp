@@ -10,6 +10,7 @@ namespace Kaydee {
     Application* Application::instance = nullptr;
 
     Application::Application()
+      : camera(-1.6f, 1.6f, -0.9f, 0.9f)
     {
         KD_CORE_ASSERT(!instance, "Application already exists!");
         instance = this;
@@ -76,13 +77,15 @@ namespace Kaydee {
             layout(location = 0) in vec3 a_position;
             layout(location = 1) in vec4 a_color;
 
+            uniform mat4 u_viewProjection;
+
             out vec3 v_position;
             out vec4 v_color;
 
             void main() {
                 v_position = a_position;
                 v_color = a_color;
-                gl_Position = vec4(a_position, 1);
+                gl_Position = u_viewProjection * vec4(a_position, 1);
             }
         )";
 
@@ -95,8 +98,8 @@ namespace Kaydee {
             in vec4 v_color;
 
             void main() {
-                //color = vec4(v_position * 0.5f + 0.5f, 1.0f);
-                color = v_color;
+                color = vec4(v_position * 0.5f + 0.5f, 1.0f);
+                //color = v_color;
             }
         )";
 
@@ -110,9 +113,11 @@ namespace Kaydee {
             out vec3 v_position;
             out vec4 v_color;
 
+            uniform mat4 u_viewProjection;
+
             void main() {
                 v_position = a_position;
-                gl_Position = vec4(a_position, 1);
+                gl_Position = u_viewProjection * vec4(a_position, 1);
             }
         )";
 
@@ -139,13 +144,14 @@ namespace Kaydee {
             RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
             RenderCommand::clear();
 
-            Renderer::beginScene();
-            {
-                blueShader->bind();
-                Renderer::submit(squareVA);
+            // camera.setPosition({ 0.5f, 0.5f, 0.0f });
+            camera.setPosition({ 0.5f, 0.5f, 0 });
+            camera.setRotation(45.0f);
 
-                shader->bind();
-                Renderer::submit(vertexArray);
+            Renderer::beginScene(camera);
+            {
+                Renderer::submit(blueShader, squareVA);
+                Renderer::submit(shader, vertexArray);
             }
             Renderer::endScene();
 

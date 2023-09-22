@@ -2,6 +2,7 @@
 #define __SHADER_H__
 
 #include <string>
+#include <glm/glm.hpp>
 
 namespace Kaydee {
     class Shader
@@ -12,6 +13,8 @@ namespace Kaydee {
 
         void bind() const;
         void unbind() const;
+
+        void uploadUniformMat4(const std::string& name, const glm::mat4& matrix);
 
     private:
         uint32_t rendererId;

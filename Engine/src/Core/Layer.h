@@ -3,6 +3,7 @@
 
 #include "Events/Event.h"
 #include "kdpch.h"
+#include "Core/Timestep.h"
 
 namespace Kaydee {
     class Layer
@@ -13,7 +14,7 @@ namespace Kaydee {
 
         virtual void onAttach() {}
         virtual void onDetach() {}
-        virtual void onUpdate() {}
+        virtual void onUpdate(Timestep ts) {}
         virtual void onEvent(Event& event) {}
         virtual void onImGuiRender() {}
 

@@ -16,10 +16,10 @@ namespace Kaydee {
 
     void OrthographicCamera::recalculateViewMatrix()
     {
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
-                              glm::rotate(glm::mat4(1.0f),
+        glm::mat4 transform = glm::rotate(glm::mat4(1.0f),
                                           glm::radians(rotation),
-                                          glm::vec3(0.0f, 0.0f, 1.0f));
+                                          glm::vec3(0.0f, 0.0f, 1.0f)) *
+                              glm::translate(glm::mat4(1.0f), position);
 
         viewMatrix = glm::inverse(transform);
         viewProjectionMatrix = projectionMatrix * viewMatrix;

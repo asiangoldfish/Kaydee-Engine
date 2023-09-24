@@ -16,7 +16,8 @@ namespace Kaydee {
         static void endScene();
 
         static void submit(const std::shared_ptr<Shader>& shader,
-                           const std::shared_ptr<VertexArray>& VertexArray);
+                           const std::shared_ptr<VertexArray>& VertexArray,
+                           const glm::mat4& transform = glm::mat4(1.0f));
 
         static inline RendererAPI::API getAPI()
         {
@@ -28,7 +29,7 @@ namespace Kaydee {
         {
             glm::mat4 viewProjectionMatrix;
         };
-        
+
         static SceneData* sceneData;
     };
 

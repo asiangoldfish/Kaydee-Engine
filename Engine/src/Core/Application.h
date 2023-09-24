@@ -5,6 +5,7 @@
 #include "Core/LayerStack.h"
 #include "Core/Window.h"
 #include "Events/ApplicationEvent.h"
+#include "Core/Timestep.h"
 
 #include "ImGui/ImGuiLayer.h"
 
@@ -47,14 +48,7 @@ namespace Kaydee {
         // Layers
         ImGuiLayer* imguiLayer;
         LayerStack layerStack;
-
-        std::shared_ptr<Shader> shader;
-        std::shared_ptr<VertexArray> vertexArray;
-
-        std::shared_ptr<Shader> blueShader;
-        std::shared_ptr<VertexArray> squareVA;
-
-        OrthographicCamera camera;
+        float lastFrameTime = 0.0f;
 
     private:
         static Application* instance;

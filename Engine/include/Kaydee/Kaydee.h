@@ -7,6 +7,8 @@
 #include "Core/Layer.h"
 #include "Core/Log.h"
 
+#include "Core/Timestep.h"
+
 // UI
 #include "ImGui/ImGuiLayer.h"
 #include <imgui/imgui.h>
@@ -15,6 +17,16 @@
 #include "Core/Input.h"
 #include "Core/KeyCodes.h"
 #include "Core/MouseButtonCodes.h"
+
+// Rendering
+#include "Renderer/Renderer.h"
+#include "Renderer/RenderCommand.h"
+
+#include "Renderer/Buffer.h"
+#include "Renderer/Shader.h"
+#include "Renderer/VertexArray.h"
+
+#include "Renderer/OrthographicCamera.h"
 
 // Entry point
 #include "Core/EntryPoint.h"

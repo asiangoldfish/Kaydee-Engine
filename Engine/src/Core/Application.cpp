@@ -1,7 +1,10 @@
 #include "Core/Application.h"
 
 #include "Core/Input.h"
+#include "Core/KeyCodes.h"
 #include "Renderer/Renderer.h"
+
+#include <GLFW/glfw3.h>
 
 namespace Kaydee {
 
@@ -10,130 +13,17 @@ namespace Kaydee {
     Application* Application::instance = nullptr;
 
     Application::Application()
-      : camera(-1.6f, 1.6f, -0.9f, 0.9f)
     {
         KD_CORE_ASSERT(!instance, "Application already exists!");
         instance = this;
 
         window = std::unique_ptr<Window>(Window::create());
-
-        // Event callback
-        window->setEventCallback(BIND_EVENT_FN(onEvent));
+        window->setEventCallback(BIND_EVENT_FN(onEvent)); // Event callback
+        //window->setVSync(true);
 
         // ImGui
         imguiLayer = new ImGuiLayer();
         pushOverlay(imguiLayer);
-
-        vertexArray.reset(VertexArray::create());
-
-        float vertices[3 * 7] = { -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-                                  0.5f,  -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-                                  0.0f,  0.5f,  0.0f, 1.0f, 1.0f, 0.0f, 1.0f };
-
-        std::shared_ptr<VertexBuffer> vertexBuffer;
-        vertexBuffer.reset(VertexBuffer::create(vertices, sizeof(vertices)));
-
-        BufferLayout layout = { { ShaderDataType::Float3, "a_position" },
-                                { ShaderDataType::Float4, "a_color" } };
-
-        vertexBuffer->setLayout(layout);
-        vertexArray->addVertexBuffer(vertexBuffer);
-
-        // Index buffer
-        unsigned int indices[3] = { 0, 1, 2 };
-        std::shared_ptr<IndexBuffer> indexBuffer;
-        indexBuffer.reset(
-          IndexBuffer::create(indices, sizeof(indices) / sizeof(uint32_t)));
-        vertexArray->setIndexBuffer(indexBuffer);
-
-        squareVA.reset(VertexArray::create());
-
-        float squareVertices[3 * 4] = {
-            -0.5f, -0.5f, 0.0f, 0.5f,  -0.5f, 0.0f,
-            0.5f,  0.5f,  0.0f, -0.5f, 0.5f,  0.0f
-        };
-
-        std::shared_ptr<VertexBuffer> squareVB;
-        squareVB.reset(
-          VertexBuffer::create(squareVertices, sizeof(squareVertices)));
-
-        squareVB->setLayout({
-          { ShaderDataType::Float3, "a_position" },
-        });
-
-        squareVA->addVertexBuffer(squareVB);
-
-        unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-        std::shared_ptr<IndexBuffer> squareIB;
-
-        squareIB.reset(IndexBuffer::create(
-          squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
-
-        squareVA->setIndexBuffer(squareIB);
-
-        std::string vertexShaderSrc = R"(
-            #version 330 core
-            
-            layout(location = 0) in vec3 a_position;
-            layout(location = 1) in vec4 a_color;
-
-            uniform mat4 u_viewProjection;
-
-            out vec3 v_position;
-            out vec4 v_color;
-
-            void main() {
-                v_position = a_position;
-                v_color = a_color;
-                gl_Position = u_viewProjection * vec4(a_position, 1);
-            }
-        )";
-
-        std::string fragmentShaderSrc = R"(
-            #version 330 core
-            
-            layout(location = 0) out vec4 color;
-
-            in vec3 v_position;
-            in vec4 v_color;
-
-            void main() {
-                color = vec4(v_position * 0.5f + 0.5f, 1.0f);
-                //color = v_color;
-            }
-        )";
-
-        shader.reset(new Shader(vertexShaderSrc, fragmentShaderSrc));
-
-        std::string blueVertexSrc = R"(
-            #version 330 core
-            
-            layout(location = 0) in vec3 a_position;
-
-            out vec3 v_position;
-            out vec4 v_color;
-
-            uniform mat4 u_viewProjection;
-
-            void main() {
-                v_position = a_position;
-                gl_Position = u_viewProjection * vec4(a_position, 1);
-            }
-        )";
-
-        std::string blueFragmentSrc = R"(
-            #version 330 core
-            
-            layout(location = 0) out vec4 color;
-
-            in vec3 v_position;
-
-            void main() {
-                color = vec4(0.2, 0.3, 0.8, 1.0);
-            }
-        )";
-
-        blueShader.reset(new Shader(blueVertexSrc, blueFragmentSrc));
     }
 
     Application::~Application() {}
@@ -141,22 +31,13 @@ namespace Kaydee {
     void Application::run()
     {
         while (running) {
-            RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-            RenderCommand::clear();
-
-            // camera.setPosition({ 0.5f, 0.5f, 0.0f });
-            camera.setPosition({ 0.5f, 0.5f, 0 });
-            camera.setRotation(45.0f);
-
-            Renderer::beginScene(camera);
-            {
-                Renderer::submit(blueShader, squareVA);
-                Renderer::submit(shader, vertexArray);
-            }
-            Renderer::endScene();
+            // Compute delta time
+            float time = (float)glfwGetTime(); // Should be in Platform::GetTime
+            Timestep timestep = time - lastFrameTime;
+            lastFrameTime = time;
 
             for (Layer* layer : layerStack) {
-                layer->onUpdate();
+                layer->onUpdate(timestep);
             }
 
             imguiLayer->begin();
@@ -164,9 +45,6 @@ namespace Kaydee {
                 layer->onImGuiRender();
             }
             imguiLayer->end();
-
-            // auto [x, y] = Input::getMousePosition();
-            //  KD_CORE_TRACE("{0}, {1}", x, y);
 
             window->onUpdate();
         }

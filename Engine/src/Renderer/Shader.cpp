@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 
 #include <glm/gtc/type_ptr.hpp>
+#include "Shader.h"
 
 namespace Kaydee {
 
@@ -140,6 +141,13 @@ namespace Kaydee {
     void Shader::unbind() const
     {
         glUseProgram(0);
+    }
+
+    void Shader::uploadUniformFloat4(const std::string& name,
+                                     const glm::vec4& values)
+    {
+        GLint location = glGetUniformLocation(rendererId, name.c_str());
+        glUniform4f(location, values.x, values.y, values.z, values.w);
     }
 
     void Shader::uploadUniformMat4(const std::string& name,

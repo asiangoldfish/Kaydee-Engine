@@ -96,7 +96,7 @@ public:
 
         shader.reset(new Kaydee::Shader(vertexShaderSrc, fragmentShaderSrc));
 
-        std::string blueVertexSrc = R"(
+        std::string flatColorVertexSrc = R"(
             #version 330 core
             
             layout(location = 0) in vec3 a_position;
@@ -113,19 +113,22 @@ public:
             }
         )";
 
-        std::string blueFragmentSrc = R"(
+        std::string flatColorFragmentSrc = R"(
             #version 330 core
             
             layout(location = 0) out vec4 color;
 
             in vec3 v_position;
 
+            uniform vec4 u_color;
+
             void main() {
-                color = vec4(0.2, 0.3, 0.8, 1.0);
+                color = u_color;
             }
         )";
 
-        blueShader.reset(new Kaydee::Shader(blueVertexSrc, blueFragmentSrc));
+        flatColorShader.reset(
+          new Kaydee::Shader(flatColorVertexSrc, flatColorFragmentSrc));
     }
 
     void onUpdate(Kaydee::Timestep ts) override
@@ -162,7 +165,14 @@ public:
 
         Kaydee::Renderer::beginScene(camera);
         {
-            static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+            static glm::mat4 scale =
+              glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+            glm::vec4 redColor(0.8, 0.2, 0.3, 1.0);
+            glm::vec4 blueColor(0.2, 0.3, 0.8, 1.0);
+
+            // Kaydee::MaterialRef material = new
+            // Kaydee::Material(flatColorShader);
 
             for (int i = 0; i < 20; i++) {
                 for (int j = 0; j < 20; j++) {
@@ -171,11 +181,20 @@ public:
                     glm::mat4 transform =
                       glm::translate(glm::mat4(1.0f), pos) * scale;
 
-                    Kaydee::Renderer::submit(blueShader, squareVA, transform);
+                    if (i % 2 == 0) {
+                        flatColorShader->uploadUniformFloat4("u_color",
+                                                             redColor);
+                    } else {
+                        flatColorShader->uploadUniformFloat4("u_color",
+                                                             blueColor);
+                    }
+
+                    Kaydee::Renderer::submit(
+                      flatColorShader, squareVA, transform);
                 }
             }
 
-             Kaydee::Renderer::submit(shader, vertexArray);
+            Kaydee::Renderer::submit(shader, vertexArray);
         }
         Kaydee::Renderer::endScene();
     }
@@ -195,7 +214,7 @@ private:
     std::shared_ptr<Kaydee::Shader> shader;
     std::shared_ptr<Kaydee::VertexArray> vertexArray;
 
-    std::shared_ptr<Kaydee::Shader> blueShader;
+    std::shared_ptr<Kaydee::Shader> flatColorShader;
     std::shared_ptr<Kaydee::VertexArray> squareVA;
 
     Kaydee::OrthographicCamera camera;

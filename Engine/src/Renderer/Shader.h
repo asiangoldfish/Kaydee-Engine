@@ -14,7 +14,10 @@ namespace Kaydee {
         void bind() const;
         void unbind() const;
 
-        void uploadUniformMat4(const std::string& name, const glm::mat4& matrix);
+        void uploadUniformFloat4(const std::string& name,
+                                 const glm::vec4& values);
+        void uploadUniformMat4(const std::string& name,
+                               const glm::mat4& matrix);
 
     private:
         uint32_t rendererId;

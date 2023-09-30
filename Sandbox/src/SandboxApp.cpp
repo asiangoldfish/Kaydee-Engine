@@ -177,6 +177,7 @@ public:
             }
 
             Kaydee::Renderer::submit(shader, vertexArray);
+            Kaydee::Renderer::submit(shader, vertexArray);
         }
         Kaydee::Renderer::endScene();
     }

@@ -1,7 +1,12 @@
 #include <Kaydee/Kaydee.h>
-#include <imgui/imgui.h>
+#include "Platforms/OpenGL/OpenGLShader.h"
 
+#include <imgui/imgui.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include <filesystem>
+#include <cmath>
 
 class ExampleLayer : public Kaydee::Layer
 {
@@ -38,9 +43,11 @@ public:
 
         squareVA.reset(Kaydee::VertexArray::create());
 
-        float squareVertices[3 * 4] = {
-            -0.5f, -0.5f, 0.0f, 0.5f,  -0.5f, 0.0f,
-            0.5f,  0.5f,  0.0f, -0.5f, 0.5f,  0.0f
+        float squareVertices[5 * 4] = {
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // Bottom left
+            0.5f,  -0.5f, 0.0f, 1.0f, 0.0f, // Bottom right
+            0.5f,  0.5f,  0.0f, 1.0f, 1.0f, // Top right
+            -0.5f, 0.5f,  0.0f, 0.0f, 1.0f, // Top left
         };
 
         Kaydee::ref<Kaydee::VertexBuffer> squareVB;
@@ -49,6 +56,7 @@ public:
 
         squareVB->setLayout({
           { Kaydee::ShaderDataType::Float3, "a_position" },
+          { Kaydee::ShaderDataType::Float2, "a_texCoord" },
         });
 
         squareVA->addVertexBuffer(squareVB);
@@ -94,9 +102,10 @@ public:
             }
         )";
 
-        shader.reset(new Kaydee::Shader(vertexShaderSrc, fragmentShaderSrc));
+        shader.reset(
+          Kaydee::Shader::create(vertexShaderSrc, fragmentShaderSrc));
 
-        std::string blueVertexSrc = R"(
+        std::string flatVertexSrc = R"(
             #version 330 core
             
             layout(location = 0) in vec3 a_position;
@@ -113,19 +122,68 @@ public:
             }
         )";
 
-        std::string blueFragmentSrc = R"(
+        std::string flatFragmentSrc = R"(
             #version 330 core
             
             layout(location = 0) out vec4 color;
 
             in vec3 v_position;
+            uniform vec3 u_color;
 
             void main() {
-                color = vec4(0.2, 0.3, 0.8, 1.0);
+                color = vec4(u_color, 1.0);
             }
         )";
 
-        blueShader.reset(new Kaydee::Shader(blueVertexSrc, blueFragmentSrc));
+        flatColorShader.reset(
+          Kaydee::Shader::create(flatVertexSrc, flatFragmentSrc));
+
+        std::string textureVertexSrc = R"(
+            #version 330 core
+            
+            layout(location = 0) in vec3 a_position;
+            layout(location = 1) in vec2 a_texCoord;
+
+            out vec3 v_position;
+            out vec2 v_texCoord;
+
+            uniform mat4 u_viewProjection;
+            uniform mat4 u_transform;
+
+            void main() {
+                v_texCoord = a_texCoord;
+                gl_Position = u_viewProjection * u_transform * vec4(a_position, 1.0);
+            }
+        )";
+
+        std::string textureFragmentSrc = R"(
+            #version 330 core
+            
+            layout(location = 0) out vec4 color;
+
+            in vec2 v_texCoord;
+
+            uniform vec3 u_color;
+            uniform sampler2D u_texture;
+
+            void main() {
+                //color = vec4(v_texCoord, 0.0, 1.0);
+                color = texture(u_texture, v_texCoord) * vec4(u_color, 1.0f);
+            }
+        )";
+
+        textureShader.reset(
+          Kaydee::Shader::create(textureVertexSrc, textureFragmentSrc));
+
+        texture =
+          Kaydee::Texture2D::create("Sandbox/assets/textures/checkerboard.png");
+
+        pandaLogo =
+          Kaydee::Texture2D::create("Sandbox/assets/textures/panda-face.png");
+
+        flatColorShader->bind();
+        std::dynamic_pointer_cast<Kaydee::OpenGLShader>(flatColorShader)
+          ->uploadUniformInt("u_texture", 0);
     }
 
     void onUpdate(Kaydee::Timestep ts) override
@@ -165,6 +223,11 @@ public:
             static glm::mat4 scale =
               glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
+            flatColorShader->bind();
+
+            std::dynamic_pointer_cast<Kaydee::OpenGLShader>(flatColorShader)
+              ->uploadUniformFloat3("u_color", squareColor);
+
             for (int i = 0; i < 20; i++) {
                 for (int j = 0; j < 20; j++) {
                     glm::vec3 pos(i * 0.11f, j * 0.11f, 0.0f);
@@ -172,12 +235,32 @@ public:
                     glm::mat4 transform =
                       glm::translate(glm::mat4(1.0f), pos) * scale;
 
-                    Kaydee::Renderer::submit(blueShader, squareVA, transform);
+                    Kaydee::Renderer::submit(
+                      flatColorShader, squareVA, transform);
                 }
             }
 
-            Kaydee::Renderer::submit(shader, vertexArray);
-            Kaydee::Renderer::submit(shader, vertexArray);
+            textureShader->bind();
+            texture->bind();
+
+            std::dynamic_pointer_cast<Kaydee::OpenGLShader>(textureShader)
+              ->uploadUniformFloat3("u_color", checkerColor);
+
+            Kaydee::Renderer::submit(
+              textureShader,
+              squareVA,
+              glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
+
+            pandaLogo->bind();
+            std::dynamic_pointer_cast<Kaydee::OpenGLShader>(textureShader)
+              ->uploadUniformFloat3("u_color", pandaColor);
+            Kaydee::Renderer::submit(
+              textureShader,
+              squareVA,
+              glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
+
+            // Triangle
+            // Kaydee::Renderer::submit(shader, vertexArray);
         }
         Kaydee::Renderer::endScene();
     }
@@ -191,26 +274,44 @@ public:
 
     bool OnKeyPressedEvent(Kaydee::KeyPressedEvent& event) { return false; }
 
-    virtual void onImGuiRender() override {}
+    virtual void onImGuiRender() override
+    {
+        ImGui::Begin("Settings");
+        ImGui::ColorEdit3("Square Color", glm::value_ptr(squareColor));
+        ImGui::ColorEdit3("Checkerboard Color", glm::value_ptr(checkerColor));
+        ImGui::ColorEdit3("Panda Color", glm::value_ptr(pandaColor));
+        ImGui::End();
+    }
 
 private:
     Kaydee::ref<Kaydee::Shader> shader;
     Kaydee::ref<Kaydee::VertexArray> vertexArray;
 
-    Kaydee::ref<Kaydee::Shader> blueShader;
+    Kaydee::ref<Kaydee::Shader> flatColorShader, textureShader;
     Kaydee::ref<Kaydee::VertexArray> squareVA;
+
+    Kaydee::ref<Kaydee::Texture2D> texture, pandaLogo;
 
     Kaydee::OrthographicCamera camera;
     glm::vec3 cameraPosition;
     float cameraMoveSpeed = 3.0f;
     float cameraRotation = 0.0f;
     float cameraRotationSpeed = 180.0f;
+
+    glm::vec3 squareColor = { 0.2f, 0.3f, 0.8f },
+              checkerColor = { 1.0f, 1.0f, 1.0f },
+              pandaColor = { 1.0f, 1.0f, 1.0f };
 };
 
 class Sandbox : public Kaydee::Application
 {
 public:
-    Sandbox() { pushLayer(new ExampleLayer()); }
+    Sandbox()
+    {
+        std::cout << "Working directory: " << std::filesystem::current_path()
+                  << std::endl;
+        pushLayer(new ExampleLayer());
+    }
 
     virtual ~Sandbox() {}
 };

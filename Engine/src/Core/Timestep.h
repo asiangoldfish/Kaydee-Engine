@@ -15,6 +15,9 @@ namespace Kaydee {
         float getSeconds() const { return time; }
         float getMilliseconds() const { return time * 1000.f; }
 
+        float getElapsedTimeInSeconds() const;
+        float getElapsedTimeInMilliseconds() const;
+
     private:
         float time;
     };

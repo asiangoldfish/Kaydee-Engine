@@ -6,6 +6,13 @@
 
 namespace Kaydee {
 
+    void OpenGLRendererAPI::init()
+    {
+        // Enable blend mode for transparency with alpha channel
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+
     void OpenGLRendererAPI::setClearColor(const glm::vec4& color)
     {
         glClearColor(color.r, color.g, color.b, color.a);
@@ -16,8 +23,7 @@ namespace Kaydee {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void OpenGLRendererAPI::drawIndexed(
-      const ref<VertexArray>& vertexArray)
+    void OpenGLRendererAPI::drawIndexed(const ref<VertexArray>& vertexArray)
     {
         glDrawElements(GL_TRIANGLES,
                        vertexArray->getIndexBuffer()->getCount(),

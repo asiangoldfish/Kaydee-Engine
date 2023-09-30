@@ -17,11 +17,11 @@ namespace Kaydee {
         };
 
     public:
+        virtual void init() = 0;
         virtual void setClearColor(const glm::vec4& color) = 0;
         virtual void clear() = 0;
 
-        virtual void drawIndexed(
-          const ref<VertexArray>& vertexArray) = 0;
+        virtual void drawIndexed(const ref<VertexArray>& vertexArray) = 0;
 
         static inline API getAPI() { return api; }
 

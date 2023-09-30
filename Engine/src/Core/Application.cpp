@@ -21,6 +21,8 @@ namespace Kaydee {
         window->setEventCallback(BIND_EVENT_FN(onEvent)); // Event callback
         //window->setVSync(true);
 
+        Renderer::init();
+
         // ImGui
         imguiLayer = new ImGuiLayer();
         pushOverlay(imguiLayer);

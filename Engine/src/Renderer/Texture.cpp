@@ -1,12 +1,14 @@
 #include "kdpch.h"
-#include "Shader.h"
+#include "Renderer/Texture.h"
 
-#include "Renderer/Renderer.h"
-#include "Platforms/OpenGL/OpenGLShader.h"
+#include "Renderer.h"
+#include "Platforms/OpenGL/OpenGLTexture.h"
+
+#include <memory>
 
 namespace Kaydee {
-    Shader* Shader::create(const std::string& vertexSrc,
-                           const std::string& fragmentSrc)
+
+    ref<Texture2D> Texture2D::create(const std::string& path)
     {
         switch (Renderer::getAPI()) {
             case RendererAPI::API::None:
@@ -15,10 +17,11 @@ namespace Kaydee {
                 return nullptr;
 
             case RendererAPI::API::OpenGL:
-                return new OpenGLShader(vertexSrc, fragmentSrc);
+                return createRef<OpenGLTexture2D>(path);
         }
 
         KD_CORE_ASSERT(false, "Unknown RendererAPI!");
         return nullptr;
     }
+
 }

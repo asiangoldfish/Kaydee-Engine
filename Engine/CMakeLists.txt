@@ -24,6 +24,7 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_CORE}/EntryPoint.h
     ${MODULE_CORE}/Layer.h                                  ${MODULE_CORE}/Layer.cpp
     ${MODULE_CORE}/LayerStack.h                             ${MODULE_CORE}/LayerStack.cpp
+    ${MODULE_CORE}/Timestep.h                               ${MODULE_CORE}/Timestep.cpp
     ${MODULE_CORE}/Input.h
 
     ${MODULE_CORE}/Window.h
@@ -41,6 +42,8 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_PLATFORMS}/OpenGL/OpenGLBuffer.h               ${MODULE_PLATFORMS}/OpenGL/OpenGLBuffer.cpp
     ${MODULE_PLATFORMS}/OpenGL/OpenGLRendererAPI.h          ${MODULE_PLATFORMS}/OpenGL/OpenGLRendererAPI.cpp
     ${MODULE_PLATFORMS}/OpenGL/OpenGLVertexArray.h          ${MODULE_PLATFORMS}/OpenGL/OpenGLVertexArray.cpp
+    ${MODULE_PLATFORMS}/OpenGL/OpenGLShader.h               ${MODULE_PLATFORMS}/OpenGL/OpenGLShader.cpp
+    ${MODULE_PLATFORMS}/OpenGL/OpenGLTexture.h              ${MODULE_PLATFORMS}/OpenGL/OpenGLTexture.cpp
 
     # Imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui # Lib
@@ -56,6 +59,7 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_RENDERER}/Shader.h                             ${MODULE_RENDERER}/Shader.cpp
     ${MODULE_RENDERER}/RenderCommand.h                      ${MODULE_RENDERER}/RenderCommand.cpp
     ${MODULE_RENDERER}/OrthographicCamera.h                 ${MODULE_RENDERER}/OrthographicCamera.cpp
+    ${MODULE_RENDERER}/Texture.h                            ${MODULE_RENDERER}/Texture.cpp
 
     # Vendor
     ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.h       ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.cpp
@@ -77,24 +81,17 @@ target_precompile_headers(${MODULE_NAME} PRIVATE
 
 # Find dependencies
 find_package(OpenGL REQUIRED)
-
-# spdlog
 add_subdirectory(vendor/spdlog)
-
-# glfw
 add_subdirectory(vendor/glfw)
+add_subdirectory(vendor/glm)
+add_subdirectory(vendor/stb)
 
-# glad
 add_subdirectory(vendor/glad)
 add_compile_definitions(GLFW_INCLUDE_NONE)
 
-# ImGui
 add_subdirectory(vendor/imgui)
 add_compile_definitions(IMGUI_IMPL_OPENGL_LOADER_CUSTOM)
 target_compile_options(imgui PRIVATE -fPIC)
-
-# glm
-add_subdirectory(vendor/glm)
 
 target_link_libraries(${MODULE_NAME} PUBLIC 
     glad
@@ -103,4 +100,5 @@ target_link_libraries(${MODULE_NAME} PUBLIC
     OpenGL::GL
     imgui
     glm
+    stb
 )

@@ -2,10 +2,17 @@
 #include "Renderer/Renderer.h"
 #include "Renderer/RendererAPI.h"
 #include "Renderer/RenderCommand.h"
+#include "Platforms/OpenGL/OpenGLShader.h"
+#include "Renderer.h"
 
 namespace Kaydee {
 
     Renderer::SceneData* Renderer::sceneData = new Renderer::SceneData;
+
+    void Renderer::init()
+    {
+        RenderCommand::init();
+    }
 
     void Renderer::beginScene(OrthographicCamera& camera)
     {
@@ -19,9 +26,12 @@ namespace Kaydee {
                           const glm::mat4& transform)
     {
         shader->bind();
-        shader->uploadUniformMat4("u_viewProjection",
-                                  sceneData->viewProjectionMatrix);
-        shader->uploadUniformMat4("u_transform", transform);
+
+        std::dynamic_pointer_cast<OpenGLShader>(shader)->uploadUniformMat4(
+          "u_viewProjection", sceneData->viewProjectionMatrix);
+
+        std::dynamic_pointer_cast<OpenGLShader>(shader)->uploadUniformMat4(
+          "u_transform", transform);
 
         vertexArray->bind();
         RenderCommand::drawIndexed(vertexArray);

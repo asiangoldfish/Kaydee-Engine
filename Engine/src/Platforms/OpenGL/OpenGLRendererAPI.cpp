@@ -17,7 +17,7 @@ namespace Kaydee {
     }
 
     void OpenGLRendererAPI::drawIndexed(
-      const std::shared_ptr<VertexArray>& vertexArray)
+      const ref<VertexArray>& vertexArray)
     {
         glDrawElements(GL_TRIANGLES,
                        vertexArray->getIndexBuffer()->getCount(),

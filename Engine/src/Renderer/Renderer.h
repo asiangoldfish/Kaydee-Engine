@@ -15,8 +15,8 @@ namespace Kaydee {
         static void beginScene(OrthographicCamera& camera);
         static void endScene();
 
-        static void submit(const std::shared_ptr<Shader>& shader,
-                           const std::shared_ptr<VertexArray>& VertexArray,
+        static void submit(const ref<Shader>& shader,
+                           const ref<VertexArray>& VertexArray,
                            const glm::mat4& transform = glm::mat4(1.0f));
 
         static inline RendererAPI::API getAPI()

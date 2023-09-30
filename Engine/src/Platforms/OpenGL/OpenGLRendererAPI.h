@@ -11,7 +11,7 @@ namespace Kaydee {
         virtual void clear() override;
 
         virtual void drawIndexed(
-          const std::shared_ptr<VertexArray>& vertexArray) override;
+          const ref<VertexArray>& vertexArray) override;
     };
 }
 

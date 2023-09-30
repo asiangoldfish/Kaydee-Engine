@@ -14,25 +14,25 @@ namespace Kaydee {
         virtual void unbind() const override;
 
         virtual void addVertexBuffer(
-          const std::shared_ptr<VertexBuffer>& vertexBuffer) override;
+          const ref<VertexBuffer>& vertexBuffer) override;
         virtual void setIndexBuffer(
-          const std::shared_ptr<IndexBuffer>& indexBuffer) override;
+          const ref<IndexBuffer>& indexBuffer) override;
 
-        virtual std::vector<std::shared_ptr<VertexBuffer>>& getVertexBuffers()
+        virtual std::vector<Kaydee::ref<VertexBuffer>>& getVertexBuffers()
           override
         {
             return vertexBuffers;
         }
 
-        virtual std::shared_ptr<IndexBuffer>& getIndexBuffer() override
+        virtual Kaydee::ref<IndexBuffer>& getIndexBuffer() override
         {
             return indexBuffer;
         }
 
     private:
         uint32_t rendererID;
-        std::vector<std::shared_ptr<VertexBuffer>> vertexBuffers;
-        std::shared_ptr<IndexBuffer> indexBuffer;
+        std::vector<Kaydee::ref<VertexBuffer>> vertexBuffers;
+        ref<IndexBuffer> indexBuffer;
     };
 }
 

@@ -57,7 +57,7 @@ namespace Kaydee {
     }
 
     void OpenGLVertexArray::addVertexBuffer(
-      const std::shared_ptr<VertexBuffer>& vertexBuffer)
+      const ref<VertexBuffer>& vertexBuffer)
     {
         glBindVertexArray(rendererID);
         vertexBuffer->bind();
@@ -83,7 +83,7 @@ namespace Kaydee {
     }
 
     void OpenGLVertexArray::setIndexBuffer(
-      const std::shared_ptr<IndexBuffer>& indexBuffer)
+      const ref<IndexBuffer>& indexBuffer)
     {
         glBindVertexArray(rendererID);
         indexBuffer->bind();

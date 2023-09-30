@@ -17,7 +17,7 @@ public:
                                   0.5f,  -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
                                   0.0f,  0.5f,  0.0f, 1.0f, 1.0f, 0.0f, 1.0f };
 
-        std::shared_ptr<Kaydee::VertexBuffer> vertexBuffer;
+        Kaydee::ref<Kaydee::VertexBuffer> vertexBuffer;
         vertexBuffer.reset(
           Kaydee::VertexBuffer::create(vertices, sizeof(vertices)));
 
@@ -31,7 +31,7 @@ public:
 
         // Index buffer
         unsigned int indices[3] = { 0, 1, 2 };
-        std::shared_ptr<Kaydee::IndexBuffer> indexBuffer;
+        Kaydee::ref<Kaydee::IndexBuffer> indexBuffer;
         indexBuffer.reset(Kaydee::IndexBuffer::create(
           indices, sizeof(indices) / sizeof(uint32_t)));
         vertexArray->setIndexBuffer(indexBuffer);
@@ -43,7 +43,7 @@ public:
             0.5f,  0.5f,  0.0f, -0.5f, 0.5f,  0.0f
         };
 
-        std::shared_ptr<Kaydee::VertexBuffer> squareVB;
+        Kaydee::ref<Kaydee::VertexBuffer> squareVB;
         squareVB.reset(
           Kaydee::VertexBuffer::create(squareVertices, sizeof(squareVertices)));
 
@@ -54,7 +54,7 @@ public:
         squareVA->addVertexBuffer(squareVB);
 
         unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-        std::shared_ptr<Kaydee::IndexBuffer> squareIB;
+        Kaydee::ref<Kaydee::IndexBuffer> squareIB;
 
         squareIB.reset(Kaydee::IndexBuffer::create(
           squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
@@ -162,7 +162,8 @@ public:
 
         Kaydee::Renderer::beginScene(camera);
         {
-            static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+            static glm::mat4 scale =
+              glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
             for (int i = 0; i < 20; i++) {
                 for (int j = 0; j < 20; j++) {
@@ -175,7 +176,7 @@ public:
                 }
             }
 
-             Kaydee::Renderer::submit(shader, vertexArray);
+            Kaydee::Renderer::submit(shader, vertexArray);
         }
         Kaydee::Renderer::endScene();
     }
@@ -192,11 +193,11 @@ public:
     virtual void onImGuiRender() override {}
 
 private:
-    std::shared_ptr<Kaydee::Shader> shader;
-    std::shared_ptr<Kaydee::VertexArray> vertexArray;
+    Kaydee::ref<Kaydee::Shader> shader;
+    Kaydee::ref<Kaydee::VertexArray> vertexArray;
 
-    std::shared_ptr<Kaydee::Shader> blueShader;
-    std::shared_ptr<Kaydee::VertexArray> squareVA;
+    Kaydee::ref<Kaydee::Shader> blueShader;
+    Kaydee::ref<Kaydee::VertexArray> squareVA;
 
     Kaydee::OrthographicCamera camera;
     glm::vec3 cameraPosition;

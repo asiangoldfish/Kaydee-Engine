@@ -21,7 +21,7 @@ namespace Kaydee {
         virtual void clear() = 0;
 
         virtual void drawIndexed(
-          const std::shared_ptr<VertexArray>& vertexArray) = 0;
+          const ref<VertexArray>& vertexArray) = 0;
 
         static inline API getAPI() { return api; }
 

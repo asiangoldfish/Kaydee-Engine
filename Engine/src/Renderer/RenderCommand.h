@@ -17,7 +17,7 @@ namespace Kaydee {
         inline static void clear() { rendererAPI->clear(); }
 
         inline static void drawIndexed(
-          const std::shared_ptr<VertexArray>& vertexArray)
+          const ref<VertexArray>& vertexArray)
         {
             rendererAPI->drawIndexed(vertexArray);
         }

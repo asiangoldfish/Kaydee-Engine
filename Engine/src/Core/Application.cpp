@@ -19,7 +19,7 @@ namespace Kaydee {
 
         window = std::unique_ptr<Window>(Window::create());
         window->setEventCallback(BIND_EVENT_FN(onEvent)); // Event callback
-        //window->setVSync(true);
+        // window->setVSync(true);
 
         Renderer::init();
 
@@ -38,8 +38,10 @@ namespace Kaydee {
             Timestep timestep = time - lastFrameTime;
             lastFrameTime = time;
 
-            for (Layer* layer : layerStack) {
-                layer->onUpdate(timestep);
+            if (!minimized) {
+                for (Layer* layer : layerStack) {
+                    layer->onUpdate(timestep);
+                }
             }
 
             imguiLayer->begin();
@@ -56,6 +58,8 @@ namespace Kaydee {
     {
         EventDispatcher dispatcher(e);
         dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(onWindowClose));
+        dispatcher.dispatch<WindowResizeEvent>(BIND_EVENT_FN(onWindowResize));
+        dispatcher.dispatch<WindowIconifyEvent>(BIND_EVENT_FN(onWindowIconify));
 
         // This prevents a handled event to be propagated backward
         for (auto it = layerStack.end(); it != layerStack.begin();) {
@@ -72,15 +76,24 @@ namespace Kaydee {
         return true;
     }
 
-    void Application::pushLayer(Layer* layer)
+    bool Application::onWindowResize(WindowResizeEvent& e)
     {
-        layerStack.pushLayer(layer);
-        layer->onAttach();
+        // On Windows, the window size is (0, 0) while minimized.
+        if (e.getWidth() == 0 || e.getHeight() == 0) {
+            minimized = true;
+            return false;
+        }
+
+        minimized = false;
+        Renderer::onWindowResize(e.getWidth(), e.getHeight());
+
+        return false;
     }
 
-    void Application::pushOverlay(Layer* overlay)
+    bool Application::onWindowIconify(WindowIconifyEvent& e)
     {
-        layerStack.pushOverlay(overlay);
-        overlay->onAttach();
+        minimized = e.getMinimized();
+        KD_WARN("Window is {0}", minimized ? "minimized" : "not minimized");
+        return true;
     }
 }

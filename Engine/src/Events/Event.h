@@ -11,6 +11,7 @@ namespace Kaydee {
         None = 0,
         WindowClose,
         WindowResize,
+        WindowIconify,
         WindowFocus,
         WindowLostFocus,
         WindowMoved,

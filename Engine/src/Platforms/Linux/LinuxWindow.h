@@ -46,6 +46,7 @@ namespace Kaydee {
             std::string title;
             unsigned int width, height;
             bool vSync;
+            int minimized;
 
             EventCallbackFn eventCallback;
         };

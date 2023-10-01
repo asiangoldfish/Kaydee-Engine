@@ -29,8 +29,17 @@ namespace Kaydee {
         void onEvent(Event& e);
 
         // Layersand there's to go about it
-        void pushLayer(Layer* layer);
-        void pushOverlay(Layer* overlay);
+        inline void pushLayer(Layer* layer)
+        {
+            layerStack.pushLayer(layer);
+            layer->onAttach();
+        }
+
+        inline void pushOverlay(Layer* overlay)
+        {
+            layerStack.pushOverlay(overlay);
+            overlay->onAttach();
+        }
 
         // Window
         inline Window& getWindow() { return *window; }
@@ -40,10 +49,14 @@ namespace Kaydee {
 
     private:
         bool onWindowClose(WindowCloseEvent& e);
+        bool onWindowResize(WindowResizeEvent& e);
+        // When the window is minimized
+        bool onWindowIconify(WindowIconifyEvent& e);
 
     private:
         std::unique_ptr<Window> window;
         bool running = true;
+        bool minimized = false;
 
         // Layers
         ImGuiLayer* imguiLayer;

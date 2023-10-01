@@ -78,6 +78,15 @@ namespace Kaydee {
               data.height = height;
 
               WindowResizeEvent event(width, height);
+              KD_CORE_WARN("{0} {1}", width, height);
+              data.eventCallback(event);
+          });
+
+        glfwSetWindowIconifyCallback(
+          window, [](GLFWwindow* window, int minimized) {
+              WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+              data.minimized = minimized;
+              WindowIconifyEvent event(minimized);
               data.eventCallback(event);
           });
 

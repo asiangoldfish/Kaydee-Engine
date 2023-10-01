@@ -6,9 +6,9 @@
 #include "kdpch.h"
 
 namespace Kaydee {
-    class WindowResizeEvent : public Kaydee::Event
+    class WindowResizeEvent : public Event
     {
-      public:
+    public:
         WindowResizeEvent(unsigned int width, unsigned int height)
           : width(width)
           , height(height)
@@ -28,13 +28,33 @@ namespace Kaydee {
         EVENT_CLASS_TYPE(WindowResize);
         EVENT_CLASS_CATEGORY(EventCategoryApplication)
 
-      private:
+    private:
         int width, height;
+    };
+
+    /**
+     * Event called when the window is minimized or restored
+     */
+    class WindowIconifyEvent : public Event
+    {
+    public:
+        WindowIconifyEvent(int minimized)
+          : minimized(minimized)
+        {
+        }
+
+        int getMinimized() { return minimized; }
+
+        EVENT_CLASS_TYPE(WindowIconify);
+        EVENT_CLASS_CATEGORY(EventCategoryApplication)
+
+    private:
+        int minimized;
     };
 
     class WindowCloseEvent : public Event
     {
-      public:
+    public:
         WindowCloseEvent() {}
 
         EVENT_CLASS_TYPE(WindowClose)
@@ -43,7 +63,7 @@ namespace Kaydee {
 
     class AppTickEvent : public Event
     {
-      public:
+    public:
         AppTickEvent() {}
 
         EVENT_CLASS_TYPE(AppTick)
@@ -52,7 +72,7 @@ namespace Kaydee {
 
     class AppUpdateEvent : public Event
     {
-      public:
+    public:
         AppUpdateEvent() {}
 
         EVENT_CLASS_TYPE(AppUpdate)
@@ -61,7 +81,7 @@ namespace Kaydee {
 
     class AppRenderEvent : public Event
     {
-      public:
+    public:
         AppRenderEvent() {}
 
         EVENT_CLASS_TYPE(AppRender)

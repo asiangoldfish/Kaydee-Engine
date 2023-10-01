@@ -67,7 +67,7 @@ namespace Kaydee {
 
     bool OrthographicCameraController::onWindowResized(WindowResizeEvent& e)
     {
-        zoomLevel -= e.getWidth() / (float)e.getHeight();
+        aspectRatio = e.getWidth() / (float)e.getHeight();
         camera.setProjection(-aspectRatio * zoomLevel,
                              aspectRatio * zoomLevel,
                              -zoomLevel,

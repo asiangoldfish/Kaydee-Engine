@@ -4,6 +4,12 @@
         "CMAKE_BUILD_TYPE": "Debug", // Set your desired build type
         "CMAKE_GENERATOR": "Unix Makefiles"
     },
+    "cmake.debugConfig": {
+        "cwd": "${workspaceFolder}"
+    },
+    "editor.indentSize": "tabSize",
+    "editor.tabSize": 4,
+    "editor.detectIndentation": false,
     "cmake.configureOnEdit": false,
     "editor.formatOnSave": true,
     "debug.inlineValues": "on",

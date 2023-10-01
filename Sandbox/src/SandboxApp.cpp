@@ -15,8 +15,7 @@ class ExampleLayer : public Kaydee::Layer
 public:
     ExampleLayer()
       : Layer("Example")
-      , camera(-1.6f, 1.6f, -0.9f, 0.9f)
-      , cameraPosition(0.0f)
+      , cameraController(1280.0f / 720.0f, true)
     {
         vertexArray.reset(Kaydee::VertexArray::create());
 
@@ -159,34 +158,18 @@ public:
         // KD_TRACE(
         //   "Delta time: {0}s ({1}ms)", ts.getSeconds(), ts.getMilliseconds());
 
-        // Move camera
-        if (Kaydee::Input::isKeyPressed(KD_KEY_A)) {
-            cameraPosition.x -= cameraMoveSpeed * ts;
-        }
-        if (Kaydee::Input::isKeyPressed(KD_KEY_D)) {
-            cameraPosition.x += cameraMoveSpeed * ts;
-        }
-        if (Kaydee::Input::isKeyPressed(KD_KEY_W)) {
-            cameraPosition.y += cameraMoveSpeed * ts;
-        }
-        if (Kaydee::Input::isKeyPressed(KD_KEY_S)) {
-            cameraPosition.y -= cameraMoveSpeed * ts;
-        }
+        //------------
+        // Update
+        //------------
+        cameraController.onUpdate(ts);
 
-        if (Kaydee::Input::isKeyPressed(KD_KEY_Q)) {
-            cameraRotation -= cameraRotationSpeed * ts;
-        }
-        if (Kaydee::Input::isKeyPressed(KD_KEY_E)) {
-            cameraRotation += cameraRotationSpeed * ts;
-        }
-
+        //------------
+        // Render
+        //------------
         Kaydee::RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
         Kaydee::RenderCommand::clear();
 
-        camera.setRotation(cameraRotation);
-        camera.setPosition(cameraPosition);
-
-        Kaydee::Renderer::beginScene(camera);
+        Kaydee::Renderer::beginScene(cameraController.getCamera());
         {
             static glm::mat4 scale =
               glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
@@ -208,7 +191,7 @@ public:
                 }
             }
             auto textureShader = shaderLibrary.get("texture");
-            
+
             textureShader->bind();
             texture->bind();
 
@@ -234,11 +217,13 @@ public:
         Kaydee::Renderer::endScene();
     }
 
-    void onEvent(Kaydee::Event& event) override
+    void onEvent(Kaydee::Event& e) override
     {
-        Kaydee::EventDispatcher dispatcher(event);
+        Kaydee::EventDispatcher dispatcher(e);
         dispatcher.dispatch<Kaydee::KeyPressedEvent>(
           KD_BIND_EVENT_FN(ExampleLayer::OnKeyPressedEvent));
+
+        cameraController.onEvent(e);
     }
 
     bool OnKeyPressedEvent(Kaydee::KeyPressedEvent& event) { return false; }
@@ -262,11 +247,7 @@ private:
 
     Kaydee::ref<Kaydee::Texture2D> texture, pandaLogo;
 
-    Kaydee::OrthographicCamera camera;
-    glm::vec3 cameraPosition;
-    float cameraMoveSpeed = 3.0f;
-    float cameraRotation = 0.0f;
-    float cameraRotationSpeed = 180.0f;
+    Kaydee::OrthographicCameraController cameraController;
 
     glm::vec3 squareColor = { 0.2f, 0.3f, 0.8f },
               checkerColor = { 1.0f, 1.0f, 1.0f },

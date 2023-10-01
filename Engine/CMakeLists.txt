@@ -26,6 +26,7 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_CORE}/LayerStack.h                             ${MODULE_CORE}/LayerStack.cpp
     ${MODULE_CORE}/Timestep.h                               ${MODULE_CORE}/Timestep.cpp
     ${MODULE_CORE}/Input.h
+    ${MODULE_CORE}/OrthographicCameraController.h           ${MODULE_CORE}/OrthographicCameraController.cpp
 
     ${MODULE_CORE}/Window.h
     

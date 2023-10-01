@@ -1,6 +1,7 @@
 #include "Renderer/OrthographicCamera.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include "OrthographicCamera.h"
 
 namespace Kaydee {
 
@@ -11,6 +12,16 @@ namespace Kaydee {
       : projectionMatrix(glm::ortho(left, right, bottom, top, -1.0f, 1.0f))
       , viewMatrix(1.0f)
     {
+        viewProjectionMatrix = projectionMatrix * viewMatrix;
+    }
+
+    void OrthographicCamera::setProjection(float left,
+                                           float right,
+                                           float bottom,
+                                           float top)
+    {
+        projectionMatrix = glm::ortho(left, right, bottom, top, -1.0f, 1.0f);
+
         viewProjectionMatrix = projectionMatrix * viewMatrix;
     }
 

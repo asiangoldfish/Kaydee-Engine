@@ -26,8 +26,7 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_CORE}/LayerStack.h                             ${MODULE_CORE}/LayerStack.cpp
     ${MODULE_CORE}/Timestep.h                               ${MODULE_CORE}/Timestep.cpp
     ${MODULE_CORE}/Input.h
-    ${MODULE_CORE}/OrthographicCameraController.h           ${MODULE_CORE}/OrthographicCameraController.cpp
-
+    
     ${MODULE_CORE}/Window.h
     
     # Events
@@ -35,7 +34,7 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_EVENTS}/Event.h
     ${MODULE_EVENTS}/KeyEvent.h
     ${MODULE_EVENTS}/MouseEvent.h
-
+    
     # Platforms
     ${MODULE_PLATFORMS}/Linux/LinuxWindow.h                 ${MODULE_PLATFORMS}/Linux/LinuxWindow.cpp
     ${MODULE_PLATFORMS}/Linux/LinuxInput.h                  ${MODULE_PLATFORMS}/Linux/LinuxInput.cpp
@@ -45,12 +44,12 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_PLATFORMS}/OpenGL/OpenGLVertexArray.h          ${MODULE_PLATFORMS}/OpenGL/OpenGLVertexArray.cpp
     ${MODULE_PLATFORMS}/OpenGL/OpenGLShader.h               ${MODULE_PLATFORMS}/OpenGL/OpenGLShader.cpp
     ${MODULE_PLATFORMS}/OpenGL/OpenGLTexture.h              ${MODULE_PLATFORMS}/OpenGL/OpenGLTexture.cpp
-
+    
     # Imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui # Lib
     ${MODULE_IMGUI}/ImGuiLayer.h                            ${MODULE_IMGUI}/ImGuiLayer.cpp
     ${MODULE_IMGUI}/ImGuiBuild.cpp
-
+    
     # Renderer
     ${MODULE_RENDERER}/Buffer.h                             ${MODULE_RENDERER}/Buffer.cpp
     ${MODULE_RENDERER}/GraphicsContext.h                    ${MODULE_RENDERER}/GraphicsContext.cpp
@@ -61,13 +60,14 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_RENDERER}/RenderCommand.h                      ${MODULE_RENDERER}/RenderCommand.cpp
     ${MODULE_RENDERER}/OrthographicCamera.h                 ${MODULE_RENDERER}/OrthographicCamera.cpp
     ${MODULE_RENDERER}/Texture.h                            ${MODULE_RENDERER}/Texture.cpp
-
+    ${MODULE_RENDERER}/OrthographicCameraController.h       ${MODULE_RENDERER}/OrthographicCameraController.cpp
+    
     # Vendor
     ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.h       ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.cpp
     ${MODULE_VENDOR}/imgui/backends/imgui_impl_opengl3.h    ${MODULE_VENDOR}/imgui/backends/imgui_impl_opengl3.cpp
-)
-
-target_include_directories(${MODULE_NAME} PRIVATE
+    )
+    
+    target_include_directories(${MODULE_NAME} PRIVATE
     src
     vendor
 )

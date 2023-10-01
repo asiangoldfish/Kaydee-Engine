@@ -17,7 +17,7 @@
 #include "Core/Input.h"
 #include "Core/KeyCodes.h"
 #include "Core/MouseButtonCodes.h"
-#include "Core/OrthographicCameraController.h"
+#include "Renderer/OrthographicCameraController.h"
 
 // Rendering
 #include "Renderer/Renderer.h"

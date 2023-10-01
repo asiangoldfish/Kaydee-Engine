@@ -78,7 +78,6 @@ namespace Kaydee {
               data.height = height;
 
               WindowResizeEvent event(width, height);
-              KD_CORE_WARN("{0} {1}", width, height);
               data.eventCallback(event);
           });
 

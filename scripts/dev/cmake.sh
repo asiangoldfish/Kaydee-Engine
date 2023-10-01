@@ -30,13 +30,9 @@ function cmake_build() {
     fi
 
     cd "$BUILDDIR"
-    cmake -G "Unix Makefiles" ..
-    cmake build . && echo "Successfully built the project"
-
-    # Generate JSON compile commands for clangd lsp
-    cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .
-    
-    make
+    # Change CMAKE_BUILD_TYPE to Release or Debug
+    cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -G "Unix Makefiles" ..
+    cmake --build . && echo "Successfully built the project"
 }
 
 
@@ -52,7 +48,7 @@ function cmake_run() {
     fi
 
     cd "$BUILDDIR"
-    make && "$OUT"
+    make && { cd ..; "$OUT"; }
 }
 
 ####

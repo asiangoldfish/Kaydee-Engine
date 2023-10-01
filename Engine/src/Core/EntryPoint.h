@@ -12,38 +12,22 @@ usage();
 void
 version();
 
-constexpr uint32_t
-hash(const char* data, size_t const size) noexcept
-{
-    uint32_t hash = 5381;
-
-    for (const char* c = data; c < data + size; ++c)
-        hash = ((hash << 5) + hash) + (unsigned char)*c;
-
-    return hash;
-}
-
 int
 main(int argc, char** argv)
 {
     if (argc == 2) {
         std::string option(argv[1]);
-        switch (hash(option.c_str(), sizeof(option))) {
-            case hash("--help", 7):
-            case hash("-h", 3):
-                usage();
-                break;
-
-            case hash("--version", 10):
-            case hash("-v", 3):
-                version();
-                break;
-
-            default:
-                std::cout << "Argument \'" << argv[1] << "\' not recognized.\n";
-                usage();
+        if (option == "--help" || option == "-h") {
+            usage();
+            return 0;
+        } else if (option == "--version" || option == "-v") {
+            version();
+            return 0;
+        } else {
+            std::cout << "Argument \'" << argv[1] << "\' is not recognized.\n";
+            usage();
+            return 1;
         }
-        return 0;
     }
 
     Kaydee::Log::init();
@@ -71,7 +55,23 @@ OPTIONS:
 void
 version()
 {
-    std::cout << "1.0.0\n";
+    // std::cout << "1.0.0\n";
+
+    if (__cplusplus == 202101L)
+        std::cout << "C++23";
+    else if (__cplusplus == 202002L)
+        std::cout << "C++20";
+    else if (__cplusplus == 201703L)
+        std::cout << "C++17";
+    else if (__cplusplus == 201402L)
+        std::cout << "C++14";
+    else if (__cplusplus == 201103L)
+        std::cout << "C++11";
+    else if (__cplusplus == 199711L)
+        std::cout << "C++98";
+    else
+        std::cout << "pre-standard C++." << __cplusplus;
+    std::cout << "\n";
 }
 
 #endif

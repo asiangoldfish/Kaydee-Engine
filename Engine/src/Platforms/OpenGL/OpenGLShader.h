@@ -13,14 +13,24 @@ namespace Kaydee {
     {
     public:
         OpenGLShader(const std::string& filepath);
-        OpenGLShader(const std::string& vertexSrc,
+        OpenGLShader(const std::string& name,
+                     const std::string& vertexSrc,
                      const std::string& fragmentSrc);
+
         virtual ~OpenGLShader();
 
         void bind() const override;
         void unbind() const override;
 
+        virtual const std::string& getName() const override { return name; }
+
+        //-----------
+        // Uniforms
+        //-----------
+        // Ints
         void uploadUniformInt(const std::string& name, int value);
+
+        // Floats
         void uploadUniformFloat(const std::string& name, float value);
         void uploadUniformFloat2(const std::string& name,
                                  const glm::vec2& values);
@@ -28,6 +38,8 @@ namespace Kaydee {
                                  const glm::vec3& values);
         void uploadUniformFloat4(const std::string& name,
                                  const glm::vec4& values);
+
+        // Mats
         void uploadUniformMat4(const std::string& name,
                                const glm::mat4& matrix);
 
@@ -46,10 +58,7 @@ namespace Kaydee {
         void compile(
           const std::unordered_map<GLenum, std::string>& shaderSources);
 
-        /**
-         * @brief Get platform specific end of line
-         */
-        inline std::string getEol();
+        std::string name;
 
     private:
         uint32_t rendererId;

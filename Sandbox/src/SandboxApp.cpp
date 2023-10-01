@@ -8,6 +8,8 @@
 #include <filesystem>
 #include <cmath>
 
+#include "Renderer/Shader.h"
+
 class ExampleLayer : public Kaydee::Layer
 {
 public:
@@ -102,8 +104,8 @@ public:
             }
         )";
 
-        shader.reset(
-          Kaydee::Shader::create(vertexShaderSrc, fragmentShaderSrc));
+        shader = Kaydee::Shader::create(
+          "vertexPosColor", vertexShaderSrc, fragmentShaderSrc);
 
         std::string flatVertexSrc = R"(
             #version 330 core
@@ -135,11 +137,11 @@ public:
             }
         )";
 
-        flatColorShader.reset(
-          Kaydee::Shader::create(flatVertexSrc, flatFragmentSrc));
+        flatColorShader =
+          Kaydee::Shader::create("flatVertex", flatVertexSrc, flatFragmentSrc);
 
-        textureShader.reset(
-          Kaydee::Shader::create("Sandbox/assets/shaders/texture.glsl"));
+        auto textureShader =
+          shaderLibrary.load("Sandbox/assets/shaders/texture.glsl");
 
         texture =
           Kaydee::Texture2D::create("Sandbox/assets/textures/checkerboard.png");
@@ -205,7 +207,8 @@ public:
                       flatColorShader, squareVA, transform);
                 }
             }
-
+            auto textureShader = shaderLibrary.get("texture");
+            
             textureShader->bind();
             texture->bind();
 
@@ -250,10 +253,11 @@ public:
     }
 
 private:
+    Kaydee::ShaderLibrary shaderLibrary;
     Kaydee::ref<Kaydee::Shader> shader;
     Kaydee::ref<Kaydee::VertexArray> vertexArray;
 
-    Kaydee::ref<Kaydee::Shader> flatColorShader, textureShader;
+    Kaydee::ref<Kaydee::Shader> flatColorShader;
     Kaydee::ref<Kaydee::VertexArray> squareVA;
 
     Kaydee::ref<Kaydee::Texture2D> texture, pandaLogo;

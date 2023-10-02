@@ -41,17 +41,18 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
 
     Kaydee::Renderer2D::beginScene(cameraController.getCamera());
     {
-        Kaydee::Renderer2D::drawQuad(
-          { -1.0f, 0.0f }, { .8f, .8f }, 0.0f, { .8f, 0.2f, 0.3f, 1.0f });
 
-        Kaydee::Renderer2D::drawQuad(
-          { 0.5f, -0.5f }, { 0.5f, 0.75f }, 30.f, { 0.2f, 0.3f, 0.8f, 1.0f });
-
-        Kaydee::Renderer2D::drawQuad({ 0.0f, 0.0f, -0.01f },
+        Kaydee::Renderer2D::drawQuad({ 0.0f, 0.0f, -0.1f },
                                      { 10.0f, 10.0f },
                                      0.0f,
                                      { 1.0f, 1.0f, 1.0f, 1.0f },
                                      checkerboardTexture);
+
+        Kaydee::Renderer2D::drawQuad(
+          { -1.0f, 0.0f }, { .8f, .8f }, 0.0f, { .8f, 0.2f, 0.3f, 0.9f });
+
+        Kaydee::Renderer2D::drawQuad(
+          { 0.5f, -0.5f }, { 0.5f, 0.75f }, 30.f, { 0.2f, 0.3f, 0.8f, 1.0f });
     }
     Kaydee::Renderer2D::endScene();
 }

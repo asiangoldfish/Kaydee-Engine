@@ -227,11 +227,11 @@ public:
 
         cameraController.onEvent(e);
 
-        if (e.getEventType() == Kaydee::EventType::WindowResize) {
-            auto& re = (Kaydee::WindowResizeEvent&)e;
-            // float zoom = e.getWidth() / 1280.f * -1;
-            // cameraController.setZoomLevel(
-        }
+        // if (e.getEventType() == Kaydee::EventType::WindowResize) {
+        //     auto& re = (Kaydee::WindowResizeEvent&)e;
+        //     // float zoom = e.getWidth() / 1280.f * -1;
+        //     // cameraController.setZoomLevel(
+        // }
     }
 
     bool OnKeyPressedEvent(Kaydee::KeyPressedEvent& event) { return false; }

@@ -61,6 +61,7 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_RENDERER}/OrthographicCamera.h                 ${MODULE_RENDERER}/OrthographicCamera.cpp
     ${MODULE_RENDERER}/Texture.h                            ${MODULE_RENDERER}/Texture.cpp
     ${MODULE_RENDERER}/OrthographicCameraController.h       ${MODULE_RENDERER}/OrthographicCameraController.cpp
+    ${MODULE_RENDERER}/Renderer2D.h                         ${MODULE_RENDERER}/Renderer2D.cpp
     
     # Vendor
     ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.h       ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.cpp

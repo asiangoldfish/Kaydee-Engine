@@ -16,6 +16,8 @@ Sandbox2D::Sandbox2D()
 void
 Sandbox2D::onAttach()
 {
+    checkerboardTexture =
+      Kaydee::Texture2D::create("Sandbox/assets/textures/checkerboard.png");
 }
 
 void
@@ -43,7 +45,13 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
           { -1.0f, 0.0f }, { .8f, .8f }, 0.0f, { .8f, 0.2f, 0.3f, 1.0f });
 
         Kaydee::Renderer2D::drawQuad(
-          { 0.5f, -0.5f }, { 0.5f, 0.75f }, 90.f, { 0.2f, 0.3f, 0.8f, 1.0f });
+          { 0.5f, -0.5f }, { 0.5f, 0.75f }, 30.f, { 0.2f, 0.3f, 0.8f, 1.0f });
+
+        Kaydee::Renderer2D::drawQuad({ 0.0f, 0.0f, -0.01f },
+                                     { 10.0f, 10.0f },
+                                     0.0f,
+                                     { 1.0f, 1.0f, 1.0f, 1.0f },
+                                     checkerboardTexture);
     }
     Kaydee::Renderer2D::endScene();
 }

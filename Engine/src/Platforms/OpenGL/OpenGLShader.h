@@ -22,6 +22,7 @@ namespace Kaydee {
         void bind() const override;
         void unbind() const override;
 
+        virtual void setInt(const std::string& name, const int value) override;
         virtual void setFloat3(const std::string& name,
                                const glm::vec3& value) override;
         virtual void setFloat4(const std::string& name,

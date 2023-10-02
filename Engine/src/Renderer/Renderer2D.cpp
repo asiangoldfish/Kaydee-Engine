@@ -10,7 +10,8 @@ namespace Kaydee {
     struct Renderer2DContext
     {
         ref<VertexArray> vertexArray;
-        ref<Shader> shader;
+        ref<Shader> flatColorShader;
+        ref<Shader> textureShader;
     };
 
     static Renderer2DContext* contextData;
@@ -20,18 +21,19 @@ namespace Kaydee {
         contextData = new Renderer2DContext();
         contextData->vertexArray = VertexArray::create();
 
-        float squareVertices[3 * 4] = {
-            -0.5f, -0.5f, 0.0f, // Bottom left
-            0.5f,  -0.5f, 0.0f, // Bottom right
-            0.5f,  0.5f,  0.0f, // Top right
-            -0.5f, 0.5f,  0.0f  // Top left
+        float squareVertices[]= {
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // Bottom left
+            0.5f,  -0.5f, 0.0f, 1.0f, 0.0f, // Bottom right
+            0.5f,  0.5f,  0.0f, 1.0f, 1.0f, // Top right
+            -0.5f, 0.5f,  0.0f, 0.0f, 1.0f  // Top left
         };
 
         ref<VertexBuffer> squareVB;
         squareVB.reset(
           VertexBuffer::create(squareVertices, sizeof(squareVertices)));
 
-        squareVB->setLayout({ { ShaderDataType::Float3, "a_position" } });
+        squareVB->setLayout({ { ShaderDataType::Float3, "a_position" },
+                              { ShaderDataType::Float2, "a_texCoord" } });
 
         contextData->vertexArray->addVertexBuffer(squareVB);
 
@@ -43,8 +45,15 @@ namespace Kaydee {
 
         contextData->vertexArray->setIndexBuffer(squareIB);
 
-        contextData->shader =
+        // Flat color shader
+        contextData->flatColorShader =
           Shader::create("Sandbox/assets/shaders/flatColor.glsl");
+
+        // Texture shader
+        contextData->textureShader =
+          Shader::create("Sandbox/assets/shaders/texture.glsl");
+        contextData->textureShader->bind();
+        contextData->textureShader->setInt("u_texture", 0);
     }
 
     void Renderer2D::shutdown()
@@ -57,9 +66,13 @@ namespace Kaydee {
 
     void Renderer2D::beginScene(const OrthographicCamera& camera)
     {
-        contextData->shader->bind();
-        contextData->shader->setMat4("u_viewProjection",
-                                     camera.getViewProjectionMatrix());
+        contextData->flatColorShader->bind();
+        contextData->flatColorShader->setMat4("u_viewProjection",
+                                              camera.getViewProjectionMatrix());
+
+        contextData->textureShader->bind();
+        contextData->textureShader->setMat4("u_viewProjection",
+                                            camera.getViewProjectionMatrix());
     }
 
     void Renderer2D::endScene() {}
@@ -69,7 +82,7 @@ namespace Kaydee {
                               const float rotation,
                               const glm::vec4& color)
     {
-        drawQuad({ position.x, position.y, 1.0f }, size, rotation, color);
+        drawQuad({ position.x, position.y, 0.0f }, size, rotation, color);
     }
 
     void Renderer2D::drawQuad(const glm::vec3& position,
@@ -77,18 +90,47 @@ namespace Kaydee {
                               const float rotation,
                               const glm::vec4& color)
     {
-        contextData->shader->bind();
-        contextData->shader->setFloat4("u_color", color);
+        contextData->flatColorShader->bind();
+        contextData->flatColorShader->setFloat4("u_color", color);
 
-        // TODO: Add rotation
         glm::mat4 transform =
           glm::translate(glm::mat4(1.0f), position) *
           glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 }) *
           glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-        contextData->shader->setMat4("u_transform", transform);
+        contextData->flatColorShader->setMat4("u_transform", transform);
 
         contextData->vertexArray->bind();
         RenderCommand::drawIndexed(contextData->vertexArray);
     }
 
+    void Renderer2D::drawQuad(const glm::vec2& position,
+                              const glm::vec2& size,
+                              const float rotation,
+                              const glm::vec4& color,
+                              const ref<Texture2D> texture)
+    {
+        drawQuad(
+          { position.x, position.y, 0.0f }, size, rotation, color, texture);
+    }
+
+    void Renderer2D::drawQuad(const glm::vec3& position,
+                              const glm::vec2& size,
+                              const float rotation,
+                              const glm::vec4& color,
+                              const ref<Texture2D> texture)
+    {
+        contextData->textureShader->bind();
+        contextData->textureShader->setFloat4("u_color", color);
+
+        glm::mat4 transform =
+          glm::translate(glm::mat4(1.0f), position) *
+          glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 }) *
+          glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+        contextData->textureShader->setMat4("u_transform", transform);
+
+        texture->bind();
+
+        contextData->vertexArray->bind();
+        RenderCommand::drawIndexed(contextData->vertexArray);
+    }
 }

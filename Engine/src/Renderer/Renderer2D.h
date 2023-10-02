@@ -2,6 +2,7 @@
 #define __RENDER_2D_H__
 
 #include "OrthographicCamera.h"
+#include "Texture.h"
 
 namespace Kaydee {
 
@@ -19,10 +20,23 @@ namespace Kaydee {
                              const glm::vec2& size,
                              const float rotation,
                              const glm::vec4& color);
+
         static void drawQuad(const glm::vec3& position,
                              const glm::vec2& size,
                              const float rotation,
                              const glm::vec4& color);
+
+        static void drawQuad(const glm::vec2& position,
+                             const glm::vec2& size,
+                             const float rotation,
+                             const glm::vec4& color,
+                             const ref<Texture2D> texture);
+
+        static void drawQuad(const glm::vec3& position,
+                             const glm::vec2& size,
+                             const float rotation,
+                             const glm::vec4& color,
+                             const ref<Texture2D> texture);
     };
 }
 

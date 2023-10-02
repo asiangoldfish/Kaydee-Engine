@@ -1,4 +1,5 @@
 #include <Kaydee/Kaydee.h>
+
 #include "Platforms/OpenGL/OpenGLShader.h"
 
 #include <imgui/imgui.h>
@@ -9,6 +10,7 @@
 #include <cmath>
 
 #include "Renderer/Shader.h"
+#include "Sandbox2D.h"
 
 class ExampleLayer : public Kaydee::Layer
 {
@@ -17,7 +19,7 @@ public:
       : Layer("Example")
       , cameraController(1280.0f / 720.0f, true)
     {
-        vertexArray.reset(Kaydee::VertexArray::create());
+        vertexArray = Kaydee::VertexArray::create();
 
         float vertices[3 * 7] = { -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
                                   0.5f,  -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
@@ -42,7 +44,7 @@ public:
           indices, sizeof(indices) / sizeof(uint32_t)));
         vertexArray->setIndexBuffer(indexBuffer);
 
-        squareVA.reset(Kaydee::VertexArray::create());
+        squareVA = Kaydee::VertexArray::create();
 
         float squareVertices[5 * 4] = {
             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // Bottom left
@@ -265,9 +267,12 @@ class Sandbox : public Kaydee::Application
 public:
     Sandbox()
     {
+        // Only for debugging/development
         std::cout << "Working directory: " << std::filesystem::current_path()
                   << std::endl;
-        pushLayer(new ExampleLayer());
+
+        // pushLayer(new ExampleLayer());
+        pushLayer(new Sandbox2D());
     }
 
     virtual ~Sandbox() {}

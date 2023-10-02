@@ -7,7 +7,7 @@
 #include "Platforms/OpenGL/OpenGLVertexArray.h"
 
 namespace Kaydee {
-    VertexArray* VertexArray::create()
+    ref<VertexArray> VertexArray::create()
     {
         switch (Renderer::getAPI()) {
             case RendererAPI::API::None:
@@ -16,7 +16,7 @@ namespace Kaydee {
                 return nullptr;
 
             case RendererAPI::API::OpenGL:
-                return new OpenGLVertexArray();
+                return std::make_shared<OpenGLVertexArray>();
         }
 
         KD_CORE_ASSERT(false, "Unknown RendererAPI!");

@@ -14,18 +14,15 @@ namespace Kaydee {
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
 
-        virtual void addVertexBuffer(
-          const ref<VertexBuffer>& vertexBuffer) = 0;
+        virtual void addVertexBuffer(const ref<VertexBuffer>& vertexBuffer) = 0;
 
-        virtual void setIndexBuffer(
-          const ref<IndexBuffer>& indexBuffer) = 0;
+        virtual void setIndexBuffer(const ref<IndexBuffer>& indexBuffer) = 0;
 
-        virtual std::vector<ref<VertexBuffer>>&
-        getVertexBuffers() = 0;
+        virtual std::vector<ref<VertexBuffer>>& getVertexBuffers() = 0;
 
         virtual ref<IndexBuffer>& getIndexBuffer() = 0;
 
-        static VertexArray* create();
+        static ref<VertexArray> create();
     };
 }
 

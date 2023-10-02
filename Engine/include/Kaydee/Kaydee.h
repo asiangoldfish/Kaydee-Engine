@@ -33,4 +33,4 @@
 // Entry point
 #include "Core/EntryPoint.h"
 
-#endif
+#endif // __KAYDEE_H__

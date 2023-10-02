@@ -10,8 +10,8 @@ namespace Kaydee {
     struct Renderer2DContext
     {
         ref<VertexArray> vertexArray;
-        ref<Shader> flatColorShader;
         ref<Shader> textureShader;
+        ref<Texture2D> whiteTexture;
     };
 
     static Renderer2DContext* contextData;
@@ -21,7 +21,7 @@ namespace Kaydee {
         contextData = new Renderer2DContext();
         contextData->vertexArray = VertexArray::create();
 
-        float squareVertices[]= {
+        float squareVertices[] = {
             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // Bottom left
             0.5f,  -0.5f, 0.0f, 1.0f, 0.0f, // Bottom right
             0.5f,  0.5f,  0.0f, 1.0f, 1.0f, // Top right
@@ -29,8 +29,7 @@ namespace Kaydee {
         };
 
         ref<VertexBuffer> squareVB;
-        squareVB.reset(
-          VertexBuffer::create(squareVertices, sizeof(squareVertices)));
+        squareVB = VertexBuffer::create(squareVertices, sizeof(squareVertices));
 
         squareVB->setLayout({ { ShaderDataType::Float3, "a_position" },
                               { ShaderDataType::Float2, "a_texCoord" } });
@@ -40,14 +39,15 @@ namespace Kaydee {
         unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
         ref<IndexBuffer> squareIB;
 
-        squareIB.reset(IndexBuffer::create(
-          squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+        squareIB = IndexBuffer::create(
+          squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 
         contextData->vertexArray->setIndexBuffer(squareIB);
 
-        // Flat color shader
-        contextData->flatColorShader =
-          Shader::create("Sandbox/assets/shaders/flatColor.glsl");
+        contextData->whiteTexture = Texture2D::create(1, 1);
+        uint32_t whiteTextureData = 0xffffffff;
+        contextData->whiteTexture->setData((void*)&whiteTextureData,
+                                           sizeof(uint32_t));
 
         // Texture shader
         contextData->textureShader =
@@ -66,10 +66,6 @@ namespace Kaydee {
 
     void Renderer2D::beginScene(const OrthographicCamera& camera)
     {
-        contextData->flatColorShader->bind();
-        contextData->flatColorShader->setMat4("u_viewProjection",
-                                              camera.getViewProjectionMatrix());
-
         contextData->textureShader->bind();
         contextData->textureShader->setMat4("u_viewProjection",
                                             camera.getViewProjectionMatrix());
@@ -90,14 +86,18 @@ namespace Kaydee {
                               const float rotation,
                               const glm::vec4& color)
     {
-        contextData->flatColorShader->bind();
-        contextData->flatColorShader->setFloat4("u_color", color);
+        contextData->textureShader->bind();
+        contextData->textureShader->setFloat4("u_color", color);
+
+        // Disable texture
+        contextData->whiteTexture->bind();
+        contextData->textureShader->setBool("u_enableTexture", false);
 
         glm::mat4 transform =
           glm::translate(glm::mat4(1.0f), position) *
           glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 }) *
           glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-        contextData->flatColorShader->setMat4("u_transform", transform);
+        contextData->textureShader->setMat4("u_transform", transform);
 
         contextData->vertexArray->bind();
         RenderCommand::drawIndexed(contextData->vertexArray);
@@ -119,8 +119,8 @@ namespace Kaydee {
                               const glm::vec4& color,
                               const ref<Texture2D> texture)
     {
-        contextData->textureShader->bind();
         contextData->textureShader->setFloat4("u_color", color);
+        contextData->textureShader->setBool("u_enableTexture", true);
 
         glm::mat4 transform =
           glm::translate(glm::mat4(1.0f), position) *
@@ -132,5 +132,6 @@ namespace Kaydee {
 
         contextData->vertexArray->bind();
         RenderCommand::drawIndexed(contextData->vertexArray);
+        texture->unbind();
     }
 }

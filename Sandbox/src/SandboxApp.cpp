@@ -26,8 +26,7 @@ public:
                                   0.0f,  0.5f,  0.0f, 1.0f, 1.0f, 0.0f, 1.0f };
 
         Kaydee::ref<Kaydee::VertexBuffer> vertexBuffer;
-        vertexBuffer.reset(
-          Kaydee::VertexBuffer::create(vertices, sizeof(vertices)));
+        vertexBuffer = Kaydee::VertexBuffer::create(vertices, sizeof(vertices));
 
         Kaydee::BufferLayout layout = {
             { Kaydee::ShaderDataType::Float3, "a_position" },
@@ -40,8 +39,8 @@ public:
         // Index buffer
         unsigned int indices[3] = { 0, 1, 2 };
         Kaydee::ref<Kaydee::IndexBuffer> indexBuffer;
-        indexBuffer.reset(Kaydee::IndexBuffer::create(
-          indices, sizeof(indices) / sizeof(uint32_t)));
+        indexBuffer = Kaydee::IndexBuffer::create(
+          indices, sizeof(indices) / sizeof(uint32_t));
         vertexArray->setIndexBuffer(indexBuffer);
 
         squareVA = Kaydee::VertexArray::create();
@@ -54,8 +53,8 @@ public:
         };
 
         Kaydee::ref<Kaydee::VertexBuffer> squareVB;
-        squareVB.reset(
-          Kaydee::VertexBuffer::create(squareVertices, sizeof(squareVertices)));
+        squareVB =
+          Kaydee::VertexBuffer::create(squareVertices, sizeof(squareVertices));
 
         squareVB->setLayout({
           { Kaydee::ShaderDataType::Float3, "a_position" },
@@ -67,8 +66,8 @@ public:
         unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
         Kaydee::ref<Kaydee::IndexBuffer> squareIB;
 
-        squareIB.reset(Kaydee::IndexBuffer::create(
-          squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+        squareIB = Kaydee::IndexBuffer::create(
+          squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 
         squareVA->setIndexBuffer(squareIB);
 

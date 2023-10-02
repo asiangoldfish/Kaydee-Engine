@@ -3,12 +3,14 @@
 
 #include "Renderer/Texture.h"
 #include <string>
+#include <glad/glad.h>
 
 namespace Kaydee {
 
     class OpenGLTexture2D : public Texture2D
     {
     public:
+        OpenGLTexture2D(uint32_t width, uint32_t height);
         OpenGLTexture2D(const std::string& path);
         virtual ~OpenGLTexture2D();
 
@@ -16,10 +18,14 @@ namespace Kaydee {
         virtual uint32_t getheight() const override { return height; }
 
         virtual void bind(uint32_t slot = 0) const override;
+        virtual void unbind(uint32_t slot = 0) const override;
+
+        virtual void setData(void* data, uint32_t size) override;
 
     private:
         std::string path;
         uint32_t width, height, rendererID;
+        GLenum internalFormat, dataFormat;
     };
 }
 

@@ -12,7 +12,9 @@ out vec2 v_texCoord;
 uniform mat4 u_viewProjection;
 uniform mat4 u_transform;
 
-void main() {
+void
+main()
+{
     v_texCoord = a_texCoord;
     gl_Position = u_viewProjection * u_transform * vec4(a_position, 1.0);
 }
@@ -26,7 +28,14 @@ in vec2 v_texCoord;
 
 uniform vec4 u_color;
 uniform sampler2D u_texture;
+uniform bool u_enableTexture;
 
-void main() {
-    color = texture(u_texture, v_texCoord * 10) * u_color;
+void
+main()
+{
+    if (u_enableTexture) {
+        color = texture(u_texture, v_texCoord * 10) * u_color;
+    } else {
+        color = u_color;
+    }
 }

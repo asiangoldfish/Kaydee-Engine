@@ -29,6 +29,8 @@ namespace Kaydee {
                                const glm::vec4& value) override;
         virtual void setMat4(const std::string& name,
                              const glm::mat4& value) override;
+        virtual void setBool(const std::string& name,
+                             const bool value) override;
 
         virtual const std::string& getName() const override { return name; }
 
@@ -50,6 +52,7 @@ namespace Kaydee {
         // Mats
         void uploadUniformMat4(const std::string& name,
                                const glm::mat4& matrix);
+        void uploadUniformBool(const std::string& name, const bool value);
 
     private:
         std::string readFile(const std::string& filepath);

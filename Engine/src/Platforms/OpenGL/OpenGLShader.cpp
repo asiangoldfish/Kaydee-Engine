@@ -230,6 +230,12 @@ namespace Kaydee {
         uploadUniformMat4(name, value);
     }
 
+    void OpenGLShader::setBool(const std::string& name, const bool value)
+    {
+
+        uploadUniformBool(name, value);
+    }
+
     void OpenGLShader::uploadUniformFloat(const std::string& name, float value)
     {
         glUniform1i(glGetUniformLocation(rendererId, name.c_str()), value);
@@ -273,5 +279,10 @@ namespace Kaydee {
                            1,
                            GL_FALSE,
                            glm::value_ptr(matrix));
+    }
+    void OpenGLShader::uploadUniformBool(const std::string& name,
+                                         const bool value)
+    {
+        uploadUniformInt(name, value);
     }
 }

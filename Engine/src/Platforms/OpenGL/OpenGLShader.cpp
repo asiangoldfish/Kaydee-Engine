@@ -208,6 +208,23 @@ namespace Kaydee {
         glUseProgram(0);
     }
 
+    void OpenGLShader::setFloat3(const std::string& name,
+                                 const glm::vec3& value)
+    {
+        uploadUniformFloat3(name, value);
+    }
+
+    void OpenGLShader::setFloat4(const std::string& name,
+                                 const glm::vec4& value)
+    {
+        uploadUniformFloat4(name, value);
+    }
+
+    void OpenGLShader::setMat4(const std::string& name, const glm::mat4& value)
+    {
+        uploadUniformMat4(name, value);
+    }
+
     void OpenGLShader::uploadUniformFloat(const std::string& name, float value)
     {
         glUniform1i(glGetUniformLocation(rendererId, name.c_str()), value);

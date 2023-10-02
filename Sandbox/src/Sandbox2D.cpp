@@ -39,21 +39,11 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
 
     Kaydee::Renderer2D::beginScene(cameraController.getCamera());
     {
-        // flatColorShader->bind();
-        //  TODO: Add the functions: Shader::SetMat4, Shader::SetFloat4
-        //  std::dynamic_pointer_cast<Kaydee::OpenGLShader>(flatColorShader)
-        //   ->uploadUniformFloat4("u_color", squareColor);
-        //
-        //  Kaydee::Renderer::submit(flatColorShader,
-        //                          squareVA,
-        //                          glm::scale(glm::mat4(1.0f),
-        //                          glm::vec3(1.0f)));
-
-        // Triangle
-        // Kaydee::Renderer::submit(shader, vertexArray);
+        Kaydee::Renderer2D::drawQuad(
+          { -1.0f, 0.0f }, { .8f, .8f }, 0.0f, { .8f, 0.2f, 0.3f, 1.0f });
 
         Kaydee::Renderer2D::drawQuad(
-          { 0.0f, 0.0f }, { 1.0f, 1.0f }, { 1.0f, 0.2f, 0.2f, 1.0f });
+          { 0.5f, -0.5f }, { 0.5f, 0.75f }, 90.f, { 0.2f, 0.3f, 0.8f, 1.0f });
     }
     Kaydee::Renderer2D::endScene();
 }

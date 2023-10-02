@@ -1,8 +1,9 @@
 #include "Renderer2D.h"
 #include "VertexArray.h"
 #include "Shader.h"
-#include "Platforms/OpenGL/OpenGLShader.h"
 #include "RenderCommand.h"
+
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Kaydee {
 
@@ -57,30 +58,36 @@ namespace Kaydee {
     void Renderer2D::beginScene(const OrthographicCamera& camera)
     {
         contextData->shader->bind();
-        std::dynamic_pointer_cast<OpenGLShader>(contextData->shader)
-          ->uploadUniformMat4("u_viewProjection",
-                              camera.getViewProjectionMatrix());
-        std::dynamic_pointer_cast<OpenGLShader>(contextData->shader)
-          ->uploadUniformMat4("u_transform", glm::mat4(1.0f));
+        contextData->shader->setMat4("u_viewProjection",
+                                     camera.getViewProjectionMatrix());
     }
 
     void Renderer2D::endScene() {}
 
     void Renderer2D::drawQuad(const glm::vec2& position,
                               const glm::vec2& size,
+                              const float rotation,
                               const glm::vec4& color)
     {
-        drawQuad({ position.x, position.y, 1.0f }, size, color);
+        drawQuad({ position.x, position.y, 1.0f }, size, rotation, color);
     }
 
     void Renderer2D::drawQuad(const glm::vec3& position,
                               const glm::vec2& size,
+                              const float rotation,
                               const glm::vec4& color)
     {
         contextData->shader->bind();
+        contextData->shader->setFloat4("u_color", color);
+
+        // TODO: Add rotation
+        glm::mat4 transform =
+          glm::translate(glm::mat4(1.0f), position) *
+          glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 }) *
+          glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+        contextData->shader->setMat4("u_transform", transform);
+
         contextData->vertexArray->bind();
-        std::dynamic_pointer_cast<OpenGLShader>(contextData->shader)
-          ->uploadUniformFloat4("u_color", color);
         RenderCommand::drawIndexed(contextData->vertexArray);
     }
 

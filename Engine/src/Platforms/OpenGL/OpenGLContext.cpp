@@ -28,6 +28,17 @@ namespace Kaydee {
 
         std::cout << std::left << std::setw(15)
                   << "Version: " << glGetString(GL_VERSION) << std::endl;
+
+#ifdef KD_ENABLE_ASSERTS
+        int versionMajor;
+        int versionMinor;
+        glGetIntegerv(GL_MAJOR_VERSION, &versionMajor);
+        glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
+
+        KD_CORE_ASSERT(versionMajor > 4 ||
+                         (versionMajor == 4 && versionMinor >= 5),
+                       "Kaydee Engine requires at least OpenGL version 4.5");
+#endif
     }
 
     void OpenGLContext::swapBuffers()

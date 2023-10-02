@@ -21,7 +21,7 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_CORE}/Core.h
     ${MODULE_CORE}/Log.h                                    ${MODULE_CORE}/Log.cpp
     ${MODULE_CORE}/Application.h                            ${MODULE_CORE}/Application.cpp
-    ${MODULE_CORE}/EntryPoint.h
+    ${MODULE_CORE}/EntryPoint.h                             ${MODULE_CORE}/EntryPoint.cpp
     ${MODULE_CORE}/Layer.h                                  ${MODULE_CORE}/Layer.cpp
     ${MODULE_CORE}/LayerStack.h                             ${MODULE_CORE}/LayerStack.cpp
     ${MODULE_CORE}/Timestep.h                               ${MODULE_CORE}/Timestep.cpp

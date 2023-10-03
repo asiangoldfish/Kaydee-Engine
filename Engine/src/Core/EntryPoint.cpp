@@ -38,9 +38,17 @@ main(int argc, char** argv)
     Kaydee::Log::init();
     KD_CORE_WARN("Initialized log");
 
+    KD_PROFILE_BEGIN_SESSION("Startup", "KaydeeProfile-Startup.json");
     auto app = Kaydee::createApplication();
+    KD_PROFILE_END_SESSION();
+
+    KD_PROFILE_BEGIN_SESSION("Runtime", "KaydeeProfile-Runtime.json");
     app->run();
+    KD_PROFILE_END_SESSION();
+
+    KD_PROFILE_BEGIN_SESSION("Shutdown", "KaydeeProfile-Shutdown.json");
     delete app;
+    KD_PROFILE_END_SESSION();
 
     return 0;
 }

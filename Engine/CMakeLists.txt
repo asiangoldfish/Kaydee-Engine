@@ -11,6 +11,7 @@ set(MODULE_EVENTS       ${CMAKE_CURRENT_SOURCE_DIR}/src/Events)
 set(MODULE_IMGUI        ${CMAKE_CURRENT_SOURCE_DIR}/src/ImGui)
 set(MODULE_PLATFORMS    ${CMAKE_CURRENT_SOURCE_DIR}/src/Platforms)
 set(MODULE_RENDERER     ${CMAKE_CURRENT_SOURCE_DIR}/src/Renderer)
+set(MODULE_DEBUG        ${CMAKE_CURRENT_SOURCE_DIR}/Debug)
 set(MODULE_VENDOR       ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 
 add_library(${MODULE_NAME} STATIC
@@ -66,9 +67,9 @@ add_library(${MODULE_NAME} STATIC
     # Vendor
     ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.h       ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.cpp
     ${MODULE_VENDOR}/imgui/backends/imgui_impl_opengl3.h    ${MODULE_VENDOR}/imgui/backends/imgui_impl_opengl3.cpp
-    )
+)
     
-    target_include_directories(${MODULE_NAME} PRIVATE
+target_include_directories(${MODULE_NAME} PRIVATE
     src
     vendor
 )

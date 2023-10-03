@@ -16,5 +16,6 @@
 #include <array>
 
 #include "Core/Log.h"
+#include "Debug/Instrumentor.h"
 
 #endif

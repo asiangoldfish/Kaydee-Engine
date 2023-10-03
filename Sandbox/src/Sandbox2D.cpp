@@ -28,20 +28,28 @@ Sandbox2D::onDetach()
 void
 Sandbox2D::onUpdate(Kaydee::Timestep ts)
 {
+    KD_PROFILE_FUNCTION();
+
     //------------
     // Update
     //------------
-    cameraController.onUpdate(ts);
+    {
+        KD_PROFILE_SCOPE("CameraController");
+        cameraController.onUpdate(ts);
+    }
 
     //------------
     // Render
     //------------
-    Kaydee::RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-    Kaydee::RenderCommand::clear();
-
-    Kaydee::Renderer2D::beginScene(cameraController.getCamera());
     {
+        KD_PROFILE_SCOPE("Render Prep");
+        Kaydee::RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+        Kaydee::RenderCommand::clear();
+    }
 
+    {
+        KD_PROFILE_SCOPE("Draw");
+        Kaydee::Renderer2D::beginScene(cameraController.getCamera());
         Kaydee::Renderer2D::drawQuad({ 0.0f, 0.0f, -0.1f },
                                      { 10.0f, 10.0f },
                                      0.0f,
@@ -53,8 +61,8 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
 
         Kaydee::Renderer2D::drawQuad(
           { 0.5f, -0.5f }, { 0.5f, 0.75f }, 30.f, { 0.2f, 0.3f, 0.8f, 1.0f });
+        Kaydee::Renderer2D::endScene();
     }
-    Kaydee::Renderer2D::endScene();
 }
 
 void

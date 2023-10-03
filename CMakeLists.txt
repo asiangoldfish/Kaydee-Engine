@@ -29,6 +29,11 @@ if(CMAKE_SYSTEM_NAME MATCHES "CYGWIN" OR CMAKE_SYSTEM_NAME MATCHES "MSYS")
     set(CMAKE_CXX_EXTENSIONS ON)
 endif()
 
+# Enable profiling
+if (CMAKE_BUILD_TYPE MATCHES "Debug")
+    add_compile_definitions(KD_PROFILE="1")
+endif()
+
 ######################
 ### Master project ###
 ######################

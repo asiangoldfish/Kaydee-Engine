@@ -51,13 +51,15 @@ namespace Kaydee {
 
         // Texture shader
         contextData->textureShader =
-          Shader::create("Sandbox/assets/shaders/texture.glsl");
+          Shader::create("assets/shaders/texture.glsl");
         contextData->textureShader->bind();
         contextData->textureShader->setInt("u_texture", 0);
     }
 
     void Renderer2D::shutdown()
     {
+        KD_PROFILE_FUNCTION();
+
         if (contextData) {
             delete contextData;
             contextData = nullptr;
@@ -66,12 +68,17 @@ namespace Kaydee {
 
     void Renderer2D::beginScene(const OrthographicCamera& camera)
     {
+        KD_PROFILE_FUNCTION();
+
         contextData->textureShader->bind();
         contextData->textureShader->setMat4("u_viewProjection",
                                             camera.getViewProjectionMatrix());
     }
 
-    void Renderer2D::endScene() {}
+    void Renderer2D::endScene()
+    {
+        KD_PROFILE_FUNCTION();
+    }
 
     void Renderer2D::drawQuad(const glm::vec2& position,
                               const glm::vec2& size,
@@ -86,6 +93,8 @@ namespace Kaydee {
                               const float rotation,
                               const glm::vec4& color)
     {
+        KD_PROFILE_FUNCTION();
+
         contextData->textureShader->bind();
         contextData->textureShader->setFloat4("u_color", color);
 
@@ -119,13 +128,16 @@ namespace Kaydee {
                               const glm::vec4& color,
                               const ref<Texture2D> texture)
     {
+        KD_PROFILE_FUNCTION();
+
         contextData->textureShader->setFloat4("u_color", color);
         contextData->textureShader->setBool("u_enableTexture", true);
 
-        glm::mat4 transform =
-          glm::translate(glm::mat4(1.0f), position) *
-          glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 }) *
-          glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+        glm::mat4 transform = glm::mat4(1.0f);
+        transform =
+          glm::translate(transform, position) *
+          glm::rotate(transform, glm::radians(rotation), { 0, 0, 1 }) *
+          glm::scale(transform, { size.x, size.y, 1.0f });
         contextData->textureShader->setMat4("u_transform", transform);
 
         texture->bind();

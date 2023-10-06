@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "EntryPoint.h"
+#include <filesystem>
 
 void
 usage()
@@ -34,6 +35,10 @@ main(int argc, char** argv)
             return 1;
         }
     }
+
+    // Only for debugging/development
+    std::cout << "Working directory: " << std::filesystem::current_path()
+              << std::endl;
 
     Kaydee::Log::init();
     KD_CORE_WARN("Initialized log");

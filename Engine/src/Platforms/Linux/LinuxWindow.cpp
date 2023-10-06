@@ -31,6 +31,8 @@ namespace Kaydee {
 
     LinuxWindow::~LinuxWindow()
     {
+        KD_PROFILE_FUNCTION();
+
         if (context) {
             delete context;
             context = nullptr;
@@ -41,6 +43,8 @@ namespace Kaydee {
 
     void LinuxWindow::init(const WindowProps& props)
     {
+        KD_PROFILE_FUNCTION();
+
         windowData.title = props.title;
         windowData.width = props.width;
         windowData.height = props.height;
@@ -52,17 +56,25 @@ namespace Kaydee {
 
         if (!glfwInitialized) {
             // TODO - glfwTerminate on system shutdown
-            int success = glfwInit();
-            KD_CORE_ASSERT(success, "Could not initialize GLFW!");
-            glfwSetErrorCallback(GLFWErrorCallback);
-            glfwInitialized = true;
+            {
+                KD_PROFILE_SCOPE("glfwInit");
+             
+                int success = glfwInit();
+                KD_CORE_ASSERT(success, "Could not initialize GLFW!");
+                glfwSetErrorCallback(GLFWErrorCallback);
+                glfwInitialized = true;
+            }
         }
 
-        window = glfwCreateWindow((int)props.width,
-                                  (int)props.height,
-                                  windowData.title.c_str(),
-                                  nullptr,
-                                  nullptr);
+        {
+            KD_PROFILE_SCOPE("glfwCreateWindow");
+            window = glfwCreateWindow((int)props.width,
+                                      (int)props.height,
+                                      windowData.title.c_str(),
+                                      nullptr,
+                                      nullptr);
+            GLFWWindowCount++;
+        }
 
         context = new OpenGLContext(window);
         context->init();
@@ -163,17 +175,23 @@ namespace Kaydee {
 
     void LinuxWindow::shutdown()
     {
+        KD_PROFILE_FUNCTION();
+
         glfwDestroyWindow(window);
     }
 
     void LinuxWindow::onUpdate()
     {
+        KD_PROFILE_FUNCTION();
+
         glfwPollEvents();
         context->swapBuffers();
     }
 
     void LinuxWindow::setVSync(bool enabled)
     {
+        KD_PROFILE_FUNCTION();
+
         if (enabled) {
             glfwSwapInterval(1);
         } else {

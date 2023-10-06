@@ -18,6 +18,8 @@ namespace Kaydee {
 
     void OrthographicCameraController::onUpdate(Timestep ts)
     {
+        KD_PROFILE_FUNCTION();
+
         if (Input::isKeyPressed(KD_KEY_A)) {
             cameraPosition.x -= cameraTranslationSpeed * ts;
         }
@@ -47,6 +49,8 @@ namespace Kaydee {
 
     void OrthographicCameraController::onEvent(Event& e)
     {
+        KD_PROFILE_FUNCTION();
+
         EventDispatcher dispatcher(e);
         dispatcher.dispatch<MouseScrolledEvent>(
           KD_BIND_EVENT_FN(OrthographicCameraController::onMouseScrolled));
@@ -56,6 +60,8 @@ namespace Kaydee {
 
     bool OrthographicCameraController::onMouseScrolled(MouseScrolledEvent& e)
     {
+        KD_PROFILE_FUNCTION();
+
         zoomLevel -= e.getOffsetY() * 0.25f;
         zoomLevel = std::max(zoomLevel, 0.25f);
         camera.setProjection(-aspectRatio * zoomLevel,
@@ -67,6 +73,8 @@ namespace Kaydee {
 
     bool OrthographicCameraController::onWindowResized(WindowResizeEvent& e)
     {
+        KD_PROFILE_FUNCTION();
+
         aspectRatio = e.getWidth() / (float)e.getHeight();
         camera.setProjection(-aspectRatio * zoomLevel,
                              aspectRatio * zoomLevel,

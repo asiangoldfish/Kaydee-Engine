@@ -51,6 +51,8 @@ namespace Kaydee {
             EventCallbackFn eventCallback;
         };
 
+        uint32_t GLFWWindowCount = 0;
+
         WindowData windowData;
     };
 }

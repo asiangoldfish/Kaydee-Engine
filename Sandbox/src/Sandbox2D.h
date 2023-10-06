@@ -21,14 +21,8 @@ public:
 
 private:
     Kaydee::OrthographicCameraController cameraController;
-
-    // Temporary
-    Kaydee::ref<Kaydee::VertexArray> squareVA;
-    Kaydee::ref<Kaydee::Shader> flatColorShader;
-
     Kaydee::ref<Kaydee::Texture2D> checkerboardTexture;
-
-    glm::vec4 squareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
+    int fps = 0;
 };
 
 #endif // __SANDBOX_2D_H__

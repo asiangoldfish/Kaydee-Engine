@@ -14,6 +14,8 @@ namespace Kaydee {
 
     void OpenGLContext::init()
     {
+        KD_PROFILE_FUNCTION();
+
         glfwMakeContextCurrent(windowHandle);
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         KD_CORE_ASSERT(status, "Failed to initialize Glad!");
@@ -43,6 +45,8 @@ namespace Kaydee {
 
     void OpenGLContext::swapBuffers()
     {
+        KD_PROFILE_FUNCTION();
+
         glfwSwapBuffers(windowHandle);
     }
 }

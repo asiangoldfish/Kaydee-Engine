@@ -38,21 +38,29 @@ namespace Kaydee {
 
     OpenGLVertexArray::OpenGLVertexArray()
     {
+        KD_PROFILE_FUNCTION();
+
         glCreateVertexArrays(1, &rendererID);
     }
 
     OpenGLVertexArray::~OpenGLVertexArray()
     {
+        KD_PROFILE_FUNCTION();
+
         glDeleteVertexArrays(1, &rendererID);
     }
 
     void OpenGLVertexArray::bind() const
     {
+        KD_PROFILE_FUNCTION();
+
         glBindVertexArray(rendererID);
     }
 
     void OpenGLVertexArray::unbind() const
     {
+        KD_PROFILE_FUNCTION();
+
         glBindVertexArray(0);
     }
 

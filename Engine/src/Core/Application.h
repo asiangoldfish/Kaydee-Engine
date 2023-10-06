@@ -29,17 +29,9 @@ namespace Kaydee {
         void onEvent(Event& e);
 
         // Layersand there's to go about it
-        inline void pushLayer(Layer* layer)
-        {
-            layerStack.pushLayer(layer);
-            layer->onAttach();
-        }
+        void pushLayer(Layer* layer);
 
-        inline void pushOverlay(Layer* overlay)
-        {
-            layerStack.pushOverlay(overlay);
-            overlay->onAttach();
-        }
+        void pushOverlay(Layer* overlay);
 
         // Window
         inline Window& getWindow() { return *window; }

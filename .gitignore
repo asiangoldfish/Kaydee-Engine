@@ -4,6 +4,7 @@ bin/
 build/
 intermediate/
 compile_commands/
+out/
 
 # Microsoft
 .vs/

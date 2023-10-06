@@ -7,6 +7,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <string>
+
 Sandbox2D::Sandbox2D()
   : Kaydee::Layer("Sandbox2D")
   , cameraController(1280.0f / 720.0f, true)
@@ -16,13 +18,16 @@ Sandbox2D::Sandbox2D()
 void
 Sandbox2D::onAttach()
 {
+    KD_PROFILE_FUNCTION();
+
     checkerboardTexture =
-      Kaydee::Texture2D::create("Sandbox/assets/textures/checkerboard.png");
+      Kaydee::Texture2D::create("assets/textures/checkerboard.png");
 }
 
 void
 Sandbox2D::onDetach()
 {
+    KD_PROFILE_FUNCTION();
 }
 
 void
@@ -30,13 +35,12 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
 {
     KD_PROFILE_FUNCTION();
 
+    fps = 1000 / (int)ts.getMilliseconds();
+
     //------------
     // Update
     //------------
-    {
-        KD_PROFILE_SCOPE("CameraController");
-        cameraController.onUpdate(ts);
-    }
+    cameraController.onUpdate(ts);
 
     //------------
     // Render
@@ -55,7 +59,7 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
                                      0.0f,
                                      { 1.0f, 1.0f, 1.0f, 1.0f },
                                      checkerboardTexture);
-
+        
         Kaydee::Renderer2D::drawQuad(
           { -1.0f, 0.0f }, { .8f, .8f }, 0.0f, { .8f, 0.2f, 0.3f, 0.9f });
 
@@ -69,7 +73,9 @@ void
 Sandbox2D::onImGuiRender()
 {
     ImGui::Begin("Settings");
-    ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+
+    ImGui::Text("FPS: %d", fps);
+
     ImGui::End();
 }
 

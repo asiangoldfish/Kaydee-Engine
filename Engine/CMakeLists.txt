@@ -67,6 +67,7 @@ add_library(${MODULE_NAME} STATIC
     # Vendor
     ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.h       ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.cpp
     ${MODULE_VENDOR}/imgui/backends/imgui_impl_opengl3.h    ${MODULE_VENDOR}/imgui/backends/imgui_impl_opengl3.cpp
+    ${MODULE_VENDOR}/stb/stb_image.h                        ${MODULE_VENDOR}/stb/stb_image.cpp
 )
     
 target_include_directories(${MODULE_NAME} PRIVATE
@@ -87,7 +88,6 @@ find_package(OpenGL REQUIRED)
 add_subdirectory(vendor/spdlog)
 add_subdirectory(vendor/glfw)
 add_subdirectory(vendor/glm)
-add_subdirectory(vendor/stb)
 
 add_subdirectory(vendor/glad)
 add_compile_definitions(GLFW_INCLUDE_NONE)
@@ -103,5 +103,4 @@ target_link_libraries(${MODULE_NAME} PUBLIC
     OpenGL::GL
     imgui
     glm
-    stb
 )

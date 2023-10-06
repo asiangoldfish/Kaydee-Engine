@@ -12,8 +12,16 @@ namespace Kaydee {
 
     void Renderer::init()
     {
+        KD_PROFILE_FUNCTION();
+
         RenderCommand::init();
         Renderer2D::init();
+    }
+
+    void Renderer::shutdown() {
+        KD_PROFILE_FUNCTION();
+
+        Renderer2D::shutdown();
     }
 
     void Renderer::onWindowResize(uint32_t width, uint32_t height)

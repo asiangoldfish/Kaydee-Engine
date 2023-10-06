@@ -14,6 +14,8 @@ namespace Kaydee {
 
     Application::Application()
     {
+        KD_PROFILE_FUNCTION();
+
         KD_CORE_ASSERT(!instance, "Application already exists!");
         instance = this;
 
@@ -28,25 +30,58 @@ namespace Kaydee {
         pushOverlay(imguiLayer);
     }
 
-    Application::~Application() {}
+    Application::~Application()
+    {
+        KD_PROFILE_FUNCTION();
+
+        Renderer::shutdown();
+    }
+
+    void Application::pushLayer(Layer* layer)
+    {
+        KD_PROFILE_FUNCTION();
+
+        layerStack.pushLayer(layer);
+        layer->onAttach();
+    }
+
+    void Application::pushOverlay(Layer* overlay)
+    {
+        KD_PROFILE_FUNCTION();
+
+        layerStack.pushOverlay(overlay);
+        overlay->onAttach();
+    }
 
     void Application::run()
     {
+        KD_PROFILE_FUNCTION();
+
         while (running) {
+            KD_PROFILE_SCOPE("RunLoop");
+
             // Compute delta time
             float time = (float)glfwGetTime(); // Should be in Platform::GetTime
             Timestep timestep = time - lastFrameTime;
             lastFrameTime = time;
 
             if (!minimized) {
-                for (Layer* layer : layerStack) {
-                    layer->onUpdate(timestep);
+                {
+                    KD_PROFILE_SCOPE("LayerStack OnUpdate");
+
+                    for (Layer* layer : layerStack) {
+                        layer->onUpdate(timestep);
+                    }
                 }
             }
 
             imguiLayer->begin();
-            for (Layer* layer : layerStack) {
-                layer->onImGuiRender();
+            {
+                KD_PROFILE_SCOPE("LayerStack OnImGuiRender");
+                
+                for (Layer* layer : layerStack) {
+                    layer->onImGuiRender();
+                }
             }
             imguiLayer->end();
 
@@ -56,6 +91,8 @@ namespace Kaydee {
 
     void Application::onEvent(Event& e)
     {
+        KD_PROFILE_FUNCTION();
+
         EventDispatcher dispatcher(e);
         dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(onWindowClose));
         dispatcher.dispatch<WindowResizeEvent>(BIND_EVENT_FN(onWindowResize));
@@ -78,6 +115,8 @@ namespace Kaydee {
 
     bool Application::onWindowResize(WindowResizeEvent& e)
     {
+        KD_PROFILE_FUNCTION();
+
         // On Windows, the window size is (0, 0) while minimized.
         if (e.getWidth() == 0 || e.getHeight() == 0) {
             minimized = true;

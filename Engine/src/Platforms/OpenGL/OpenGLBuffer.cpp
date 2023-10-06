@@ -7,6 +7,8 @@ namespace Kaydee {
     // Vertex buffer
     OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
     {
+        KD_PROFILE_FUNCTION();
+
         glCreateBuffers(1, &rendererID);
         glBindBuffer(GL_ARRAY_BUFFER, rendererID);
         glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
@@ -14,16 +16,22 @@ namespace Kaydee {
 
     OpenGLVertexBuffer::~OpenGLVertexBuffer()
     {
+        KD_PROFILE_FUNCTION();
+
         glDeleteBuffers(1, &rendererID);
     }
 
     void OpenGLVertexBuffer::bind() const
     {
+        KD_PROFILE_FUNCTION();
+
         glBindBuffer(GL_ARRAY_BUFFER, rendererID);
     }
 
     void OpenGLVertexBuffer::unbind() const
     {
+        KD_PROFILE_FUNCTION();
+
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
@@ -31,6 +39,8 @@ namespace Kaydee {
     OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
       : count(count)
     {
+        KD_PROFILE_FUNCTION();
+
         glCreateBuffers(1, &rendererID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rendererID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER,
@@ -41,16 +51,22 @@ namespace Kaydee {
 
     OpenGLIndexBuffer::~OpenGLIndexBuffer()
     {
+        KD_PROFILE_FUNCTION();
+
         glDeleteBuffers(1, &rendererID);
     }
 
     void OpenGLIndexBuffer::bind() const
     {
+        KD_PROFILE_FUNCTION();
+
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rendererID);
     }
 
     void OpenGLIndexBuffer::unbind() const
     {
+        KD_PROFILE_FUNCTION();
+
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 }

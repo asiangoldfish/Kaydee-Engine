@@ -34,6 +34,8 @@ namespace Kaydee {
 
     OpenGLShader::OpenGLShader(const std::string& filepath)
     {
+        KD_PROFILE_FUNCTION();
+
         std::string source = readFile(filepath);
         auto shaderSources = preProcess(source);
         compile(shaderSources);
@@ -54,6 +56,8 @@ namespace Kaydee {
                                const std::string& fragmentSrc)
       : name(name)
     {
+        KD_PROFILE_FUNCTION();
+
         std::unordered_map<GLenum, std::string> sources;
         sources[GL_VERTEX_SHADER] = vertexSrc;
         sources[GL_FRAGMENT_SHADER] = fragmentSrc;
@@ -62,11 +66,15 @@ namespace Kaydee {
 
     OpenGLShader::~OpenGLShader()
     {
+        KD_PROFILE_FUNCTION();
+
         glDeleteProgram(rendererId);
     }
 
     std::string OpenGLShader::readFile(const std::string& filepath)
     {
+        KD_PROFILE_FUNCTION();
+
         std::string result;
         std::ifstream infile(filepath, std::ios::in | std::ios::binary);
 
@@ -77,7 +85,7 @@ namespace Kaydee {
             infile.read(&result[0], result.size());
             infile.close();
         } else {
-            KD_CORE_ERROR("Unable to open file '{}'", filepath);
+            KD_CORE_ERROR("{} line {}: Unable to open file '{}'",__FILE__, __LINE__, filepath);
         }
 
         return result;
@@ -86,6 +94,8 @@ namespace Kaydee {
     std::unordered_map<GLenum, std::string> OpenGLShader::preProcess(
       const std::string& source)
     {
+        KD_PROFILE_FUNCTION();
+
         std::unordered_map<GLenum, std::string> shaderSources;
 
         const char* typeToken = "#type";
@@ -116,6 +126,8 @@ namespace Kaydee {
     void OpenGLShader::compile(
       const std::unordered_map<GLenum, std::string>& shaderSources)
     {
+        KD_PROFILE_FUNCTION();
+
         GLuint program = glCreateProgram();
         KD_CORE_ASSERT(shaderSources.size() <= 2,
                        "Only two shaders are supported\n");
@@ -200,39 +212,52 @@ namespace Kaydee {
 
     void OpenGLShader::bind() const
     {
+        KD_PROFILE_FUNCTION();
+
         glUseProgram(rendererId);
     }
 
     void OpenGLShader::unbind() const
     {
+        KD_PROFILE_FUNCTION();
+
         glUseProgram(0);
     }
 
     void OpenGLShader::setInt(const std::string& name, const int value)
     {
+        KD_PROFILE_FUNCTION();
+
         uploadUniformInt(name, value);
     }
 
     void OpenGLShader::setFloat3(const std::string& name,
                                  const glm::vec3& value)
     {
+        KD_PROFILE_FUNCTION();
+
         uploadUniformFloat3(name, value);
     }
 
     void OpenGLShader::setFloat4(const std::string& name,
                                  const glm::vec4& value)
     {
+        KD_PROFILE_FUNCTION();
+     
         uploadUniformFloat4(name, value);
     }
 
     void OpenGLShader::setMat4(const std::string& name, const glm::mat4& value)
     {
+        KD_PROFILE_FUNCTION();
+        
         uploadUniformMat4(name, value);
     }
 
     void OpenGLShader::setBool(const std::string& name, const bool value)
     {
-
+        KD_PROFILE_FUNCTION();
+        
         uploadUniformBool(name, value);
     }
 

@@ -146,4 +146,10 @@ namespace Kaydee {
         RenderCommand::drawIndexed(contextData->vertexArray);
         texture->unbind();
     }
+
+    ref<Shader>& Renderer2D::getShader()
+    {
+        return contextData->textureShader;
+    }
+
 }

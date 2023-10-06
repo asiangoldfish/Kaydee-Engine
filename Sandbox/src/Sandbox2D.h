@@ -23,6 +23,7 @@ private:
     Kaydee::OrthographicCameraController cameraController;
     Kaydee::ref<Kaydee::Texture2D> checkerboardTexture;
     int fps = 0;
+    int tiling = 1;
 };
 
 #endif // __SANDBOX_2D_H__

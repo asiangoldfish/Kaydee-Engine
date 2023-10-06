@@ -30,11 +30,13 @@ uniform vec4 u_color;
 uniform sampler2D u_texture;
 uniform bool u_enableTexture;
 
+uniform int u_tiling;
+
 void
 main()
 {
     if (u_enableTexture) {
-        color = texture(u_texture, v_texCoord * 10) * u_color;
+        color = texture(u_texture, v_texCoord * u_tiling) * u_color;
     } else {
         color = u_color;
     }

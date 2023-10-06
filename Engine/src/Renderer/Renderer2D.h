@@ -3,6 +3,7 @@
 
 #include "OrthographicCamera.h"
 #include "Texture.h"
+#include "Shader.h"
 
 namespace Kaydee {
 
@@ -37,6 +38,8 @@ namespace Kaydee {
                              const float rotation,
                              const glm::vec4& color,
                              const ref<Texture2D> texture);
+
+        static ref<Shader>& getShader();
     };
 }
 

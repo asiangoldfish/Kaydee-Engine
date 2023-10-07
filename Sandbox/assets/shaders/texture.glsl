@@ -30,7 +30,7 @@ uniform vec4 u_color;
 uniform sampler2D u_texture;
 uniform bool u_enableTexture;
 
-uniform int u_tiling;
+uniform vec2 u_tiling;
 
 void
 main()

@@ -52,20 +52,18 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
     }
 
     {
-        int defaultTiling = 1;
         Kaydee::ref<Kaydee::Shader> shader = Kaydee::Renderer2D::getShader();
 
         KD_PROFILE_SCOPE("Draw");
         Kaydee::Renderer2D::beginScene(cameraController.getCamera());
-        
-        shader->setInt("u_tiling", tiling);
+
         Kaydee::Renderer2D::drawQuad({ 0.0f, 0.0f, -0.1f },
                                      { 10.0f, 10.0f },
                                      0.0f,
                                      { 1.0f, 1.0f, 1.0f, 1.0f },
-                                     checkerboardTexture);
-        
-        shader->setInt("u_tiling", defaultTiling);
+                                     checkerboardTexture,
+                                     tiling);
+
         Kaydee::Renderer2D::drawQuad(
           { -1.0f, 0.0f }, { .8f, .8f }, 0.0f, { .8f, 0.2f, 0.3f, 0.9f });
 

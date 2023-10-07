@@ -91,12 +91,15 @@ namespace Kaydee {
     void Renderer2D::drawQuad(const glm::vec3& position,
                               const glm::vec2& size,
                               const float rotation,
-                              const glm::vec4& color)
+                              const glm::vec4& color,
+                              float tilingFactor)
     {
         KD_PROFILE_FUNCTION();
 
         contextData->textureShader->bind();
         contextData->textureShader->setFloat4("u_color", color);
+        contextData->textureShader->setFloat2("u_tiling",
+                                              glm::vec2(tilingFactor));
 
         // Disable texture
         contextData->whiteTexture->bind();
@@ -126,12 +129,15 @@ namespace Kaydee {
                               const glm::vec2& size,
                               const float rotation,
                               const glm::vec4& color,
-                              const ref<Texture2D> texture)
+                              const ref<Texture2D> texture,
+                              float tilingFactor)
     {
         KD_PROFILE_FUNCTION();
 
-        contextData->textureShader->setFloat4("u_color", color);
         contextData->textureShader->setBool("u_enableTexture", true);
+        contextData->textureShader->setFloat4("u_color", color);
+        contextData->textureShader->setFloat2("u_tiling",
+                                              glm::vec2(tilingFactor));
 
         glm::mat4 transform = glm::mat4(1.0f);
         transform =

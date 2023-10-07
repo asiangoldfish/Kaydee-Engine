@@ -85,7 +85,10 @@ namespace Kaydee {
             infile.read(&result[0], result.size());
             infile.close();
         } else {
-            KD_CORE_ERROR("{} line {}: Unable to open file '{}'",__FILE__, __LINE__, filepath);
+            KD_CORE_ERROR("{} line {}: Unable to open file '{}'",
+                          __FILE__,
+                          __LINE__,
+                          filepath);
         }
 
         return result;
@@ -231,6 +234,14 @@ namespace Kaydee {
         uploadUniformInt(name, value);
     }
 
+    void OpenGLShader::setFloat2(const std::string& name,
+                                 const glm::vec2& value)
+    {
+        KD_PROFILE_FUNCTION();
+
+        uploadUniformFloat2(name, value);
+    }
+
     void OpenGLShader::setFloat3(const std::string& name,
                                  const glm::vec3& value)
     {
@@ -243,21 +254,21 @@ namespace Kaydee {
                                  const glm::vec4& value)
     {
         KD_PROFILE_FUNCTION();
-     
+
         uploadUniformFloat4(name, value);
     }
 
     void OpenGLShader::setMat4(const std::string& name, const glm::mat4& value)
     {
         KD_PROFILE_FUNCTION();
-        
+
         uploadUniformMat4(name, value);
     }
 
     void OpenGLShader::setBool(const std::string& name, const bool value)
     {
         KD_PROFILE_FUNCTION();
-        
+
         uploadUniformBool(name, value);
     }
 

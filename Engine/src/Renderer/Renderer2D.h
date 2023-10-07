@@ -25,7 +25,8 @@ namespace Kaydee {
         static void drawQuad(const glm::vec3& position,
                              const glm::vec2& size,
                              const float rotation,
-                             const glm::vec4& color);
+                             const glm::vec4& color,
+                             float tilingFactor = 1.0f);
 
         static void drawQuad(const glm::vec2& position,
                              const glm::vec2& size,
@@ -37,7 +38,8 @@ namespace Kaydee {
                              const glm::vec2& size,
                              const float rotation,
                              const glm::vec4& color,
-                             const ref<Texture2D> texture);
+                             const ref<Texture2D> texture,
+                             float tilingFactor = 1.0f);
 
         static ref<Shader>& getShader();
     };

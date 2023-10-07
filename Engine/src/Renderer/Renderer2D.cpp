@@ -80,77 +80,37 @@ namespace Kaydee {
         KD_PROFILE_FUNCTION();
     }
 
-    void Renderer2D::drawQuad(const glm::vec2& position,
-                              const glm::vec2& size,
-                              const float rotation,
-                              const glm::vec4& color)
-    {
-        drawQuad({ position.x, position.y, 0.0f }, size, rotation, color);
-    }
-
-    void Renderer2D::drawQuad(const glm::vec3& position,
-                              const glm::vec2& size,
-                              const float rotation,
-                              const glm::vec4& color,
-                              float tilingFactor)
+    void Renderer2D::drawQuad(const Quad2DProperties* properties)
     {
         KD_PROFILE_FUNCTION();
 
-        contextData->textureShader->bind();
-        contextData->textureShader->setFloat4("u_color", color);
-        contextData->textureShader->setFloat2("u_tiling",
-                                              glm::vec2(tilingFactor));
+        // Properties
+        contextData->textureShader->setFloat4("u_color", properties->color);
+        contextData->textureShader->setFloat2(
+          "u_tiling", glm::vec2(properties->tilingFactor));
 
-        // Disable texture
-        contextData->whiteTexture->bind();
-        contextData->textureShader->setBool("u_enableTexture", false);
-
-        glm::mat4 transform =
-          glm::translate(glm::mat4(1.0f), position) *
-          glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 }) *
-          glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-        contextData->textureShader->setMat4("u_transform", transform);
-
-        contextData->vertexArray->bind();
-        RenderCommand::drawIndexed(contextData->vertexArray);
-    }
-
-    void Renderer2D::drawQuad(const glm::vec2& position,
-                              const glm::vec2& size,
-                              const float rotation,
-                              const glm::vec4& color,
-                              const ref<Texture2D> texture)
-    {
-        drawQuad(
-          { position.x, position.y, 0.0f }, size, rotation, color, texture);
-    }
-
-    void Renderer2D::drawQuad(const glm::vec3& position,
-                              const glm::vec2& size,
-                              const float rotation,
-                              const glm::vec4& color,
-                              const ref<Texture2D> texture,
-                              float tilingFactor)
-    {
-        KD_PROFILE_FUNCTION();
-
-        contextData->textureShader->setBool("u_enableTexture", true);
-        contextData->textureShader->setFloat4("u_color", color);
-        contextData->textureShader->setFloat2("u_tiling",
-                                              glm::vec2(tilingFactor));
-
+        // Transformation matrix - position, rotation, scaling
         glm::mat4 transform = glm::mat4(1.0f);
         transform =
-          glm::translate(transform, position) *
-          glm::rotate(transform, glm::radians(rotation), { 0, 0, 1 }) *
-          glm::scale(transform, { size.x, size.y, 1.0f });
+          glm::translate(transform, properties->position) *
+          glm::rotate(transform, properties->rotation, { 0, 0, 1 }) *
+          glm::scale(transform,
+                     { properties->size.x, properties->size.y, 1.0f });
         contextData->textureShader->setMat4("u_transform", transform);
 
-        texture->bind();
+        // Texture
+        contextData->textureShader->setBool("u_enableTexture",
+                                            properties->texture ? true : false);
+        if (properties->texture) {
+            properties->texture->bind();
+        }
 
         contextData->vertexArray->bind();
         RenderCommand::drawIndexed(contextData->vertexArray);
-        texture->unbind();
+
+        if (properties->texture) {
+            properties->texture->unbind();
+        }
     }
 
     ref<Shader>& Renderer2D::getShader()

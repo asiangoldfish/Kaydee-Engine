@@ -7,6 +7,24 @@
 
 namespace Kaydee {
 
+    struct Quad2DProperties
+    {
+        glm::vec3 position;
+        glm::vec3 size;
+        float rotation = 0.0f;  ///< In degrees (not radians)
+        glm::vec4 color;
+        float tilingFactor = 1.0f;
+        ref<Texture2D> texture;
+
+        Quad2DProperties()
+          : position(0.0f)
+          , size(1.0f)
+          , color(1.0f)
+          , texture(nullptr)
+        {
+        }
+    };
+
     class Renderer2D
     {
     public:
@@ -17,29 +35,7 @@ namespace Kaydee {
         static void endScene();
 
         // Primitives
-        static void drawQuad(const glm::vec2& position,
-                             const glm::vec2& size,
-                             const float rotation,
-                             const glm::vec4& color);
-
-        static void drawQuad(const glm::vec3& position,
-                             const glm::vec2& size,
-                             const float rotation,
-                             const glm::vec4& color,
-                             float tilingFactor = 1.0f);
-
-        static void drawQuad(const glm::vec2& position,
-                             const glm::vec2& size,
-                             const float rotation,
-                             const glm::vec4& color,
-                             const ref<Texture2D> texture);
-
-        static void drawQuad(const glm::vec3& position,
-                             const glm::vec2& size,
-                             const float rotation,
-                             const glm::vec4& color,
-                             const ref<Texture2D> texture,
-                             float tilingFactor = 1.0f);
+        static void drawQuad(const Quad2DProperties* properties);
 
         static ref<Shader>& getShader();
     };

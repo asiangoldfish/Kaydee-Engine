@@ -23,7 +23,15 @@ private:
     Kaydee::OrthographicCameraController cameraController;
     Kaydee::ref<Kaydee::Texture2D> checkerboardTexture;
     int fps = 0;
-    int tiling = 1;
+
+    Kaydee::Quad2DProperties chessProps, quad1Props, quad2Props;
+    float chessRotation = 0.0f;
+    float quad1Pos = 1.0f;
+    float quad1Radius = 1.0f;
+    float quad1LocalRotation = 0.0f;
+
+    float elapsedTime = 0.0f;
+
 };
 
 #endif // __SANDBOX_2D_H__ vcb

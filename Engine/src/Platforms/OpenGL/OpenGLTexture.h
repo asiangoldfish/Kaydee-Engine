@@ -21,6 +21,11 @@ namespace Kaydee {
         virtual void unbind(uint32_t slot = 0) const override;
 
         virtual void setData(void* data, uint32_t size) override;
+        
+        virtual bool operator==(const Texture& other) const override
+        {
+            return rendererID == ((OpenGLTexture2D&)other).rendererID;
+        }
 
     private:
         std::string path;

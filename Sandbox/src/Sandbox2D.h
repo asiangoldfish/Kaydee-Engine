@@ -24,13 +24,21 @@ private:
     Kaydee::ref<Kaydee::Texture2D> checkerboardTexture;
     int fps = 0;
 
-    Kaydee::Quad2DProperties chessProps, quad1Props, quad2Props;
+    Kaydee::Quad2DProperties chessProps, chessProps2, quad1Props, quad2Props;
     float chessRotation = 0.0f;
     float quad1Pos = 1.0f;
+    float quad1PosX = 1.0f;
+    float quad1PosY = 1.0f;
     float quad1Radius = 1.0f;
     float quad1LocalRotation = 0.0f;
+    int trailingQuads = 5;
+    float quadDistance = 0.f;
 
-    float elapsedTime = 0.0f;
+    float colorSpeed = 0.5f;
+
+    float elapsedTimeX = 0.0f;
+    float elapsedTimeY = 0.0f;
+    float elapsedTimeColor = 0.0f;
 
 };
 

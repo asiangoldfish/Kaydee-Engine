@@ -167,9 +167,13 @@ namespace Kaydee {
         virtual void setLayout(const BufferLayout& layout) = 0;
         virtual const BufferLayout& getLayout() const = 0;
 
+        virtual void setData(const void* data, uint32_t size) = 0;
+
+        static ref<VertexBuffer> create(uint32_t size);
         static ref<VertexBuffer> create(float* vertices, uint32_t size);
     };
 
+    // 32-bit only index buffers is on supported
     class IndexBuffer
     {
     public:
@@ -180,7 +184,7 @@ namespace Kaydee {
 
         virtual uint32_t getCount() const = 0;
 
-        static ref<IndexBuffer> create(uint32_t* indices, uint32_t size);
+        static ref<IndexBuffer> create(uint32_t* indices, uint32_t count);
     };
 }
 

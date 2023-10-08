@@ -7,11 +7,14 @@ namespace Kaydee {
     class OpenGLVertexBuffer : public VertexBuffer
     {
     public:
+        OpenGLVertexBuffer(uint32_t size);
         OpenGLVertexBuffer(float* vertices, uint32_t size);
         ~OpenGLVertexBuffer() override;
 
         virtual void bind() const override;
         virtual void unbind() const override;
+
+        virtual void setData(const void* data, uint32_t size) override;
 
         virtual const BufferLayout& getLayout() const { return layout; }
 

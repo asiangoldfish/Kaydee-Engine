@@ -25,9 +25,10 @@ namespace Kaydee {
 
         inline static void clear() { rendererAPI->clear(); }
 
-        inline static void drawIndexed(const ref<VertexArray>& vertexArray)
+        inline static void drawIndexed(const ref<VertexArray>& vertexArray,
+                                       uint32_t indexCount = 0)
         {
-            rendererAPI->drawIndexed(vertexArray);
+            rendererAPI->drawIndexed(vertexArray, indexCount);
         }
 
     private:

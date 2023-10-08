@@ -15,7 +15,8 @@ namespace Kaydee {
         virtual void setClearColor(const glm::vec4& color) override;
         virtual void clear() override;
 
-        virtual void drawIndexed(const ref<VertexArray>& vertexArray) override;
+        virtual void drawIndexed(const ref<VertexArray>& vertexArray,
+                                 uint32_t indexCount = 0) override;
     };
 }
 

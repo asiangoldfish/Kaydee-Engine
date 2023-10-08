@@ -234,6 +234,13 @@ namespace Kaydee {
         uploadUniformInt(name, value);
     }
 
+    void OpenGLShader::setIntArray(const std::string& name,
+                                   int* values,
+                                   uint32_t count)
+    {
+        uploadUniformIntArray(name, values, count);
+    }
+
     void OpenGLShader::setFloat2(const std::string& name,
                                  const glm::vec2& value)
     {
@@ -274,47 +281,50 @@ namespace Kaydee {
 
     void OpenGLShader::uploadUniformFloat(const std::string& name, float value)
     {
-        glUniform1i(glGetUniformLocation(rendererId, name.c_str()), value);
+        GLint location = glGetUniformLocation(rendererId, name.c_str());
+        glUniform1i(location, value);
     }
 
     void OpenGLShader::uploadUniformFloat2(const std::string& name,
                                            const glm::vec2& values)
     {
-        glUniform2f(
-          glGetUniformLocation(rendererId, name.c_str()), values.x, values.y);
+        GLint location = glGetUniformLocation(rendererId, name.c_str());
+        glUniform2f(location, values.x, values.y);
     }
 
     void OpenGLShader::uploadUniformInt(const std::string& name, int value)
     {
-        glUniform1i(glGetUniformLocation(rendererId, name.c_str()), value);
+        GLint location = glGetUniformLocation(rendererId, name.c_str());
+        glUniform1i(location, value);
+    }
+
+    void OpenGLShader::uploadUniformIntArray(const std::string& name,
+                                             int* values,
+                                             uint32_t count)
+    {
+        GLint location = glGetUniformLocation(rendererId, name.c_str());
+        glUniform1iv(location, count, values);
     }
 
     void OpenGLShader::uploadUniformFloat3(const std::string& name,
                                            const glm::vec3& values)
     {
-        glUniform3f(glGetUniformLocation(rendererId, name.c_str()),
-                    values.x,
-                    values.y,
-                    values.z);
+        GLint location = glGetUniformLocation(rendererId, name.c_str());
+        glUniform3f(location, values.x, values.y, values.z);
     }
 
     void OpenGLShader::uploadUniformFloat4(const std::string& name,
                                            const glm::vec4& values)
     {
-        glUniform4f(glGetUniformLocation(rendererId, name.c_str()),
-                    values.x,
-                    values.y,
-                    values.z,
-                    values.w);
+        GLint location = glGetUniformLocation(rendererId, name.c_str());
+        glUniform4f(location, values.x, values.y, values.z, values.w);
     }
 
     void OpenGLShader::uploadUniformMat4(const std::string& name,
                                          const glm::mat4& matrix)
     {
-        glUniformMatrix4fv(glGetUniformLocation(rendererId, name.c_str()),
-                           1,
-                           GL_FALSE,
-                           glm::value_ptr(matrix));
+        GLint location = glGetUniformLocation(rendererId, name.c_str());
+        glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
     }
     void OpenGLShader::uploadUniformBool(const std::string& name,
                                          const bool value)

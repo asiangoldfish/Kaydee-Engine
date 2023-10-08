@@ -3,6 +3,8 @@
 #include "EntryPoint.h"
 #include <filesystem>
 
+#include <Windows.h>
+
 void
 usage()
 {
@@ -17,6 +19,24 @@ version()
 {
     std::cout << "MyApp version 1.0.0\n";
 }
+
+void
+hideConsole()
+{
+    ::ShowWindow(::GetConsoleWindow(), SW_HIDE);
+}
+
+void
+showConsole()
+{
+    ::ShowWindow(::GetConsoleWindow(), SW_SHOW);
+}
+
+bool
+isConsoleVisible()
+{
+    return ::IsWindowVisible(::GetConsoleWindow()) != FALSE;
+} 
 
 int
 main(int argc, char** argv)

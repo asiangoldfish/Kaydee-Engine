@@ -34,6 +34,8 @@ namespace Kaydee {
         static void beginScene(const OrthographicCamera& camera);
         static void endScene();
 
+        static void flush();
+
         // Primitives
         static void drawQuad(const Quad2DProperties* properties);
 

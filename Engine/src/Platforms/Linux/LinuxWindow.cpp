@@ -58,7 +58,7 @@ namespace Kaydee {
             // TODO - glfwTerminate on system shutdown
             {
                 KD_PROFILE_SCOPE("glfwInit");
-             
+
                 int success = glfwInit();
                 KD_CORE_ASSERT(success, "Could not initialize GLFW!");
                 glfwSetErrorCallback(GLFWErrorCallback);
@@ -73,6 +73,10 @@ namespace Kaydee {
                                       windowData.title.c_str(),
                                       nullptr,
                                       nullptr);
+
+            KD_CORE_ASSERT(window,
+                           "Unable to create OpenGL window. Window is NULL");
+
             GLFWWindowCount++;
         }
 

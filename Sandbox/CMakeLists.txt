@@ -18,6 +18,11 @@ target_link_libraries(${MODULE_NAME} PRIVATE
     Engine
 )
 
+# Set CWD
+set_target_properties(
+    Sandbox PROPERTIES
+    VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+
 # Copy assets directory to binary destination
 set (source "${CMAKE_CURRENT_SOURCE_DIR}/assets")
 set (destination "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets")

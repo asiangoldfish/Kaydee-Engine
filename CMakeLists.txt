@@ -47,33 +47,6 @@ if(NOT DEFINED KAYDEE_MASTER_PROJECT)
     endif()
 endif()
 
-#####################
-### Build options ###
-#####################
-
-######################
-### Git Submodules ###
-######################
-
-# find_package(Git QUIET)
-# if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
-#     option(GIT_SUBMODULE "Check submodules during build" ON)
-#     if(GIT_SUBMODULE)
-#         message(STATUS "Submodule update")
-#         execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-#                         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-#                         RESULT_VARIABLE GIT_SUBMOD_RESULT)
-#         if(NOT GIT_SUBMOD_RESULT EQUAL "0")
-#             message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules!")
-#         endif()
-#     endif()
-# endif()
-
-# # CHECK ALL SUBMODULES
-# if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/glfw/CMakeLists.txt")
-#     message(FATAL_ERROR "The GLFW submodules was not downloaded! GIT_SUBMODULE was turned off or failed.")
-# endif()
-
 # Output directories
 set(BITSIZE 64)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${CMAKE_SYSTEM_NAME}${BITSIZE}/${CMAKE_BUILD_TYPE}")
@@ -81,3 +54,41 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${CMAKE_SYSTEM_NAME}
 # Add subdirectories
 add_subdirectory(Engine)
 add_subdirectory(Sandbox)
+
+######################
+### Installation   ###
+######################
+install(
+    TARGETS Sandbox
+    RUNTIME
+    DESTINATION bin
+    COMPONENT applications
+)
+
+# Define NSIS installation types
+set(CPACK_ALL_INSTALL_TYPES Full Developer)
+set(CPACK_COMPONENT_LIBRARIES_INSTALL_TYPES Developer Full)
+set(CPACK_COMPONENT_HEADERS_INSTALL_TYPES Developer Full)
+set(CPACK_COMPONENT_APPLICATIONS_INSTALL_TYPES Full)
+
+include(InstallRequiredSystemLibraries)
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_VERSION_MAJOR "1")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+set(CPACK_SOURCE_GENERATOR "ZIP")
+
+#set( CPACK_NSIS_CREATE_ICONS_EXTRA 
+#"
+#CreateShortcut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\SDK Documentation.lnk\\\" \\\"$INSTDIR\\\\doc\\\\html\\\\index.html\\\"
+#" )
+#
+#set( CPACK_NSIS_DELETE_ICONS_EXTRA 
+#"
+#Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\SDK Documentation.lnk\\\"
+#" )
+
+set (CPACK_NSIS_MODIFY_PATH "ON")
+#set(CPACK_NSIS_MENU_LINKS ON)
+
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" ${CMAKE_MODULE_PATH})
+include(CPack)

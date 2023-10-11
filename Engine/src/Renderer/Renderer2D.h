@@ -38,8 +38,19 @@ namespace Kaydee {
 
         // Primitives
         static void drawQuad(const Quad2DProperties* properties);
-
         static ref<Shader>& getShader();
+
+        struct Statistics
+        {
+            uint32_t drawCalls = 0, quadCount = 0;
+            uint32_t getTotalVertexCount() { return quadCount * 4; }
+            uint32_t getTotalIndexCount() { return quadCount * 6; }
+        };
+        static void resetStats();
+        static Statistics getStats();
+
+    private:
+        static void flushAndReset();
     };
 }
 

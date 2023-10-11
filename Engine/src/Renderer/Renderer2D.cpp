@@ -24,9 +24,9 @@ namespace Kaydee {
 
     struct Renderer2DContext
     {
-        const uint32_t maxQuads = 10000; ///< Max quads per draw call
-        const uint32_t maxVertices = maxQuads * 4;
-        const uint32_t maxIndices = maxQuads * 6;
+        static const uint32_t maxQuads = 10000; ///< Max quads per draw call
+        static const uint32_t maxVertices = maxQuads * 4;
+        static const uint32_t maxIndices = maxQuads * 6;
         static const uint32_t maxTextureSlots =
           32; // TODO - Render capabilities
 
@@ -42,6 +42,8 @@ namespace Kaydee {
 
         std::array<ref<Texture2D>, maxTextureSlots> textureSlots;
         uint32_t textureSlotIndex = 1; // 0 = white texture
+
+        Renderer2D::Statistics stats;
     };
 
     static Renderer2DContext contextData;
@@ -70,16 +72,17 @@ namespace Kaydee {
         uint32_t* quadIndices = new uint32_t[contextData.maxIndices];
         uint32_t offset = 0;
         for (uint32_t i = 0; i < contextData.maxIndices; i += 6) {
+            if (i + 6 < contextData.maxIndices) {
+                quadIndices[i + 0] = offset + 0;
+                quadIndices[i + 1] = offset + 1;
+                quadIndices[i + 2] = offset + 2;
 
-            quadIndices[i + 0] = offset + 0;
-            quadIndices[i + 1] = offset + 1;
-            quadIndices[i + 2] = offset + 2;
+                quadIndices[i + 3] = offset + 2;
+                quadIndices[i + 4] = offset + 3;
+                quadIndices[i + 5] = offset + 0;
 
-            quadIndices[i + 3] = offset + 2;
-            quadIndices[i + 4] = offset + 3;
-            quadIndices[i + 5] = offset + 0;
-
-            offset += 4;
+                offset += 4;
+            }
         }
 
         ref<IndexBuffer> squareIB;
@@ -110,6 +113,11 @@ namespace Kaydee {
 
         // Set all texture slots to 0
         contextData.textureSlots[0] = contextData.whiteTexture;
+
+        contextData.quadIndexCount += 6;
+
+        // Statistics
+        contextData.stats.quadCount++;
     }
 
     void Renderer2D::shutdown()
@@ -156,11 +164,26 @@ namespace Kaydee {
 
         RenderCommand::drawIndexed(contextData.vertexArray,
                                    contextData.quadIndexCount);
+        contextData.stats.drawCalls++;
+    }
+
+    void Renderer2D::flushAndReset() 
+    {
+        endScene();
+        contextData.quadIndexCount = 0;
+        contextData.quadVertexBufferPtr = contextData.quadVertexBufferBase;
+
+        contextData.textureSlotIndex = 1;
     }
 
     void Renderer2D::drawQuad(const Quad2DProperties* properties)
     {
         KD_PROFILE_FUNCTION();
+
+        // Handle edge case when we draw too many vertices
+        if (contextData.quadIndexCount >= Renderer2DContext::maxIndices) {
+            flushAndReset();
+        }
 
         // Figure out whether we have bound this quad's texture before
         // constexpr glm::vec4 color(1.0f);
@@ -190,11 +213,11 @@ namespace Kaydee {
         // Configure vertices
         // -------
         /*
-        * 1. bottom left
-        * 2. bottom right
-        * 3. top right
-        * 4. top left
-        */
+         * 1. bottom left
+         * 2. bottom right
+         * 3. top right
+         * 4. top left
+         */
         glm::vec3 position[4] = { properties->position,
                                   { properties->position.x + properties->size.x,
                                     properties->position.y,
@@ -224,6 +247,7 @@ namespace Kaydee {
         }
 
         contextData.quadIndexCount += 6;
+        contextData.stats.quadCount++;
 
 #if OLD_PATH
         // Properties
@@ -258,6 +282,16 @@ namespace Kaydee {
     ref<Shader>& Renderer2D::getShader()
     {
         return contextData.textureShader;
+    }
+
+    void Renderer2D::resetStats()
+    {
+        memset(&contextData.stats, 0, sizeof(Statistics));
+    }
+
+    Renderer2D::Statistics Renderer2D::getStats()
+    {
+        return contextData.stats;
     }
 
 }

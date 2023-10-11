@@ -64,8 +64,8 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
     float iterationY = ts.getMilliseconds() * 0.01f * quad1Pos * quad1PosY;
     elapsedTimeX += iterationX;
     elapsedTimeY += iterationY;
-    
-    elapsedTimeColor += ts.getMilliseconds() * 0.01f * colorSpeed  * 0.1f;
+
+    elapsedTimeColor += ts.getMilliseconds() * 0.01f * colorSpeed * 0.1f;
 
     //------------
     // Update
@@ -75,6 +75,8 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
     //------------
     // Render
     //------------
+    // Reset stats
+    Kaydee::Renderer2D::resetStats();
     {
         KD_PROFILE_SCOPE("Render Prep");
         Kaydee::RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
@@ -92,24 +94,33 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
 
         float tmpX = elapsedTimeX;
         float tmpY = elapsedTimeY;
-        float r = cos(elapsedTimeColor);
-        float g = sin(elapsedTimeColor);
-        float b = cos(sin(elapsedTimeColor));
+
+        quad2Props.color.r = (1 + cos(elapsedTimeColor)) * 0.5f;
+        quad2Props.color.g = (1 + sin(elapsedTimeColor)) * 0.5f;
+        quad2Props.color.b = (1 + cos(sin(elapsedTimeColor))) * 0.5f;
 
         for (int i = 0; i < trailingQuads; i++) {
             quad2Props.position.x = cos(tmpX) * quad1Radius;
             quad2Props.position.y = sin(tmpY) * quad1Radius;
-            quad2Props.color.a =
-              1.0f / trailingQuads * (trailingQuads - i);
-            quad2Props.color.r = r;
-            quad2Props.color.g = g;
-            quad2Props.color.b = b;
+            quad2Props.color.a = 1.0f / trailingQuads * (trailingQuads - i);
             Kaydee::Renderer2D::drawQuad(&quad2Props);
             tmpX -= iterationX + quadDistance;
             tmpY -= iterationY + quadDistance;
         }
 
+        Kaydee::Renderer2D::endScene();
 
+        Kaydee::Renderer2D::beginScene(cameraController.getCamera());
+
+        for (int i = 0; i < trailingQuads; i++) {
+            quad2Props.position.x = cos(tmpX) * quad1Radius;
+            quad2Props.position.y = sin(tmpY) * quad1Radius;
+            quad2Props.color.a = 1.0f / trailingQuads * (trailingQuads - i);
+            Kaydee::Renderer2D::drawQuad(&quad2Props);
+            tmpX -= iterationX + quadDistance;
+            tmpY -= iterationY + quadDistance;
+        }
+     
         Kaydee::Renderer2D::endScene();
     }
 }
@@ -118,16 +129,28 @@ void
 Sandbox2D::onImGuiRender()
 {
     ImGui::Begin("Settings");
-
     ImGui::Text("FPS: %d", fps);
-    ImGui::SliderInt("Quads", &trailingQuads, 0, 20);
+    ImGui::Text("Colors: %f %f %f %f",
+                quad2Props.color.r,
+                quad2Props.color.g,
+                quad2Props.color.b,
+                quad2Props.color.a);
+    ImGui::SliderInt("Quads", &trailingQuads, 0, 1000);
     ImGui::SliderFloat("Radius", &quad1Radius, 0, 10);
     ImGui::SliderFloat("Speed", &quad1Pos, 0, 1);
     ImGui::SliderFloat("SpeedX", &quad1PosX, 0, 3);
     ImGui::SliderFloat("SpeedY", &quad1PosY, 0, 3);
     ImGui::SliderFloat("Quad Distance", &quadDistance, 0, 1);
     ImGui::SliderFloat("Color Speed", &colorSpeed, 0, 3);
+    ImGui::End();
 
+    ImGui::Begin("Statistics");
+    auto stats = Kaydee::Renderer2D::getStats();
+    ImGui::Text("Renderer2D Stats:");
+    ImGui::Text("Draw Calls: %d", stats.drawCalls);
+    ImGui::Text("Quads: %d", stats.quadCount);
+    ImGui::Text("Vertices: %d", stats.getTotalVertexCount());
+    ImGui::Text("Indices: %d", stats.getTotalIndexCount());
     ImGui::End();
 }
 

@@ -109,19 +109,6 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
         }
 
         Kaydee::Renderer2D::endScene();
-
-        Kaydee::Renderer2D::beginScene(cameraController.getCamera());
-
-        for (int i = 0; i < trailingQuads; i++) {
-            quad2Props.position.x = cos(tmpX) * quad1Radius;
-            quad2Props.position.y = sin(tmpY) * quad1Radius;
-            quad2Props.color.a = 1.0f / trailingQuads * (trailingQuads - i);
-            Kaydee::Renderer2D::drawQuad(&quad2Props);
-            tmpX -= iterationX + quadDistance;
-            tmpY -= iterationY + quadDistance;
-        }
-     
-        Kaydee::Renderer2D::endScene();
     }
 }
 
@@ -135,7 +122,8 @@ Sandbox2D::onImGuiRender()
                 quad2Props.color.g,
                 quad2Props.color.b,
                 quad2Props.color.a);
-    ImGui::SliderInt("Quads", &trailingQuads, 0, 1000);
+    ImGui::InputInt("Quads Input", &trailingQuads, 1000, 100);
+    ImGui::SliderInt("Quads", &trailingQuads, 0, 10000);
     ImGui::SliderFloat("Radius", &quad1Radius, 0, 10);
     ImGui::SliderFloat("Speed", &quad1Pos, 0, 1);
     ImGui::SliderFloat("SpeedX", &quad1PosX, 0, 3);

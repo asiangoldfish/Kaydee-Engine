@@ -13,6 +13,7 @@ set(MODULE_PLATFORMS    ${CMAKE_CURRENT_SOURCE_DIR}/src/Platforms)
 set(MODULE_RENDERER     ${CMAKE_CURRENT_SOURCE_DIR}/src/Renderer)
 set(MODULE_DEBUG        ${CMAKE_CURRENT_SOURCE_DIR}/Debug)
 set(MODULE_VENDOR       ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
+set(MODULE_UTILS        ${CMAKE_CURRENT_SOURCE_DIR}/Utils)
 
 add_library(${MODULE_NAME} STATIC
     # Precompiled header

@@ -18,10 +18,26 @@ target_link_libraries(${MODULE_NAME} PRIVATE
     Engine
 )
 
+# TODO: Create better and cleaner configuration for Debug and Release mode.
+# They must compile on both Linux and MS Windows using Visual Studio 2022
+# Output directories
+set(BITSIZE 64)
+if ( MSVC )
+    set_target_properties( Sandbox PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${CMAKE_SYSTEM_NAME}${BITSIZE}/${CMAKE_BUILD_TYPE}" )
+    set_target_properties( Sandbox PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/bin/${CMAKE_SYSTEM_NAME}${BITSIZE}/${CMAKE_BUILD_TYPE}" )
+    set_target_properties( Sandbox PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/bin/${CMAKE_SYSTEM_NAME}${BITSIZE}/${CMAKE_BUILD_TYPE}" )
+    # etc for the other available configuration types (MinSizeRel, RelWithDebInfo)
+else()
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${CMAKE_SYSTEM_NAME}${BITSIZE}/${CMAKE_BUILD_TYPE}")
+endif ( MSVC )
+
 # Set CWD
+set(CWD "${CMAKE_BINARY_DIR}/bin/${CMAKE_SYSTEM_NAME}${BITSIZE}/${CMAKE_BUILD_TYPE}")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${CMAKE_SYSTEM_NAME}${BITSIZE}/${CMAKE_BUILD_TYPE}")
+
 set_target_properties(
     Sandbox PROPERTIES
-    VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+    VS_DEBUGGER_WORKING_DIRECTORY "${CWD}")
 
 # Copy assets directory to binary destination
 set (source "${CMAKE_CURRENT_SOURCE_DIR}/assets")

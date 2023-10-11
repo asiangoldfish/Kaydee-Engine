@@ -24,7 +24,7 @@ namespace Kaydee {
 
     struct Renderer2DContext
     {
-        static const uint32_t maxQuads = 10000; ///< Max quads per draw call
+        static const uint32_t maxQuads = 20000; ///< Max quads per draw call
         static const uint32_t maxVertices = maxQuads * 4;
         static const uint32_t maxIndices = maxQuads * 6;
         static const uint32_t maxTextureSlots =

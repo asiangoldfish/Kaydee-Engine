@@ -37,10 +37,10 @@ namespace Kaydee {
     void OpenGLRendererAPI::drawIndexed(const ref<VertexArray>& vertexArray,
                                         uint32_t indexCount)
     {
-        uint32_t count =
-          indexCount ? indexCount : vertexArray->getIndexBuffer()->getCount();
-        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
-        glBindTexture(GL_TEXTURE_2D, 0);
+        if (indexCount) {
+            glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
+            glBindTexture(GL_TEXTURE_2D, 0);
+        }
     }
 
 }

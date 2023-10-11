@@ -21,6 +21,7 @@ namespace Kaydee {
             return instance->isMouseButtonPressedImpl(button);
         }
 
+        // Get mouse position in screen space
         inline static std::pair<float, float> getMousePosition()
         {
             return { instance->getMouseXImpl(), instance->getMouseYImpl() };

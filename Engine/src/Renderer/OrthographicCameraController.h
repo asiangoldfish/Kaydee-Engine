@@ -10,6 +10,25 @@
 #include <glm/glm.hpp>
 
 namespace Kaydee {
+    struct OrthographicCameraBounds
+    {
+        float left, right;
+        float bottom, top;
+
+        inline float getWidth() { return right - left; }
+        inline float getHeight() { return top - bottom; }
+
+        OrthographicCameraBounds(float left,
+                                 float right,
+                                 float bottom,
+                                 float top)
+          : left(left)
+          , right(right)
+          , bottom(bottom)
+          , top(top)
+        {
+        }
+    };
 
     class OrthographicCameraController
     {
@@ -18,6 +37,11 @@ namespace Kaydee {
 
         void onUpdate(Timestep ts);
         void onEvent(Event& e);
+
+        const OrthographicCameraBounds& getBounds() const
+        {
+            return cameraBounds;
+        }
 
         OrthographicCamera& getCamera() { return camera; }
         const OrthographicCamera& getCamera() const { return camera; }
@@ -32,6 +56,7 @@ namespace Kaydee {
     private:
         float aspectRatio;
         float zoomLevel = 1.0f;
+        OrthographicCameraBounds cameraBounds;
         OrthographicCamera camera;
 
         bool enableRotation = false;

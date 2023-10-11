@@ -8,7 +8,7 @@ class ExampleLayer : public Kaydee::Layer
 public:
     ExampleLayer();
     void onUpdate(Kaydee::Timestep ts) override;
-    void ExampleLayer::onEvent(Kaydee::Event& e) override;
+    void onEvent(Kaydee::Event& e) override;
     inline bool OnKeyPressedEvent(Kaydee::KeyPressedEvent& event)
     {
         return false;

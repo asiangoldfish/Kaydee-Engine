@@ -63,7 +63,7 @@ namespace Kaydee {
     void ImGuiLayer::onDetach()
     {
         KD_PROFILE_FUNCTION();
-        
+
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
@@ -72,7 +72,7 @@ namespace Kaydee {
     void ImGuiLayer::begin()
     {
         KD_PROFILE_FUNCTION();
-        
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -81,7 +81,7 @@ namespace Kaydee {
     void ImGuiLayer::end()
     {
         KD_PROFILE_FUNCTION();
-        
+
         ImGuiIO& io = ImGui::GetIO();
         Application& app = Application::get();
         io.DisplaySize = ImVec2((float)app.getWindow().getWidth(),
@@ -97,5 +97,12 @@ namespace Kaydee {
             ImGui::RenderPlatformWindowsDefault();
             glfwMakeContextCurrent(backup_current_context);
         }
+    }
+
+    void ImGuiLayer::onEvent(Event& event)
+    {
+        /*Kaydee::EventDispatcher dispatcher(event);
+        dispatcher.dispatch<Kaydee::MouseButtonPressedEvent>(
+          KD_BIND_EVENT_FN(ImGuiLayer::onKeyPressedEvent));*/
     }
 }

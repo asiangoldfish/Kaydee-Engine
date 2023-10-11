@@ -2,6 +2,7 @@
 #define __SANDBOX_2D_H__
 
 #include "Kaydee/Kaydee.h"
+#include "ParticleSystem.h"
 
 /**
  * @brief 2D layer for Sandbox
@@ -39,7 +40,10 @@ private:
     float elapsedTimeX = 0.0f;
     float elapsedTimeY = 0.0f;
     float elapsedTimeColor = 0.0f;
+    float timestep = 0.0f;
 
+    ParticleProps particle;
+    ParticleSystem particleSystem;
 };
 
 #endif // __SANDBOX_2D_H__ vcb

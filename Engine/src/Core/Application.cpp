@@ -21,7 +21,7 @@ namespace Kaydee {
 
         window = std::unique_ptr<Window>(Window::create());
         window->setEventCallback(BIND_EVENT_FN(onEvent)); // Event callback
-        // window->setVSync(true);
+        window->setVSync(false);
 
         Renderer::init();
 

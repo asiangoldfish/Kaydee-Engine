@@ -11,23 +11,22 @@
 #include <random>
 #include <iostream>
 
-float
-rng()
-{
-    // Setup random number generator
-    std::random_device rnddev;
-    std::mt19937 gen(rnddev());
-    std::uniform_real_distribution<float> dist(0.f, 1.f);
+namespace Random {
+    float rng()
+    {
+        // Setup random number generator
+        static std::random_device rnddev;
+        static std::mt19937 gen(rnddev());
+        static std::uniform_real_distribution<float> dist(0.f, 1.f);
 
-    float myRandomNumber = dist(gen);
+        return dist(gen);
 
-    return myRandomNumber;
-}
+    }
 
-float
-rng(float low, float high)
-{
-    return rng() * (high - low) + low;
+    float rng(float low, float high)
+    {
+        return rng() * (high - low) + low;
+    }
 }
 
 #endif

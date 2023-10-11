@@ -3,7 +3,10 @@ set(MODULE_NAME Sandbox)
 add_executable(${MODULE_NAME} 
     src/Sandbox2D.h     src/Sandbox2D.cpp
     src/SandboxApp.cpp
-    src/ExampleLayer.h  src/ExampleLayer.cpp)
+    src/ExampleLayer.h  src/ExampleLayer.cpp 
+
+    src/ParticleSystem.h    src/ParticleSystem.cpp
+)
 
 target_include_directories(${MODULE_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/Engine/include

@@ -16,9 +16,16 @@ namespace Kaydee {
 
         virtual void onAttach() override;
         virtual void onDetach() override;
+        virtual void onEvent(Event& event) override;
 
         void begin();
         void end();
+
+    private:
+        //inline bool onKeyPressedEvent(Kaydee::MouseButtonPressedEvent& event)
+        //{
+        //    return true;
+        //}
 
     private:
         float time;

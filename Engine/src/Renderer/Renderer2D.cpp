@@ -44,6 +44,8 @@ namespace Kaydee {
         uint32_t textureSlotIndex = 1; // 0 = white texture
 
         Renderer2D::Statistics stats;
+
+        glm::vec4 quadVertexPositions[4];
     };
 
     static Renderer2DContext contextData;
@@ -84,6 +86,11 @@ namespace Kaydee {
                 offset += 4;
             }
         }
+
+        contextData.quadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
+        contextData.quadVertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
+        contextData.quadVertexPositions[2] = { 0.5f, 0.5f, 0.0f, 1.0f };
+        contextData.quadVertexPositions[3] = { -0.5f, 0.5f, 0.0f, 1.0f };
 
         ref<IndexBuffer> squareIB;
         squareIB = IndexBuffer::create(quadIndices, contextData.maxIndices);
@@ -167,7 +174,7 @@ namespace Kaydee {
         contextData.stats.drawCalls++;
     }
 
-    void Renderer2D::flushAndReset() 
+    void Renderer2D::flushAndReset()
     {
         endScene();
         contextData.quadIndexCount = 0;
@@ -218,16 +225,6 @@ namespace Kaydee {
          * 3. top right
          * 4. top left
          */
-        glm::vec3 position[4] = { properties->position,
-                                  { properties->position.x + properties->size.x,
-                                    properties->position.y,
-                                    properties->position.z },
-                                  { properties->position.x + properties->size.x,
-                                    properties->position.y + properties->size.y,
-                                    properties->position.z },
-                                  { properties->position.x,
-                                    properties->position.y + properties->size.y,
-                                    properties->position.z } };
 
         glm::vec2 texCoords[4] = {
             { 0.0f, 0.0f },
@@ -236,8 +233,23 @@ namespace Kaydee {
             { 0.0f, 1.0f },
         };
 
+        // --------
+        // Transformation
+        // --------
+        // Translate
+        glm::mat4 transform =
+          glm::translate(glm::mat4(1.0f), properties->position);
+
+        // Rotate
+        transform =
+          glm::rotate(transform, properties->rotation, { 0.0f, 0.0f, 1.0f });
+
+        // Scale
+        transform =
+          glm::scale(transform, properties->scale);
+
         for (int i = 0; i < 4; i++) {
-            contextData.quadVertexBufferPtr->position = position[i];
+            contextData.quadVertexBufferPtr->position = transform * contextData.quadVertexPositions[i];
             contextData.quadVertexBufferPtr->color = properties->color;
             contextData.quadVertexBufferPtr->textureCoord = texCoords[i];
             contextData.quadVertexBufferPtr->textureIndex = textureIndex;

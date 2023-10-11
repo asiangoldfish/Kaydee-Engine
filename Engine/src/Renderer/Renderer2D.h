@@ -10,7 +10,7 @@ namespace Kaydee {
     struct Quad2DProperties
     {
         glm::vec3 position;
-        glm::vec3 size;
+        glm::vec3 scale;
         float rotation = 0.0f;  ///< In degrees (not radians)
         glm::vec4 color;
         float tilingFactor = 1.0f;
@@ -18,7 +18,7 @@ namespace Kaydee {
 
         Quad2DProperties()
           : position(0.0f)
-          , size(1.0f)
+          , scale(1.0f)
           , color(1.0f)
           , texture(nullptr)
         {
@@ -36,7 +36,7 @@ namespace Kaydee {
 
         static void flush();
 
-        // Primitives
+        // Primitives. Rotation is in radians.
         static void drawQuad(const Quad2DProperties* properties);
         static ref<Shader>& getShader();
 

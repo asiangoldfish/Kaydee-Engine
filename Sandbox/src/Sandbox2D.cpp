@@ -25,27 +25,38 @@ Sandbox2D::onAttach()
 
     // Chessboard properties
     chessProps.position = { -5.f, -5.f, -0.1f };
-    chessProps.size = { 10.0f, 10.0f, 1.0f };
+    chessProps.scale = { 10.0f, 10.0f, 1.0f };
     chessProps.color = { 1.0f, 1.0f, 1.0f, 0.4f };
     chessProps.texture = checkerboardTexture;
     chessProps.tilingFactor = 0.5f;
 
     // Chess 2
     chessProps2.position = { 0.5f, -0.5f, -0.1f };
-    chessProps2.size = { 1.0f, 1.0f, 1.0f };
+    chessProps2.scale = { 1.0f, 1.0f, 1.0f };
     chessProps2.color = { 1.0f, 1.0f, 1.0f, 1.0f };
     chessProps2.texture = checkerboardTexture;
     chessProps2.tilingFactor = 20.0f;
 
     // Quad 1 properties
     quad1Props.position.x = -1;
-    quad1Props.size = { 0.8f, 0.8f, 1.0f };
+    quad1Props.scale = { 0.8f, 0.8f, 1.0f };
     quad1Props.color = { .3f, 0.2f, 0.3f, 0.9f };
 
     // Quad 2 properties
-    quad2Props.position = { 0.5f, -0.5f, 0.0f };
-    quad2Props.size = { 0.5f, 0.5f, 1.0f };
-    quad2Props.color = { 1.0f, 0.3f, 0.2f, 1.0f };
+    quad2Props.position = { 0.0f, 0.0f, 0.0f };
+    quad2Props.scale = { 0.3f, 0.3f, 1.0f };
+    quad2Props.color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+    // Particle properties
+    particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+    particle.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
+    particle.SizeBegin = 0.5f;
+    particle.SizeVariation = 0.3f;
+    particle.SizeEnd = 0.0f;
+    particle.LifeTime = 1.0f;
+    particle.Velocity = { 0.0f, 0.0f };
+    particle.VelocityVariation = { 3.0f, 1.0f };
+    particle.Position = { 0.0f, 0.0f };
 }
 
 void
@@ -58,8 +69,8 @@ void
 Sandbox2D::onUpdate(Kaydee::Timestep ts)
 {
     KD_PROFILE_FUNCTION();
-
-    fps = 1000 / (int)ts.getMilliseconds();
+    timestep = ts.getMilliseconds();
+    fps = (int)ts.getMilliseconds() ? 1000 / (int)ts.getMilliseconds() : 0;
     float iterationX = ts.getMilliseconds() * 0.01f * quad1Pos * quad1PosX;
     float iterationY = ts.getMilliseconds() * 0.01f * quad1Pos * quad1PosY;
     elapsedTimeX += iterationX;
@@ -71,6 +82,7 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
     // Update
     //------------
     cameraController.onUpdate(ts);
+    particleSystem.OnUpdate(ts);
 
     //------------
     // Render
@@ -102,7 +114,8 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
         for (int i = 0; i < trailingQuads; i++) {
             quad2Props.position.x = cos(tmpX) * quad1Radius;
             quad2Props.position.y = sin(tmpY) * quad1Radius;
-            quad2Props.color.a = 1.0f / trailingQuads * (trailingQuads - i);
+            quad2Props.color.a = trailingQuads * (trailingQuads - i);
+
             Kaydee::Renderer2D::drawQuad(&quad2Props);
             tmpX -= iterationX + quadDistance;
             tmpY -= iterationY + quadDistance;
@@ -110,13 +123,31 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
 
         Kaydee::Renderer2D::endScene();
     }
+
+    // Emit particles
+    if (Kaydee::Input::isMouseButtonPressed(KD_MOUSE_BUTTON_LEFT)) {
+        auto [x, y] = Kaydee::Input::getMousePosition();
+        auto width = Kaydee::Application::get().getWindow().getWidth();
+        auto height = Kaydee::Application::get().getWindow().getHeight();
+
+        auto bounds = cameraController.getBounds();
+        auto pos = cameraController.getCamera().getPosition();
+        x = (x / width) * bounds.getWidth() - bounds.getWidth() * 0.5f;
+        y = bounds.getHeight() * 0.5f - (y / height) * bounds.getHeight();
+        particle.Position = { x + pos.x, y + pos.y };
+        for (int i = 0; i < 50; i++) {
+            particleSystem.Emit(particle);
+        }
+    }
+
+    particleSystem.OnRender(cameraController.getCamera());
 }
 
 void
 Sandbox2D::onImGuiRender()
 {
     ImGui::Begin("Settings");
-    ImGui::Text("FPS: %d", fps);
+    ImGui::Text("Frame-time: %.3fms (%d)", timestep, fps);
     ImGui::Text("Colors: %f %f %f %f",
                 quad2Props.color.r,
                 quad2Props.color.g,

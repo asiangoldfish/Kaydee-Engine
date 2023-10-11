@@ -8,10 +8,14 @@ namespace Kaydee {
       float aspectRatio,
       bool rotation)
       : aspectRatio(aspectRatio)
-      , camera(-aspectRatio * zoomLevel,
-               aspectRatio * zoomLevel,
-               -zoomLevel,
-               zoomLevel)
+      , cameraBounds(-aspectRatio * zoomLevel,
+                     aspectRatio * zoomLevel,
+                     -zoomLevel,
+                     zoomLevel)
+      , camera(cameraBounds.left,
+               cameraBounds.right,
+               cameraBounds.bottom,
+               cameraBounds.top)
       , enableRotation(rotation)
     {
     }
@@ -64,10 +68,16 @@ namespace Kaydee {
 
         zoomLevel -= e.getOffsetY() * 0.25f;
         zoomLevel = std::max(zoomLevel, 0.25f);
-        camera.setProjection(-aspectRatio * zoomLevel,
-                             aspectRatio * zoomLevel,
-                             -zoomLevel,
-                             zoomLevel);
+        cameraBounds = { -aspectRatio * zoomLevel,
+                         aspectRatio * zoomLevel,
+                         -zoomLevel,
+                         zoomLevel };
+
+        camera.setProjection(cameraBounds.left,
+                             cameraBounds.right,
+                             cameraBounds.bottom,
+                             cameraBounds.top);
+
         return false;
     }
 

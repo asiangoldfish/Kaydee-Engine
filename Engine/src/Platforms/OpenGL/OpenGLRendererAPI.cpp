@@ -38,7 +38,7 @@ namespace Kaydee {
                                         uint32_t indexCount)
     {
         uint32_t count =
-          indexCount ? vertexArray->getIndexBuffer()->getCount() : indexCount;
+          indexCount ? indexCount : vertexArray->getIndexBuffer()->getCount();
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
     }
 

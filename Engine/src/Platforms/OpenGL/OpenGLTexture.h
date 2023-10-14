@@ -15,7 +15,7 @@ namespace Kaydee {
         virtual ~OpenGLTexture2D();
 
         virtual uint32_t getWidth() const override { return width; }
-        virtual uint32_t getheight() const override { return height; }
+        virtual uint32_t getHeight() const override { return height; }
 
         virtual void bind(uint32_t slot = 0) const override;
         virtual void unbind(uint32_t slot = 0) const override;

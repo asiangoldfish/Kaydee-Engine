@@ -23,25 +23,6 @@ Sandbox2D::onAttach()
     checkerboardTexture =
       Kaydee::Texture2D::create("assets/textures/checkerboard.png");
 
-    // Chessboard properties
-    chessProps.position = { -5.f, -5.f, -0.1f };
-    chessProps.scale = { 10.0f, 10.0f, 1.0f };
-    chessProps.color = { 1.0f, 1.0f, 1.0f, 0.4f };
-    chessProps.texture = checkerboardTexture;
-    chessProps.tilingFactor = 0.5f;
-
-    // Chess 2
-    chessProps2.position = { 0.5f, -0.5f, -0.1f };
-    chessProps2.scale = { 1.0f, 1.0f, 1.0f };
-    chessProps2.color = { 1.0f, 1.0f, 1.0f, 1.0f };
-    chessProps2.texture = checkerboardTexture;
-    chessProps2.tilingFactor = 20.0f;
-
-    // Quad 1 properties
-    quad1Props.position.x = -1;
-    quad1Props.scale = { 0.8f, 0.8f, 1.0f };
-    quad1Props.color = { .3f, 0.2f, 0.3f, 0.9f };
-
     // Quad 2 properties
     quad2Props.position = { 0.0f, 0.0f, 0.0f };
     quad2Props.scale = { 0.3f, 0.3f, 1.0f };
@@ -50,13 +31,24 @@ Sandbox2D::onAttach()
     // Particle properties
     particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
     particle.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
-    particle.SizeBegin = 0.5f;
+    particle.SizeBegin = 0.1f;
     particle.SizeVariation = 0.3f;
     particle.SizeEnd = 0.0f;
     particle.LifeTime = 1.0f;
     particle.Velocity = { 0.0f, 0.0f };
     particle.VelocityVariation = { 3.0f, 1.0f };
     particle.Position = { 0.0f, 0.0f };
+
+    // Sprite sheet
+    spriteSheet = Kaydee::Texture2D::create(
+      GAME_ASSETS + std::string("textures/RPGpack_sheet_2X.png"));
+
+    textureStairs = Kaydee::SubTexture2D::createFromCoords(
+      spriteSheet, { 7, 6 }, { 128, 128 });
+    textureBarrels = Kaydee::SubTexture2D::createFromCoords(
+      spriteSheet, { 8, 2 }, { 128, 128 });
+    textureTree = Kaydee::SubTexture2D::createFromCoords(
+      spriteSheet, { 2, 1 }, { 128, 128 }, { 1, 2 });
 }
 
 void
@@ -95,14 +87,10 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
         Kaydee::RenderCommand::clear();
     }
 
+#if 0
     {
-        Kaydee::ref<Kaydee::Shader> shader = Kaydee::Renderer2D::getShader();
-
         KD_PROFILE_SCOPE("Draw");
         Kaydee::Renderer2D::beginScene(cameraController.getCamera());
-        // Kaydee::Renderer2D::drawQuad(&chessProps2);
-        // Kaydee::Renderer2D::drawQuad(&chessProps);
-        // Kaydee::Renderer2D::drawQuad(&quad1Props);
 
         float tmpX = elapsedTimeX;
         float tmpY = elapsedTimeY;
@@ -124,6 +112,32 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
         Kaydee::Renderer2D::endScene();
     }
 
+    {
+        // Generate tiles
+        KD_PROFILE_SCOPE("Draw Grid");
+        Kaydee::Renderer2D::beginScene(cameraController.getCamera());
+
+        int quads = 20;
+        float gap = 1.1f;
+        quad2Props.scale = { 1.0f, 1.0f, 1.0f };
+        for (int y = 0; y < quads; y++) {
+            quad2Props.position.y = y * gap;
+            for (int x = 0; x < quads; x++) {
+                quad2Props.position.x = x * gap;
+
+                quad2Props.color.r = (float)x / quads;
+                quad2Props.color.g = (float)y / quads;
+                quad2Props.color.b =
+                  1.0f - quad2Props.color.r - quad2Props.color.g;
+
+                Kaydee::Renderer2D::drawQuad(&quad2Props);
+            }
+        }
+
+        Kaydee::Renderer2D::endScene();
+    }
+#endif
+
     // Emit particles
     if (Kaydee::Input::isMouseButtonPressed(KD_MOUSE_BUTTON_LEFT)) {
         auto [x, y] = Kaydee::Input::getMousePosition();
@@ -135,17 +149,43 @@ Sandbox2D::onUpdate(Kaydee::Timestep ts)
         x = (x / width) * bounds.getWidth() - bounds.getWidth() * 0.5f;
         y = bounds.getHeight() * 0.5f - (y / height) * bounds.getHeight();
         particle.Position = { x + pos.x, y + pos.y };
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 5; i++) {
             particleSystem.Emit(particle);
         }
     }
 
     particleSystem.OnRender(cameraController.getCamera());
+
+    {
+        // Generate tiles
+        KD_PROFILE_SCOPE("Draw Spritesheet");
+        Kaydee::Renderer2D::beginScene(cameraController.getCamera());
+
+        Kaydee::Quad2DProperties quadProps;
+        // quadProps.texture = spriteSheet;
+        quadProps.subTexture = textureStairs;
+        quadProps.position.z = 0.5f;
+        Kaydee::Renderer2D::drawQuad(&quadProps);
+
+        quadProps.subTexture = textureBarrels;
+        quadProps.position.x = 1.0f;
+        quadProps.position.z = 0.5f;
+        Kaydee::Renderer2D::drawQuad(&quadProps);
+
+        quadProps.subTexture = textureTree;
+        quadProps.position.x = 2.0f;
+        quadProps.position.z = 0.5f;
+        quadProps.scale.y = 2;
+        Kaydee::Renderer2D::drawQuad(&quadProps);
+
+        Kaydee::Renderer2D::endScene();
+    }
 }
 
 void
 Sandbox2D::onImGuiRender()
 {
+#if 0
     ImGui::Begin("Settings");
     ImGui::Text("Frame-time: %.3fms (%d)", timestep, fps);
     ImGui::Text("Colors: %f %f %f %f",
@@ -162,6 +202,7 @@ Sandbox2D::onImGuiRender()
     ImGui::SliderFloat("Quad Distance", &quadDistance, 0, 1);
     ImGui::SliderFloat("Color Speed", &colorSpeed, 0, 3);
     ImGui::End();
+#endif
 
     ImGui::Begin("Statistics");
     auto stats = Kaydee::Renderer2D::getStats();

@@ -23,9 +23,14 @@ public:
 private:
     Kaydee::OrthographicCameraController cameraController;
     Kaydee::ref<Kaydee::Texture2D> checkerboardTexture;
+    Kaydee::ref<Kaydee::Texture2D> spriteSheet;
+    Kaydee::ref<Kaydee::SubTexture2D> textureStairs;
+    Kaydee::ref<Kaydee::SubTexture2D> textureBarrels;
+    Kaydee::ref<Kaydee::SubTexture2D> textureTree;
+    
     int fps = 0;
 
-    Kaydee::Quad2DProperties chessProps, chessProps2, quad1Props, quad2Props;
+    Kaydee::Quad2DProperties quad2Props;
     float chessRotation = 0.0f;
     float quad1Pos = 1.0f;
     float quad1PosX = 1.0f;

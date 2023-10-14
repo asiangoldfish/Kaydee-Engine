@@ -21,6 +21,8 @@ target_link_libraries(${MODULE_NAME} PRIVATE
     Engine
 )
 
+target_compile_definitions(${MODULE_NAME} PRIVATE GAME_ASSETS="assets/game/")
+
 # TODO: Create better and cleaner configuration for Debug and Release mode.
 # They must compile on both Linux and MS Windows using Visual Studio 2022
 # Output directories

@@ -62,6 +62,7 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_RENDERER}/RenderCommand.h                      ${MODULE_RENDERER}/RenderCommand.cpp
     ${MODULE_RENDERER}/OrthographicCamera.h                 ${MODULE_RENDERER}/OrthographicCamera.cpp
     ${MODULE_RENDERER}/Texture.h                            ${MODULE_RENDERER}/Texture.cpp
+    ${MODULE_RENDERER}/SubTexture2D.h                       ${MODULE_RENDERER}/SubTexture2D.cpp
     ${MODULE_RENDERER}/OrthographicCameraController.h       ${MODULE_RENDERER}/OrthographicCameraController.cpp
     ${MODULE_RENDERER}/Renderer2D.h                         ${MODULE_RENDERER}/Renderer2D.cpp
     

@@ -49,7 +49,7 @@ ParticleSystem::OnRender(Kaydee::OrthographicCamera& camera)
         float size = glm::lerp(particle.SizeEnd, particle.SizeBegin, life);
 
         Kaydee::Quad2DProperties quadProps;
-        quadProps.position = { particle.Position.x, particle.Position.y, 1.0f };
+        quadProps.position = { particle.Position.x, particle.Position.y, 0.0f };
         quadProps.scale = { size, size, 0.0f };
         quadProps.rotation = particle.Rotation;
         quadProps.color = color;

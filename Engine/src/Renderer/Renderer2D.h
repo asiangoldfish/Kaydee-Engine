@@ -3,6 +3,7 @@
 
 #include "OrthographicCamera.h"
 #include "Texture.h"
+#include "SubTexture2D.h"
 #include "Shader.h"
 
 namespace Kaydee {
@@ -14,7 +15,13 @@ namespace Kaydee {
         float rotation = 0.0f;  ///< In degrees (not radians)
         glm::vec4 color;
         float tilingFactor = 1.0f;
+
+        // If the quad renders a texture, then we display the whole texture.
+        // Else, if the quad renders a quad texture, we make sure to account
+        // for this. Only one of texture or subTexture can be in use, and not
+        // both at one time. If both is nullptr, then no texture is rendered.
         ref<Texture2D> texture;
+        ref<SubTexture2D> subTexture;
 
         Quad2DProperties()
           : position(0.0f)

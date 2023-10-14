@@ -192,14 +192,31 @@ namespace Kaydee {
             flushAndReset();
         }
 
+        // --------
+        // Textures
+        // --------
+        // If sub texture, then fetch texture coordinates from it. Otherwise,
+        // default to 0 to 1 coordinate space.
+        glm::vec2 texCoords[4];
+        ref<Texture2D> texture;
+        if (properties->subTexture) {
+            memcpy(texCoords, properties->subTexture->getTexCoords(), sizeof(glm::vec2) * 4);
+            texture = properties->subTexture->getTexture();
+        } else {
+            texCoords[0] = { 0.0f, 0.0f }; // 1. bottom left
+            texCoords[1] = { 1.0f, 0.0f }; // 2. bottom right
+            texCoords[2] = { 1.0f, 1.0f }; // 3. top right
+            texCoords[3] = { 0.0f, 1.0f }; // 4. top left
+
+            texture = properties->texture;
+        };
+
         // Figure out whether we have bound this quad's texture before
         // constexpr glm::vec4 color(1.0f);
 
         uint32_t textureIndex = 0;
-
         for (uint32_t i = 0; i < contextData.textureSlotIndex; i++) {
-            if (contextData.textureSlots[i].get() ==
-                properties->texture.get()) {
+            if (contextData.textureSlots[i].get() == texture.get()) {
                 textureIndex = i;
                 break;
             }
@@ -208,30 +225,13 @@ namespace Kaydee {
         // If a texture was passed, then we set the corresponding textureId to
         // that texture's ID. Otherwise the ID is 0
         if (textureIndex == 0) {
-            if (properties->texture) {
+            if (texture) {
                 textureIndex = contextData.textureSlotIndex;
                 contextData.textureSlots[contextData.textureSlotIndex] =
-                  properties->texture;
+                  texture;
                 contextData.textureSlotIndex++;
             }
         }
-
-        // -------
-        // Configure vertices
-        // -------
-        /*
-         * 1. bottom left
-         * 2. bottom right
-         * 3. top right
-         * 4. top left
-         */
-
-        glm::vec2 texCoords[4] = {
-            { 0.0f, 0.0f },
-            { 1.0f, 0.0f },
-            { 1.0f, 1.0f },
-            { 0.0f, 1.0f },
-        };
 
         // --------
         // Transformation
@@ -245,11 +245,11 @@ namespace Kaydee {
           glm::rotate(transform, properties->rotation, { 0.0f, 0.0f, 1.0f });
 
         // Scale
-        transform =
-          glm::scale(transform, properties->scale);
+        transform = glm::scale(transform, properties->scale);
 
         for (int i = 0; i < 4; i++) {
-            contextData.quadVertexBufferPtr->position = transform * contextData.quadVertexPositions[i];
+            contextData.quadVertexBufferPtr->position =
+              transform * contextData.quadVertexPositions[i];
             contextData.quadVertexBufferPtr->color = properties->color;
             contextData.quadVertexBufferPtr->textureCoord = texCoords[i];
             contextData.quadVertexBufferPtr->textureIndex = textureIndex;
@@ -305,5 +305,4 @@ namespace Kaydee {
     {
         return contextData.stats;
     }
-
 }

@@ -62,12 +62,8 @@ namespace Kaydee {
           KD_BIND_EVENT_FN(OrthographicCameraController::onWindowResized));
     }
 
-    bool OrthographicCameraController::onMouseScrolled(MouseScrolledEvent& e)
+    void OrthographicCameraController::calculateView()
     {
-        KD_PROFILE_FUNCTION();
-
-        zoomLevel -= e.getOffsetY() * 0.25f;
-        zoomLevel = std::max(zoomLevel, 0.25f);
         cameraBounds = { -aspectRatio * zoomLevel,
                          aspectRatio * zoomLevel,
                          -zoomLevel,
@@ -77,7 +73,15 @@ namespace Kaydee {
                              cameraBounds.right,
                              cameraBounds.bottom,
                              cameraBounds.top);
+    }
 
+    bool OrthographicCameraController::onMouseScrolled(MouseScrolledEvent& e)
+    {
+        KD_PROFILE_FUNCTION();
+
+        zoomLevel -= e.getOffsetY() * 0.25f;
+        zoomLevel = std::max(zoomLevel, 0.25f);
+        calculateView();
         return false;
     }
 
@@ -86,10 +90,7 @@ namespace Kaydee {
         KD_PROFILE_FUNCTION();
 
         aspectRatio = e.getWidth() / (float)e.getHeight();
-        camera.setProjection(-aspectRatio * zoomLevel,
-                             aspectRatio * zoomLevel,
-                             -zoomLevel,
-                             zoomLevel);
+        calculateView();
         return false;
     }
 }

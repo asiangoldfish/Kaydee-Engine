@@ -47,9 +47,15 @@ namespace Kaydee {
         const OrthographicCamera& getCamera() const { return camera; }
 
         float getZoomLevel() { return zoomLevel; }
-        void setZoomLevel(const float level) { zoomLevel = level; }
+        void setZoomLevel(const float level)
+        {
+            zoomLevel = level;
+            calculateView();
+        }
 
     private:
+        void calculateView();
+
         bool onMouseScrolled(MouseScrolledEvent& e);
         bool onWindowResized(WindowResizeEvent& e);
 

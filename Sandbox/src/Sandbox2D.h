@@ -27,6 +27,8 @@ private:
     Kaydee::ref<Kaydee::SubTexture2D> textureStairs;
     Kaydee::ref<Kaydee::SubTexture2D> textureBarrels;
     Kaydee::ref<Kaydee::SubTexture2D> textureTree;
+
+    Kaydee::ref<Kaydee::Framebuffer> framebuffer;
     
     int fps = 0;
 

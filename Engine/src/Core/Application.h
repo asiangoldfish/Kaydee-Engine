@@ -36,6 +36,8 @@ namespace Kaydee {
         // Window
         inline Window& getWindow() { return *window; }
 
+        void close();
+
         // Singleton
         inline static Application& get() { return *instance; }
 

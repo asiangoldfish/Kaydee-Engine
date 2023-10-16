@@ -11,6 +11,8 @@ namespace Kaydee {
     public:
         Texture() = default;
         virtual ~Texture() = default;
+        
+        virtual uint32_t getID() const = 0;
 
         virtual uint32_t getWidth() const = 0;
         virtual uint32_t getHeight() const = 0;

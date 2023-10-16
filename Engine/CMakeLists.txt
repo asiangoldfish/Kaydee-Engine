@@ -46,6 +46,7 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_PLATFORMS}/OpenGL/OpenGLVertexArray.h          ${MODULE_PLATFORMS}/OpenGL/OpenGLVertexArray.cpp
     ${MODULE_PLATFORMS}/OpenGL/OpenGLShader.h               ${MODULE_PLATFORMS}/OpenGL/OpenGLShader.cpp
     ${MODULE_PLATFORMS}/OpenGL/OpenGLTexture.h              ${MODULE_PLATFORMS}/OpenGL/OpenGLTexture.cpp
+    ${MODULE_PLATFORMS}/OpenGL/OpenGLFramebuffer.h          ${MODULE_PLATFORMS}/OpenGL/OpenGLFramebuffer.cpp
     
     # Imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui # Lib
@@ -65,6 +66,7 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_RENDERER}/SubTexture2D.h                       ${MODULE_RENDERER}/SubTexture2D.cpp
     ${MODULE_RENDERER}/OrthographicCameraController.h       ${MODULE_RENDERER}/OrthographicCameraController.cpp
     ${MODULE_RENDERER}/Renderer2D.h                         ${MODULE_RENDERER}/Renderer2D.cpp
+    ${MODULE_RENDERER}/Framebuffer.h                        ${MODULE_RENDERER}/Framebuffer.cpp
     
     # Vendor
     ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.h       ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.cpp

@@ -53,6 +53,11 @@ namespace Kaydee {
         overlay->onAttach();
     }
 
+    void Application::close()
+    {
+        running = false;
+    }
+
     void Application::run()
     {
         KD_PROFILE_FUNCTION();
@@ -78,7 +83,7 @@ namespace Kaydee {
             imguiLayer->begin();
             {
                 KD_PROFILE_SCOPE("LayerStack OnImGuiRender");
-                
+
                 for (Layer* layer : layerStack) {
                     layer->onImGuiRender();
                 }

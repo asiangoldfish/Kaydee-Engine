@@ -1,5 +1,4 @@
-#ifndef __SUB_EXTURE_H__
-#define __SUB_EXTURE_H__
+#pragma once
 
 #include "Texture.h"
 #include "glm/glm.hpp"
@@ -50,5 +49,3 @@ namespace Kaydee {
         glm::vec2 texCoords[4];
     };
 }
-
-#endif // __SUB_EXTURE_H__

@@ -1,5 +1,4 @@
-#ifndef __LOG_H__
-#define __LOG_H__
+#pragma once
 
 #include <memory>
 
@@ -41,5 +40,3 @@ namespace Kaydee
 #define KD_WARN(...)       ::Kaydee::Log::getClientLogger()->warn(__VA_ARGS__)
 #define KD_ERROR(...)      ::Kaydee::Log::getClientLogger()->error(__VA_ARGS__)
 #define KD_FATAL(...)      ::Kaydee::Log::getClientLogger()->fatal(__VA_ARGS__)
-
-#endif

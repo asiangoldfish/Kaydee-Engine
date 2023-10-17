@@ -1,5 +1,4 @@
-#ifndef __OPENGL_VERTEX_ARRAY_H__
-#define __OPENGL_VERTEX_ARRAY_H__
+#pragma once
 
 #include "Renderer/VertexArray.h"
 
@@ -35,5 +34,3 @@ namespace Kaydee {
         ref<IndexBuffer> indexBuffer;
     };
 }
-
-#endif // __OPENGL_VERTEX_ARRAY_H__

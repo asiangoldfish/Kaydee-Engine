@@ -1,5 +1,4 @@
-#ifndef __RENDERER_API_H__
-#define __RENDERER_API_H__
+#pragma once
 
 #include <glm/glm.hpp>
 #include "Renderer/VertexArray.h"
@@ -33,5 +32,3 @@ namespace Kaydee {
         static API api;
     };
 }
-
-#endif // __RENDERER_API_H__

@@ -1,5 +1,4 @@
-#ifndef __IMGUI_LAYER_H__
-#define __IMGUI_LAYER_H__
+#pragma once
 
 #include "Core/Layer.h"
 
@@ -31,5 +30,3 @@ namespace Kaydee {
         float time;
     };
 }
-
-#endif

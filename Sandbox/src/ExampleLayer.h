@@ -1,5 +1,4 @@
-#ifndef __EXAMPLE_LAYER_H__
-#define __EXAMPLE_LAYER_H__
+#pragma once
 
 #include <Kaydee/Kaydee.h>
 
@@ -31,5 +30,3 @@ private:
               checkerColor = { 1.0f, 1.0f, 1.0f },
               pandaColor = { 1.0f, 1.0f, 1.0f };
 };
-
-#endif // __EXAMPLE_LAYER_H__

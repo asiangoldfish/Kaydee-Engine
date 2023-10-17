@@ -1,5 +1,4 @@
-#ifndef __KAYDEE_MOUSE_EVENT_H__
-#define __KAYDEE_MOUSE_EVENT_H__
+#pragma once
 
 #include "Event.h"
 
@@ -111,5 +110,3 @@ namespace Kaydee {
         EVENT_CLASS_TYPE(MouseButtonReleased)
     };
 }
-
-#endif

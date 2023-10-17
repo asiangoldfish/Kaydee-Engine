@@ -1,5 +1,4 @@
-#ifndef __TIMESTEP_H__
-#define __TIMESTEP_H__
+#pragma once
 
 namespace Kaydee {
     class Timestep
@@ -22,5 +21,3 @@ namespace Kaydee {
         float time;
     };
 }
-
-#endif // __TIMESTEP_H__

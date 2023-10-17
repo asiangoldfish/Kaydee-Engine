@@ -1,5 +1,4 @@
-#ifndef __LINUX__INPUT_H__
-#define __LINUX__INPUT_H__
+#pragma once
 
 // From glfw3
 #define KD_KEY_SPACE 32
@@ -124,5 +123,3 @@
 #define KD_KEY_RIGHT_ALT 346
 #define KD_KEY_RIGHT_SUPER 347
 #define KD_KEY_MENU 348
-
-#endif // __LINUX__INPUT_H__

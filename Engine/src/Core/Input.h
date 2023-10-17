@@ -1,9 +1,8 @@
+#pragma once
+
 /**
  * Input poll. Lets any class poll for input.
  */
-
-#ifndef __INPUT_H__
-#define __INPUT_H__
 
 namespace Kaydee {
 
@@ -42,5 +41,3 @@ namespace Kaydee {
         static Input* instance;
     };
 }
-
-#endif // __INPUT_H__

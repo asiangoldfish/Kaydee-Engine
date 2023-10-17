@@ -1,5 +1,4 @@
-#ifndef __KDPCH_H__
-#define __KDPCH_H__
+#pragma once
 
 #include <algorithm>
 #include <functional>
@@ -17,5 +16,3 @@
 
 #include "Core/Log.h"
 #include "Debug/Instrumentor.h"
-
-#endif

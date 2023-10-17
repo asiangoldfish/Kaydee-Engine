@@ -1,5 +1,4 @@
-#ifndef __WINDOW_H__
-#define __WINDOW_H__
+#pragma once
 
 #include "kdpch.h"
 
@@ -46,5 +45,3 @@ namespace Kaydee {
         static Window* create(const WindowProps& props = WindowProps());
     };
 }
-
-#endif

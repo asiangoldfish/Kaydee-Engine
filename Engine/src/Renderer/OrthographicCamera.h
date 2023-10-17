@@ -1,5 +1,4 @@
-#ifndef __ORTHOGRAPHIC_CAMERA_H__
-#define __ORTHOGRAPHIC_CAMERA_H__
+#pragma once
 
 #include <glm/glm.hpp>
 
@@ -47,5 +46,3 @@ namespace Kaydee {
         float rotation = 0.0f;
     };
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef __OPENGL_BUFFER_H__
-#define __OPENGL_BUFFER_H__
+#pragma once
 
 #include "Renderer/Buffer.h"
 
@@ -44,5 +43,3 @@ namespace Kaydee {
         uint32_t count;
     };
 }
-
-#endif // __OPENGL_BUFFER_H__

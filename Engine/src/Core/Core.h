@@ -1,5 +1,4 @@
-#ifndef __KAYDEE__CORE_H__
-#define __KAYDEE__CORE_H__
+#pragma once
 
 #include <memory>
 
@@ -71,5 +70,3 @@ namespace Kaydee {
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
 }
-
-#endif

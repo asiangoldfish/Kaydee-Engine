@@ -1,5 +1,4 @@
-#ifndef __LAYER_STACK_H__
-#define __LAYER_STACK_H__
+#pragma once
 
 #include "Core/Core.h"
 #include "Core/Layer.h"
@@ -25,5 +24,3 @@ namespace Kaydee {
         unsigned int layerInsertIndex = 0;
     };
 }
-
-#endif // __LAYER_STACK_H__

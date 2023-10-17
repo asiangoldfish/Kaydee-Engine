@@ -1,5 +1,4 @@
-#ifndef __BUFFER_H__
-#define __BUFFER_H__
+#pragma once
 
 #include <vector>
 
@@ -187,5 +186,3 @@ namespace Kaydee {
         static ref<IndexBuffer> create(uint32_t* indices, uint32_t count);
     };
 }
-
-#endif // __BUFFER_H__

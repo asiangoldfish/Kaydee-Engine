@@ -1,5 +1,4 @@
-#ifndef __ENTRY_POINT_H__
-#define __ENTRY_POINT_H__
+#pragma once
 
 #include "Application.h"
 
@@ -14,5 +13,3 @@ usage();
 
 void
 version();
-
-#endif

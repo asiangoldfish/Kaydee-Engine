@@ -1,5 +1,4 @@
-#ifndef __TEXTURE_H__
-#define __TEXTURE_H__
+#pragma once
 
 #include <cstdint>
 
@@ -33,5 +32,3 @@ namespace Kaydee {
         static ref<Texture2D> create(const std::string& path);
     };
 }
-
-#endif // __TEXTURE_H__

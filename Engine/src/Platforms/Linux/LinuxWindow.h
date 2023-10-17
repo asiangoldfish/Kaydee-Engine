@@ -1,5 +1,4 @@
-#ifndef __LINUX__WINDOW_H__
-#define __LINUX__WINDOW_H__
+#pragma once
 
 #include "Core/Window.h"
 #include "Renderer/GraphicsContext.h"
@@ -56,5 +55,3 @@ namespace Kaydee {
         WindowData windowData;
     };
 }
-
-#endif

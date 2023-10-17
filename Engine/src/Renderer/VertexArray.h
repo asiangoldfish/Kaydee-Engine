@@ -1,5 +1,4 @@
-#ifndef __VERTEX_ARRAY_H__
-#define __VERTEX_ARRAY_H__
+#pragma once
 
 #include "Renderer/Buffer.h"
 #include <memory>
@@ -25,5 +24,3 @@ namespace Kaydee {
         static ref<VertexArray> create();
     };
 }
-
-#endif // __VERTEX_ARRAY_H__

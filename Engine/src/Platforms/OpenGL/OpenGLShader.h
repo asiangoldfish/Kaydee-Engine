@@ -1,5 +1,4 @@
-#ifndef __OPENGL_SHADER_H__
-#define __OPENGL_SHADER_H__
+#pragma once
 
 #include "Renderer/Shader.h"
 #include <glm/glm.hpp>
@@ -84,5 +83,3 @@ namespace Kaydee {
     };
 
 }
-
-#endif // __OPENGL_SHADER_H__

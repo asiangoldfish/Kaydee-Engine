@@ -1,5 +1,4 @@
-#ifndef __GRAPHICS_CONTEXT_H__
-#define __GRAPHICS_CONTEXT_H__
+#pragma once
 
 class GraphicsContext
 {
@@ -9,5 +8,3 @@ public:
 
 private:
 };
-
-#endif

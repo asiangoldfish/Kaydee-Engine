@@ -1,5 +1,4 @@
-#ifndef __MOUSE_BUTTON_CODES_H__
-#define __MOUSE_BUTTON_CODES_H__
+#pragma once
 
 // From glfw3.h
 #define KD_MOUSE_BUTTON_1 0
@@ -14,5 +13,3 @@
 #define KD_MOUSE_BUTTON_LEFT KD_MOUSE_BUTTON_1
 #define KD_MOUSE_BUTTON_RIGHT KD_MOUSE_BUTTON_2
 #define KD_MOUSE_BUTTON_MIDDLE KD_MOUSE_BUTTON_3
-
-#endif // __MOUSE_BUTTON_CODES_H__

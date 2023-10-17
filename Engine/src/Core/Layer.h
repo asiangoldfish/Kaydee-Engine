@@ -1,5 +1,4 @@
-#ifndef __LAYER_H__
-#define __LAYER_H__
+#pragma once
 
 #include "Events/Event.h"
 #include "kdpch.h"
@@ -25,5 +24,3 @@ namespace Kaydee {
         std::string debugName;
     };
 }
-
-#endif

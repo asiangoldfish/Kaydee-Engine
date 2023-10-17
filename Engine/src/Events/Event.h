@@ -1,5 +1,4 @@
-#ifndef __KAYDEE_EVENT_H__
-#define __KAYDEE_EVENT_H__
+#pragma once
 
 #include "Core/Core.h"
 #include "kdpch.h"
@@ -105,5 +104,3 @@ namespace Kaydee {
         return os << e.toString();
     }
 }
-
-#endif

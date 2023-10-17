@@ -1,5 +1,4 @@
-#ifndef __ORTHOGRAPHIC_CAMERA_CONTROLLER_H__
-#define __ORTHOGRAPHIC_CAMERA_CONTROLLER_H__
+#pragma once
 
 #include "Renderer/OrthographicCamera.h"
 #include "Core/Timestep.h"
@@ -73,5 +72,3 @@ namespace Kaydee {
     };
 
 }
-
-#endif // __ORTHOGRAPHIC_CAMERA_CONTROLLER_H__

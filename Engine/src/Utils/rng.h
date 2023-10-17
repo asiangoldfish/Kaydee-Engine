@@ -1,12 +1,11 @@
+#pragma once
+
 /**
  * Random number generator module
  *
  * @file main.cpp
  * @author your name (you@domain.com)
  */
-
-#ifndef RNG_H
-#define RNG_H
 
 #include <random>
 #include <iostream>
@@ -28,5 +27,3 @@ namespace Random {
         return rng() * (high - low) + low;
     }
 }
-
-#endif

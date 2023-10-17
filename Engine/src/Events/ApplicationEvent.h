@@ -1,5 +1,4 @@
-#ifndef __KAYDEE_APPLICATION_EVENT_H__
-#define __KAYDEE_APPLICATION_EVENT_H__
+#pragma once
 
 #include "Event.h"
 
@@ -88,5 +87,3 @@ namespace Kaydee {
         EVENT_CLASS_CATEGORY(EventCategoryApplication)
     };
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef __LINUX__INPUT_H__
-#define __LINUX__INPUT_H__
+#pragma once
 
 #include "Core/Input.h"
 
@@ -16,5 +15,3 @@ namespace Kaydee {
     };
 
 }
-
-#endif // __LINUX__INPUT_H__

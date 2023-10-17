@@ -1,5 +1,4 @@
-#ifndef __OPENGL_RENDERER_API_H__
-#define __OPENGL_RENDERER_API_H__
+#pragma once
 
 #include "Renderer/RendererAPI.h"
 
@@ -19,5 +18,3 @@ namespace Kaydee {
                                  uint32_t indexCount = 0) override;
     };
 }
-
-#endif

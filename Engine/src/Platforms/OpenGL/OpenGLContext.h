@@ -1,5 +1,4 @@
-#ifndef __OPENGL_CONTEXT_H__
-#define __OPENGL_CONTEXT_H__
+#pragma once
 
 #include "Renderer/GraphicsContext.h"
 
@@ -20,5 +19,3 @@ namespace Kaydee {
     };
 
 }
-
-#endif

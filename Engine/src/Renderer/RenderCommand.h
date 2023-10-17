@@ -1,5 +1,4 @@
-#ifndef __RENDER_COMMAND_H__
-#define __RENDER_COMMAND_H__
+#pragma once
 
 #include "Renderer/VertexArray.h"
 #include "Renderer/RendererAPI.h"
@@ -35,5 +34,3 @@ namespace Kaydee {
         static RendererAPI* rendererAPI;
     };
 }
-
-#endif // __RENDER_COMMAND_H__

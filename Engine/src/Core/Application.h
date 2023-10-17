@@ -1,5 +1,4 @@
-#ifndef __APPLICATION_H__
-#define __APPLICATION_H__
+#pragma once
 
 #include "Core/Layer.h"
 #include "Core/LayerStack.h"
@@ -64,5 +63,3 @@ namespace Kaydee {
     // To be defined in the client
     Application* createApplication();
 }
-
-#endif

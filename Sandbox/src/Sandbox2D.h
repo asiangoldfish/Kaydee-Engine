@@ -1,5 +1,4 @@
-#ifndef __SANDBOX_2D_H__
-#define __SANDBOX_2D_H__
+#pragma once
 
 #include "Kaydee/Kaydee.h"
 #include "ParticleSystem.h"
@@ -52,5 +51,3 @@ private:
     ParticleProps particle;
     ParticleSystem particleSystem;
 };
-
-#endif // __SANDBOX_2D_H__ vcb

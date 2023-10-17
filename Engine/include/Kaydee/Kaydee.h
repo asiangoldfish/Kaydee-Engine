@@ -1,5 +1,4 @@
-#ifndef __KAYDEE_H__
-#define __KAYDEE_H__
+#pragma once
 
 // For use by Kaydee applications
 
@@ -35,5 +34,3 @@
 
 // Entry point
 #include "Core/EntryPoint.h"
-
-#endif // __KAYDEE_H__

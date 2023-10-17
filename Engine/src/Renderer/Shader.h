@@ -1,5 +1,4 @@
-#ifndef __SHADER_H__
-#define __SHADER_H__
+#pragma once
 
 #include <string>
 #include <unordered_map>
@@ -61,5 +60,3 @@ namespace Kaydee {
         std::unordered_map<std::string, ref<Shader>> shaders;
     };
 }
-
-#endif // __SHADER_H__

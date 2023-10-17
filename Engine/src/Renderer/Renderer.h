@@ -1,5 +1,4 @@
-#ifndef __RENDERER_H__
-#define __RENDERER_H__
+#pragma once
 
 #include "Renderer/RenderCommand.h"
 #include "Renderer/RendererAPI.h"
@@ -37,5 +36,3 @@ namespace Kaydee {
     };
 
 }
-
-#endif // __RENDERER_H__

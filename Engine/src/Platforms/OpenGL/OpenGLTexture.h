@@ -1,5 +1,4 @@
-#ifndef __OPENGL_TEXTURE_H__
-#define __OPENGL_TEXTURE_H__
+#pragma once
 
 #include "Renderer/Texture.h"
 #include <string>
@@ -35,5 +34,3 @@ namespace Kaydee {
         GLenum internalFormat, dataFormat;
     };
 }
-
-#endif // __OPENGL_TEXTURE_H__

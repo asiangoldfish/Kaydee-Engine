@@ -1,5 +1,4 @@
-#ifndef __RENDER_2D_H__
-#define __RENDER_2D_H__
+#pragma once
 
 #include "OrthographicCamera.h"
 #include "Texture.h"
@@ -60,5 +59,3 @@ namespace Kaydee {
         static void flushAndReset();
     };
 }
-
-#endif // __RENDER_2D_H__

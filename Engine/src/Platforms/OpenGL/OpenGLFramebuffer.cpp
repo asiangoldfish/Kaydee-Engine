@@ -13,10 +13,25 @@ namespace Kaydee {
     OpenGLFramebuffer::~OpenGLFramebuffer()
     {
         glDeleteFramebuffers(1, &rendererID);
+        glDeleteTextures(1, &colorAttachment);
+        glDeleteTextures(1, &depthAttachment);
+    }
+
+    void OpenGLFramebuffer::resize(uint32_t width, uint32_t height) {
+        specification.width = width;
+        specification.height = height;
+
+        invalidate();
     }
 
     void OpenGLFramebuffer::invalidate()
     {
+        if (rendererID) {
+            glDeleteFramebuffers(1, &rendererID);
+            glDeleteTextures(1, &colorAttachment);
+            glDeleteTextures(1, &depthAttachment);
+        }
+
         glCreateFramebuffers(1, &rendererID);
         glBindFramebuffer(GL_FRAMEBUFFER, rendererID);
 
@@ -49,18 +64,6 @@ namespace Kaydee {
                        GL_DEPTH24_STENCIL8,
                        specification.width,
                        specification.height);
-
-        /*
-        glTexImage2D(GL_TEXTURE_2D,
-                     0,
-                     GL_DEPTH24_STENCIL8,
-                     specification.width,
-                     specification.height,
-                     0,
-                     GL_DEPTH_STENCIL,
-                     GL_UNSIGNED_INT_24_8,
-                     NULL);
-        */
         
         glFramebufferTexture2D(GL_FRAMEBUFFER,
                                GL_DEPTH_STENCIL_ATTACHMENT,
@@ -78,6 +81,7 @@ namespace Kaydee {
     void OpenGLFramebuffer::bind()
     {
         glBindFramebuffer(GL_FRAMEBUFFER, rendererID);
+        glViewport(0, 0, specification.width, specification.height);
     }
 
     void OpenGLFramebuffer::unbind()

@@ -50,6 +50,7 @@ endif()
 # Add subdirectories
 add_subdirectory(Engine)
 add_subdirectory(Sandbox)
+add_subdirectory(Kaydee-Editor)
 
 ######################
 ### Installation   ###

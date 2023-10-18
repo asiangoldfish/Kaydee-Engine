@@ -12,14 +12,14 @@ namespace Kaydee {
 
     Application* Application::instance = nullptr;
 
-    Application::Application()
+    Application::Application(const std::string& name)
     {
         KD_PROFILE_FUNCTION();
 
         KD_CORE_ASSERT(!instance, "Application already exists!");
         instance = this;
 
-        window = std::unique_ptr<Window>(Window::create());
+        window = std::unique_ptr<Window>(Window::create(WindowProps(name)));
         window->setEventCallback(BIND_EVENT_FN(onEvent)); // Event callback
         window->setVSync(false);
 

@@ -89,8 +89,13 @@ namespace Kaydee {
     {
         KD_PROFILE_FUNCTION();
 
-        aspectRatio = e.getWidth() / (float)e.getHeight();
-        calculateView();
+        onResize((float)e.getWidth(), (float)e.getHeight());
         return false;
+    }
+
+    void OrthographicCameraController::onResize(float width, float height)
+    {
+        aspectRatio = width / height;
+        calculateView();
     }
 }

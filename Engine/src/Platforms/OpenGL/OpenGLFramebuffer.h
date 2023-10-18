@@ -9,6 +9,8 @@ namespace Kaydee {
         OpenGLFramebuffer(const FramebufferSpecification& spec);
         virtual ~OpenGLFramebuffer();
 
+        virtual void resize(uint32_t width, uint32_t height);
+
         /**
          * @brief The framebuffer's state is invalid. It therefore needs to be
          * evaluated again.
@@ -30,8 +32,8 @@ namespace Kaydee {
         }
 
     private:
-        uint32_t rendererID;
-        uint32_t colorAttachment, depthAttachment;
+        uint32_t rendererID = 0;
+        uint32_t colorAttachment = 0, depthAttachment = 0;
         FramebufferSpecification specification;
     };
 }

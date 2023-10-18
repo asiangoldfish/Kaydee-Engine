@@ -37,6 +37,8 @@ namespace Kaydee {
         void onUpdate(Timestep ts);
         void onEvent(Event& e);
 
+        void onResize(float width, float height);
+
         const OrthographicCameraBounds& getBounds() const
         {
             return cameraBounds;

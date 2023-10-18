@@ -19,7 +19,7 @@ namespace Kaydee {
     class Application
     {
     public:
-        Application();
+        Application(const std::string& name = "Kaydee App");
         virtual ~Application();
 
         void run();

@@ -1,11 +1,9 @@
-#include "Platforms/Linux/LinuxInput.h"
+#include "Core/Input.h"
 #include "Core/Application.h"
 #include <GLFW/glfw3.h>
 
 namespace Kaydee {
-    Input* Input::instance = new LinuxInput();
-
-    bool LinuxInput::isKeyPressedImpl(int keycode)
+    bool Input::isKeyPressed(int keycode)
     {
         auto window = static_cast<GLFWwindow*>(
           Application::get().getWindow().getNativeWindow());
@@ -14,7 +12,7 @@ namespace Kaydee {
         return state == GLFW_PRESS || state == GLFW_REPEAT;
     }
 
-    bool LinuxInput::isMouseButtonPressedImpl(int button)
+    bool Input::isMouseButtonPressed(int button)
     {
         auto window = static_cast<GLFWwindow*>(
           Application::get().getWindow().getNativeWindow());
@@ -23,19 +21,19 @@ namespace Kaydee {
         return state == GLFW_PRESS;
     }
 
-    float LinuxInput::getMouseXImpl()
+    float Input::getMouseX()
     {
-        auto [x, y] = getMousePositionImpl();
+        auto [x, y] = getMousePosition();
         return x;
     }
 
-    float LinuxInput::getMouseYImpl()
+    float Input::getMouseY()
     {
-        auto [x, y] = getMousePositionImpl();
+        auto [x, y] = getMousePosition();
         return y;
     }
 
-    std::pair<float, float> LinuxInput::getMousePositionImpl()
+    std::pair<float, float> Input::getMousePosition()
     {
         auto window = static_cast<GLFWwindow*>(
           Application::get().getWindow().getNativeWindow());

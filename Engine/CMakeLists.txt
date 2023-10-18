@@ -39,7 +39,7 @@ add_library(${MODULE_NAME} STATIC
     
     # Platforms
     ${MODULE_PLATFORMS}/Linux/LinuxWindow.h                 ${MODULE_PLATFORMS}/Linux/LinuxWindow.cpp
-    ${MODULE_PLATFORMS}/Linux/LinuxInput.h                  ${MODULE_PLATFORMS}/Linux/LinuxInput.cpp
+    ${MODULE_PLATFORMS}/Linux/LinuxInput.cpp
     ${MODULE_PLATFORMS}/OpenGL/OpenGLContext.h              ${MODULE_PLATFORMS}/OpenGL/OpenGLContext.cpp
     ${MODULE_PLATFORMS}/OpenGL/OpenGLBuffer.h               ${MODULE_PLATFORMS}/OpenGL/OpenGLBuffer.cpp
     ${MODULE_PLATFORMS}/OpenGL/OpenGLRendererAPI.h          ${MODULE_PLATFORMS}/OpenGL/OpenGLRendererAPI.cpp

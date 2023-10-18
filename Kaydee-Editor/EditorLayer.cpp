@@ -204,8 +204,6 @@ namespace Kaydee {
         // If ImGUI viewport's size changes, then we recreate the framebuffer.
         if (viewportSize != *((glm::vec2*)&viewportPanelSize)) {
             viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-            //framebuffer->resize((uint32_t)viewportSize.x,
-            //                    (uint32_t)viewportSize.y);
 
             cameraController.onResize(viewportPanelSize.x, viewportPanelSize.y);
         }

@@ -20,13 +20,10 @@ namespace Kaydee {
         void begin();
         void end();
 
-    private:
-        //inline bool onKeyPressedEvent(Kaydee::MouseButtonPressedEvent& event)
-        //{
-        //    return true;
-        //}
+        void setBlockEvents(bool block) { blockEvents = block; }
 
     private:
+        bool blockEvents = true;
         float time;
     };
 }

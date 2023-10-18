@@ -49,5 +49,6 @@ namespace Kaydee {
         float timestep = 0.0f;
 
         glm::vec2 viewportSize = { 0.0f, 0.0f };
+        bool viewportFocused = false;
     };
 }

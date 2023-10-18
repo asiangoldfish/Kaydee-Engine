@@ -54,6 +54,8 @@ namespace Kaydee {
             calculateView();
         }
 
+        void setEnableZooming(bool enable) { enableZooming = enable; }
+
     private:
         void calculateView();
 
@@ -65,6 +67,8 @@ namespace Kaydee {
         float zoomLevel = 1.0f;
         OrthographicCameraBounds cameraBounds;
         OrthographicCamera camera;
+
+        bool enableZooming = true;
 
         bool enableRotation = false;
 

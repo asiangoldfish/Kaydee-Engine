@@ -79,9 +79,12 @@ namespace Kaydee {
     {
         KD_PROFILE_FUNCTION();
 
-        zoomLevel -= e.getOffsetY() * 0.25f;
-        zoomLevel = std::max(zoomLevel, 0.25f);
-        calculateView();
+        if (enableZooming) {
+            zoomLevel -= e.getOffsetY() * 0.25f;
+            zoomLevel = std::max(zoomLevel, 0.25f);
+            calculateView();
+        }
+        
         return false;
     }
 

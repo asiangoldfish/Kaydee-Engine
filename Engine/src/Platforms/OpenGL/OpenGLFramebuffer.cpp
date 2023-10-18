@@ -4,6 +4,9 @@
 #include <glad/glad.h>
 
 namespace Kaydee {
+    // TODO - Look for GPU capability for max buffer sizw
+    static const uint32_t maxFramebufferSize = 8192;
+
     OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
       : specification(spec)
     {
@@ -18,6 +21,12 @@ namespace Kaydee {
     }
 
     void OpenGLFramebuffer::resize(uint32_t width, uint32_t height) {
+        if (width == 0 || height == 0 || width > maxFramebufferSize ||
+                        height > maxFramebufferSize) {
+            KD_CORE_WARN(
+              "Failed to resize framebuffer to {}, {}", width, height);
+            return;
+        }
         specification.width = width;
         specification.height = height;
 

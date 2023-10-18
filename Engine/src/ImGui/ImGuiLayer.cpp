@@ -101,8 +101,12 @@ namespace Kaydee {
 
     void ImGuiLayer::onEvent(Event& event)
     {
-        /*Kaydee::EventDispatcher dispatcher(event);
-        dispatcher.dispatch<Kaydee::MouseButtonPressedEvent>(
-          KD_BIND_EVENT_FN(ImGuiLayer::onKeyPressedEvent));*/
+        if (blockEvents) {
+            ImGuiIO& io = ImGui::GetIO();
+            event.handled |=
+              event.isInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+            event.handled |= event.isInCategory(EventCategoryKeyboard) &
+                             io.WantCaptureKeyboard;
+        }
     }
 }

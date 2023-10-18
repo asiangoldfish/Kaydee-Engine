@@ -37,6 +37,8 @@ namespace Kaydee {
 
         void close();
 
+        ImGuiLayer* getImGuiLayer() { return imguiLayer; }
+
         // Singleton
         inline static Application& get() { return *instance; }
 

@@ -136,6 +136,21 @@ namespace Kaydee {
         KD_PROFILE_FUNCTION();
     }
 
+    void Renderer2D::beginScene(const Camera& camera, const glm::mat4& transform)
+    {
+        KD_PROFILE_FUNCTION();
+
+        glm::mat4 viewProj = camera.getProjection() * glm::inverse(transform);
+
+        contextData.textureShader->bind();
+        contextData.textureShader->setMat4("u_viewProjection", viewProj);
+
+        contextData.quadIndexCount = 0;
+        contextData.quadVertexBufferPtr = contextData.quadVertexBufferBase;
+
+        contextData.textureSlotIndex = 1;
+    }
+
     void Renderer2D::beginScene(const OrthographicCamera& camera)
     {
         KD_PROFILE_FUNCTION();

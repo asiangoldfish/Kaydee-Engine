@@ -4,6 +4,7 @@
 #include "Texture.h"
 #include "SubTexture2D.h"
 #include "Shader.h"
+#include "Camera.h"
 
 #include "Core/Core.h"
 
@@ -49,10 +50,20 @@ namespace Kaydee {
     class Renderer2D
     {
     public:
+        struct RenderCamera
+        {
+            glm::mat4 projection;
+            glm::mat4 view;
+        };
+
         static void init();
         static void shutdown();
 
-        static void beginScene(const OrthographicCamera& camera);
+        /**
+         * @param transform The camera's transform in world space
+        */
+        static void beginScene(const Camera& camera, const glm::mat4& transform);
+        static void beginScene(const OrthographicCamera& camera); // TODO: Remove
         static void endScene();
 
         static void flush();

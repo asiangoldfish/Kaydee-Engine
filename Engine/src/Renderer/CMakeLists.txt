@@ -14,6 +14,7 @@ add_library(${PROJECT_NAME} STATIC
     OrthographicCameraController.h       OrthographicCameraController.cpp
     Renderer2D.h                         Renderer2D.cpp
     Framebuffer.h                        Framebuffer.cpp
+    Camera.h
 )
 
 target_include_directories(${PROJECT_NAME} 

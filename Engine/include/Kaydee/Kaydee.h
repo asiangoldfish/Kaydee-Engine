@@ -35,6 +35,7 @@
 // Scene
 #include "Scene/Scene.h"
 #include "Scene/Components.h"
+#include "Scene/Entity.h"
 
 // Entry point
 #include "Core/EntryPoint.h"

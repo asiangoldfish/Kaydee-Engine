@@ -6,6 +6,8 @@
 
 #include <glm/glm.hpp>
 
+#include "Entity.h"
+
 namespace Kaydee {
 
     Scene::Scene()
@@ -33,20 +35,51 @@ namespace Kaydee {
 
     Scene::~Scene() {}
 
-    entt::entity Scene::createEntity()
+    Entity Scene::createEntity(const std::string& name)
     {
-        return registry.create();
+        Entity entity = { registry.create(), this };
+        entity.addComponent<TransformComponent>();
+        auto& tag = entity.addComponent<TagComponent>();
+        tag.tag = name.empty() ? "Entity" : name;
+
+        return entity;
     }
 
     void Scene::onUpdate(Timestep ts)
     {
-        auto group = registry.group<TransformComponent>(
-          entt::get<SpriteRendererComponent>);
-        for (auto entity : group) {
-            auto& [transform, sprite] =
-              group.get<TransformComponent, SpriteRendererComponent>(entity);
-            Quad2DProperties props = { transform, sprite.color };
-            Renderer2D::drawQuad(&props);
+        // Render sprites
+        Camera* mainCamera = nullptr;
+        glm::mat4* cameraTransform = nullptr;
+        {
+            auto view = registry.view<CameraComponent, TransformComponent>();
+            // Try to find the main camera
+            for (auto entity : view) {
+                auto& [camera, transform] =
+                  registry.get<CameraComponent, TransformComponent>(entity);
+
+                if (camera.primary) {
+                    mainCamera = &camera.camera;
+                    cameraTransform = &transform.transform;
+                    break;
+                }
+            }
+        }
+
+        if (mainCamera) {
+            Renderer2D::beginScene(mainCamera->getProjection(),
+                                   *cameraTransform);
+
+            auto group = registry.group<TransformComponent>(
+              entt::get<SpriteRendererComponent>);
+            for (auto entity : group) {
+                auto& [transform, sprite] =
+                  group.get<TransformComponent, SpriteRendererComponent>(
+                    entity);
+                Quad2DProperties props = { transform, sprite.color };
+                Renderer2D::drawQuad(&props);
+            }
+
+            Renderer2D::endScene();
         }
     }
 }

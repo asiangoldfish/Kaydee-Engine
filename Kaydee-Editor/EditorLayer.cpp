@@ -109,13 +109,18 @@ namespace Kaydee {
         fbSpec.height = 720;
         framebuffer = Framebuffer::create(fbSpec);
 
-        // Scene
+        // --------
+        // Scene and entities
+        // --------
         activeScene = createRef<Scene>();
 
-        squareEntity = activeScene->createEntity();
-        activeScene->reg().emplace<TransformComponent>(squareEntity);
-        activeScene->reg().emplace<SpriteRendererComponent>(
-          squareEntity, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+        Entity square = activeScene->createEntity("Green Square");
+        square.addComponent<SpriteRendererComponent>(
+          glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+
+        squareEntity = square;
+        cameraEntity = activeScene->createEntity("Camera Entity");
+        cameraEntity.addComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
     }
 
     void EditorLayer::onDetach()
@@ -148,10 +153,10 @@ namespace Kaydee {
 
         // Scene
         Renderer2D::beginScene(cameraController.getCamera());
-        
+
         // Update current scene
         activeScene->onUpdate(ts);
-        
+
         Renderer2D::endScene();
 
         framebuffer->unbind();
@@ -172,9 +177,15 @@ namespace Kaydee {
         ImGui::Text("Vertices: %d", stats.getTotalVertexCount());
         ImGui::Text("Indices: %d", stats.getTotalIndexCount());
 
-        auto& squareColor = activeScene->reg().get<SpriteRendererComponent>(squareEntity).color;
+        if (squareEntity) {
+            ImGui::Separator();
+            ImGui::Text("%s", squareEntity.getComponent<TagComponent>().tag.c_str());
+            auto& squareColor =
+              squareEntity.getComponent<SpriteRendererComponent>().color;
 
-        ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+            ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+            ImGui::Separator();
+        }
         ImGui::End();
 
         // ----------

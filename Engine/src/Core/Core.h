@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "Log.h"
 
 #ifdef KD_PLATFORM_WINDOWS
 #ifdef KD_BUILD_DLL
@@ -10,6 +11,7 @@
 #endif
 #endif
 
+// TODO: Add assert that takes no arguments
 #ifdef KD_ENABLE_ASSERTS
 #if defined(_WIN32) || defined(_WIN64)
 #define KD_ASSERT(x, ...)                                                      \

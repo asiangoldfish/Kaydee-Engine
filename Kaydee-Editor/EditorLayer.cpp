@@ -79,7 +79,7 @@ namespace Kaydee {
             if (ImGui::BeginMenu("File")) {
                 if (ImGui::MenuItem("Exit")) {
                     dockspaceOpen = false;
-                    Kaydee::Application::get().close();
+                    Application::get().close();
                 }
                 ImGui::EndMenu();
             }
@@ -94,7 +94,7 @@ namespace Kaydee {
     }
 
     EditorLayer::EditorLayer()
-      : Kaydee::Layer("EditorLayer")
+      : Layer("EditorLayer")
       , cameraController(1280.0f / 720.0f, true)
     {
     }
@@ -103,7 +103,7 @@ namespace Kaydee {
     {
         KD_PROFILE_FUNCTION();
         checkerboardTexture =
-          Kaydee::Texture2D::create("assets/textures/checkerboard.png");
+          Texture2D::create("assets/textures/checkerboard.png");
 
         // Quad 2 properties
         quad2Props.position = { 0.0f, 0.0f, 0.0f };
@@ -111,20 +111,20 @@ namespace Kaydee {
         quad2Props.color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
         // Sprite sheet
-        spriteSheet = Kaydee::Texture2D::create(
+        spriteSheet = Texture2D::create(
           GAME_ASSETS + std::string("textures/RPGpack_sheet_2X.png"));
 
-        textureStairs = Kaydee::SubTexture2D::createFromCoords(
+        textureStairs = SubTexture2D::createFromCoords(
           spriteSheet, { 7, 6 }, { 128, 128 });
-        textureBarrels = Kaydee::SubTexture2D::createFromCoords(
+        textureBarrels = SubTexture2D::createFromCoords(
           spriteSheet, { 8, 2 }, { 128, 128 });
-        textureTree = Kaydee::SubTexture2D::createFromCoords(
+        textureTree = SubTexture2D::createFromCoords(
           spriteSheet, { 2, 1 }, { 128, 128 }, { 1, 2 });
 
-        Kaydee::FramebufferSpecification fbSpec;
+        FramebufferSpecification fbSpec;
         fbSpec.width = 1280;
         fbSpec.height = 720;
-        framebuffer = Kaydee::Framebuffer::create(fbSpec);
+        framebuffer = Framebuffer::create(fbSpec);
     }
 
     void EditorLayer::onDetach()
@@ -132,7 +132,7 @@ namespace Kaydee {
         KD_PROFILE_FUNCTION();
     }
 
-    void EditorLayer::onUpdate(Kaydee::Timestep ts)
+    void EditorLayer::onUpdate(Timestep ts)
     {
         KD_PROFILE_FUNCTION();
         timestep = ts.getMilliseconds();
@@ -147,6 +147,7 @@ namespace Kaydee {
         //------------
         // Update
         //------------
+        // Camera
         if (viewportFocused) {
             cameraController.onUpdate(ts);
         }
@@ -155,37 +156,37 @@ namespace Kaydee {
         // Render
         //------------
         // Reset stats
-        Kaydee::Renderer2D::resetStats();
+        Renderer2D::resetStats();
         {
             KD_PROFILE_SCOPE("Render Prep");
             framebuffer->bind();
-            Kaydee::RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-            Kaydee::RenderCommand::clear();
+            RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+            RenderCommand::clear();
         }
 
         {
             // Generate tiles
             KD_PROFILE_SCOPE("Draw Spritesheet");
-            Kaydee::Renderer2D::beginScene(cameraController.getCamera());
+            Renderer2D::beginScene(cameraController.getCamera());
 
-            Kaydee::Quad2DProperties quadProps;
+            Quad2DProperties quadProps;
             // quadProps.texture = spriteSheet;
             quadProps.subTexture = textureStairs;
             quadProps.position.z = 0.5f;
-            Kaydee::Renderer2D::drawQuad(&quadProps);
+            Renderer2D::drawQuad(&quadProps);
 
             quadProps.subTexture = textureBarrels;
             quadProps.position.x = 1.0f;
             quadProps.position.z = 0.5f;
-            Kaydee::Renderer2D::drawQuad(&quadProps);
+            Renderer2D::drawQuad(&quadProps);
 
             quadProps.subTexture = textureTree;
             quadProps.position.x = 2.0f;
             quadProps.position.z = 0.5f;
             quadProps.scale.y = 2;
-            Kaydee::Renderer2D::drawQuad(&quadProps);
+            Renderer2D::drawQuad(&quadProps);
 
-            Kaydee::Renderer2D::endScene();
+            Renderer2D::endScene();
             framebuffer->unbind();
         }
     }

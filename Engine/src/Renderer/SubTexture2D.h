@@ -2,6 +2,7 @@
 
 #include "Texture.h"
 #include "glm/glm.hpp"
+#include "Core/Core.h"
 
 namespace Kaydee {
 

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstdint>
+#include "Core/Core.h"
+#include <string>
 
 namespace Kaydee {
     class Texture2D;

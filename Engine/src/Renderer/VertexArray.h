@@ -4,6 +4,8 @@
 #include <memory>
 #include <vector>
 
+#include "Core/Core.h"
+
 namespace Kaydee {
     class VertexArray
     {

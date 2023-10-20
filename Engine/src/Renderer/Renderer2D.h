@@ -5,6 +5,8 @@
 #include "SubTexture2D.h"
 #include "Shader.h"
 
+#include "Core/Core.h"
+
 namespace Kaydee {
 
     struct Quad2DProperties

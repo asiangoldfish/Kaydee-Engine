@@ -3,6 +3,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "OrthographicCamera.h"
 
+#include "Debug/Instrumentor.h"
+
 namespace Kaydee {
 
     OrthographicCamera::OrthographicCamera(float left,

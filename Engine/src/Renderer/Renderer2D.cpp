@@ -11,6 +11,10 @@
 #include <vector>
 #include <array>
 
+#include "Core/Core.h"
+
+#include "Debug/Instrumentor.h"
+
 namespace Kaydee {
 
     struct QuadVertex

@@ -1,6 +1,9 @@
 #pragma once
 
 #include <vector>
+#include <string>
+
+#include "Core/Core.h"
 
 namespace Kaydee {
     enum class ShaderDataType

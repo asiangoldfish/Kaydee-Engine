@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Renderer/VertexArray.h"
+#include "Core/Core.h"
 
 namespace Kaydee {
     class OpenGLVertexArray : public VertexArray

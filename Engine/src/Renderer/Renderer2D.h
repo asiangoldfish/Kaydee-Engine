@@ -11,9 +11,13 @@ namespace Kaydee {
 
     struct Quad2DProperties
     {
-        glm::vec3 position;
-        glm::vec3 scale;
-        float rotation = 0.0f;  ///< In degrees (not radians)
+        // We can either use position, scale and rotation, OR transform
+        glm::vec3 position{ 0.0f };
+        glm::vec3 scale{ 1.0f };
+        float rotation = 0.0f; ///< In degrees (not radians)
+
+        glm::mat4 transform{ 1.0f };
+
         glm::vec4 color;
         float tilingFactor = 1.0f;
 
@@ -29,6 +33,15 @@ namespace Kaydee {
           , scale(1.0f)
           , color(1.0f)
           , texture(nullptr)
+        {
+        }
+
+        Quad2DProperties(glm::mat4 transform,
+                         glm::vec4 color,
+                         ref<Texture2D> texture = nullptr)
+          : transform(transform)
+          , color(color)
+          , texture(texture)
         {
         }
     };

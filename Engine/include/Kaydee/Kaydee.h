@@ -32,5 +32,9 @@
 
 #include "Renderer/OrthographicCamera.h"
 
+// Scene
+#include "Scene/Scene.h"
+#include "Scene/Components.h"
+
 // Entry point
 #include "Core/EntryPoint.h"

@@ -11,7 +11,7 @@ set(MODULE_VENDOR       ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 add_library(${MODULE_NAME} STATIC
     # Precompiled header
     ${CMAKE_CURRENT_SOURCE_DIR}/src/kdpch.h
-
+    
     # Vendor
     # TODO: Fix cmakelists so we dont need to add the internal imgui code to our library.
     ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.h       ${MODULE_VENDOR}/imgui/backends/imgui_impl_glfw.cpp
@@ -45,6 +45,7 @@ add_subdirectory(vendor/imgui)
 add_compile_definitions(IMGUI_IMPL_OPENGL_LOADER_CUSTOM)
 target_compile_options(imgui PRIVATE -fPIC)
 
+add_subdirectory(vendor/entt)
 
 # Custom modules
 add_subdirectory(src/Core)
@@ -53,6 +54,7 @@ add_subdirectory(src/Events)
 add_subdirectory(src/ImGui)
 add_subdirectory(src/Platforms)
 add_subdirectory(src/Renderer)
+add_subdirectory(src/Scene)
 
 target_link_libraries(${MODULE_NAME} PUBLIC 
 # External modules
@@ -62,6 +64,7 @@ target_link_libraries(${MODULE_NAME} PUBLIC
     OpenGL::GL
     imgui
     glm
+    entt
 
 # Custom modules
     core
@@ -71,4 +74,5 @@ target_link_libraries(${MODULE_NAME} PUBLIC
     platforms_linux
     platforms_opengl
     renderer
+    scene
 )

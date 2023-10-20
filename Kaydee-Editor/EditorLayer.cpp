@@ -10,7 +10,8 @@
 #include <string>
 
 namespace Kaydee {
-    static void ImGuiDocking() {
+    static void ImGuiDocking()
+    {
         // ------
         // BEGIN Dockspace
         // ------
@@ -102,29 +103,19 @@ namespace Kaydee {
     void EditorLayer::onAttach()
     {
         KD_PROFILE_FUNCTION();
-        checkerboardTexture =
-          Texture2D::create("assets/textures/checkerboard.png");
-
-        // Quad 2 properties
-        quad2Props.position = { 0.0f, 0.0f, 0.0f };
-        quad2Props.scale = { 0.3f, 0.3f, 1.0f };
-        quad2Props.color = { 1.0f, 1.0f, 1.0f, 1.0f };
-
-        // Sprite sheet
-        spriteSheet = Texture2D::create(
-          GAME_ASSETS + std::string("textures/RPGpack_sheet_2X.png"));
-
-        textureStairs = SubTexture2D::createFromCoords(
-          spriteSheet, { 7, 6 }, { 128, 128 });
-        textureBarrels = SubTexture2D::createFromCoords(
-          spriteSheet, { 8, 2 }, { 128, 128 });
-        textureTree = SubTexture2D::createFromCoords(
-          spriteSheet, { 2, 1 }, { 128, 128 }, { 1, 2 });
 
         FramebufferSpecification fbSpec;
         fbSpec.width = 1280;
         fbSpec.height = 720;
         framebuffer = Framebuffer::create(fbSpec);
+
+        // Scene
+        activeScene = createRef<Scene>();
+
+        squareEntity = activeScene->createEntity();
+        activeScene->reg().emplace<TransformComponent>(squareEntity);
+        activeScene->reg().emplace<SpriteRendererComponent>(
+          squareEntity, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
     }
 
     void EditorLayer::onDetach()
@@ -135,14 +126,6 @@ namespace Kaydee {
     void EditorLayer::onUpdate(Timestep ts)
     {
         KD_PROFILE_FUNCTION();
-        timestep = ts.getMilliseconds();
-        fps = (int)ts.getMilliseconds() ? 1000 / (int)ts.getMilliseconds() : 0;
-        float iterationX = ts.getMilliseconds() * 0.01f * quad1Pos * quad1PosX;
-        float iterationY = ts.getMilliseconds() * 0.01f * quad1Pos * quad1PosY;
-        elapsedTimeX += iterationX;
-        elapsedTimeY += iterationY;
-
-        elapsedTimeColor += ts.getMilliseconds() * 0.01f * colorSpeed * 0.1f;
 
         //------------
         // Update
@@ -158,60 +141,54 @@ namespace Kaydee {
         // Reset stats
         Renderer2D::resetStats();
         {
-            KD_PROFILE_SCOPE("Render Prep");
             framebuffer->bind();
             RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
             RenderCommand::clear();
         }
 
-        {
-            // Generate tiles
-            KD_PROFILE_SCOPE("Draw Spritesheet");
-            Renderer2D::beginScene(cameraController.getCamera());
+        // Scene
+        Renderer2D::beginScene(cameraController.getCamera());
+        
+        // Update current scene
+        activeScene->onUpdate(ts);
+        
+        Renderer2D::endScene();
 
-            Quad2DProperties quadProps;
-            // quadProps.texture = spriteSheet;
-            quadProps.subTexture = textureStairs;
-            quadProps.position.z = 0.5f;
-            Renderer2D::drawQuad(&quadProps);
-
-            quadProps.subTexture = textureBarrels;
-            quadProps.position.x = 1.0f;
-            quadProps.position.z = 0.5f;
-            Renderer2D::drawQuad(&quadProps);
-
-            quadProps.subTexture = textureTree;
-            quadProps.position.x = 2.0f;
-            quadProps.position.z = 0.5f;
-            quadProps.scale.y = 2;
-            Renderer2D::drawQuad(&quadProps);
-
-            Renderer2D::endScene();
-            framebuffer->unbind();
-        }
+        framebuffer->unbind();
     }
 
     void EditorLayer::onImGuiRender()
     {
         ImGuiDocking();
 
+        // ----------
+        // Statistics
+        // ----------
         ImGui::Begin("Statistics");
-        auto stats = Kaydee::Renderer2D::getStats();
+        auto stats = Renderer2D::getStats();
         ImGui::Text("Renderer2D Stats:");
         ImGui::Text("Draw Calls: %d", stats.drawCalls);
         ImGui::Text("Quads: %d", stats.quadCount);
         ImGui::Text("Vertices: %d", stats.getTotalVertexCount());
         ImGui::Text("Indices: %d", stats.getTotalIndexCount());
+
+        auto& squareColor = activeScene->reg().get<SpriteRendererComponent>(squareEntity).color;
+
+        ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
         ImGui::End();
 
+        // ----------
+        // Viewport
+        // ----------
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
         ImGui::Begin("Viewport");
 
         if ((viewportFocused = ImGui::IsWindowFocused())) {
-            Application::get().getImGuiLayer()->setBlockEvents(!viewportFocused);
+            Application::get().getImGuiLayer()->setBlockEvents(
+              !viewportFocused);
         }
 
-        cameraController.setEnableZooming(ImGui::IsWindowHovered()) ;
+        cameraController.setEnableZooming(ImGui::IsWindowHovered());
 
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
@@ -231,7 +208,7 @@ namespace Kaydee {
         ImGui::PopStyleVar();
     }
 
-    void EditorLayer::onEvent(Kaydee::Event& e)
+    void EditorLayer::onEvent(Event& e)
     {
         cameraController.onEvent(e);
     }

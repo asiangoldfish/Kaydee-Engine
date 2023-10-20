@@ -204,7 +204,9 @@ namespace Kaydee {
         glm::vec2 texCoords[4];
         ref<Texture2D> texture;
         if (properties->subTexture) {
-            memcpy(texCoords, properties->subTexture->getTexCoords(), sizeof(glm::vec2) * 4);
+            memcpy(texCoords,
+                   properties->subTexture->getTexCoords(),
+                   sizeof(glm::vec2) * 4);
             texture = properties->subTexture->getTexture();
         } else {
             texCoords[0] = { 0.0f, 0.0f }; // 1. bottom left
@@ -241,15 +243,19 @@ namespace Kaydee {
         // Transformation
         // --------
         // Translate
-        glm::mat4 transform =
-          glm::translate(glm::mat4(1.0f), properties->position);
+        glm::mat4 transform;
+        if (properties->transform == glm::mat4(1.0f)) {
+            transform = properties->transform;
+        } else {
+            transform = glm::translate(glm::mat4(1.0f), properties->position);
 
-        // Rotate
-        transform =
-          glm::rotate(transform, properties->rotation, { 0.0f, 0.0f, 1.0f });
+            // Rotate
+            transform = glm::rotate(
+              transform, properties->rotation, { 0.0f, 0.0f, 1.0f });
 
-        // Scale
-        transform = glm::scale(transform, properties->scale);
+            // Scale
+            transform = glm::scale(transform, properties->scale);
+        }
 
         for (int i = 0; i < 4; i++) {
             contextData.quadVertexBufferPtr->position =

@@ -75,11 +75,27 @@ namespace Kaydee {
                 auto& [transform, sprite] =
                   group.get<TransformComponent, SpriteRendererComponent>(
                     entity);
-                Quad2DProperties props = { transform, sprite.color };
-                Renderer2D::drawQuad(&props);
+                Renderer2D::drawQuad(&Quad2DProperties{ transform, sprite.color });
             }
 
             Renderer2D::endScene();
         }
     }
+
+    void Scene::onViewportResize(uint32_t width, uint32_t height)
+    {
+        viewportWidth = width;
+        viewportHeight = height;
+
+        // Resize our non-FixedAspectRatio cameras
+        auto view = registry.view<CameraComponent>();
+        // Try to find the main camera
+        for (auto entity : view) {
+            auto& cameraComponent = view.get<CameraComponent>(entity);
+            if (!cameraComponent.fixedAspectRatio) {
+                cameraComponent.camera.setViewportSize(width, height);
+            }
+        }
+    }
+
 }

@@ -9,14 +9,17 @@ namespace Kaydee {
     class Camera
     {
     public:
+        Camera() = default;
         Camera(const glm::mat4& projection)
           : projection(projection)
         {
         }
 
+        virtual ~Camera() = default;
+
         const glm::mat4& getProjection() const { return projection; }
 
-    private:
-        glm::mat4 projection;
+    protected:
+        glm::mat4 projection{ 1.0f };
     };
 }

@@ -4,9 +4,10 @@
  * All components live under this file
  */
 
-#include "Renderer/Camera.h"
+#include "SceneCamera.h"
 
 #include <glm/glm.hpp>
+#include <string>
 
 namespace Kaydee {
     struct TagComponent
@@ -50,14 +51,12 @@ namespace Kaydee {
 
     struct CameraComponent
     {
-        Camera camera;
-        bool primary = true; // TODO: Think about moving to scene
+        SceneCamera camera;
+        bool primary = true;          // TODO: Think about moving to scene
+        bool fixedAspectRatio = true; // If true, then this will not change if
+                                      // the game viewport changes
 
         CameraComponent() = default;
         CameraComponent(const CameraComponent&) = default;
-        CameraComponent(const glm::mat4& projection)
-          : camera(projection)
-        {
-        }
     };
 }

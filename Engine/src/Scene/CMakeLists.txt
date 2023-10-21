@@ -1,9 +1,10 @@
 project(scene)
 
 add_library(${PROJECT_NAME} STATIC
-	Scene.h Scene.cpp
+	Scene.h			Scene.cpp
 	Components.h
-	Entity.h Entity.cpp
+	Entity.h		Entity.cpp
+	SceneCamera.h	SceneCamera.cpp
 )
 
 target_include_directories(${PROJECT_NAME} 

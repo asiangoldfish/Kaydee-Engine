@@ -120,7 +120,8 @@ namespace Kaydee {
 
         squareEntity = square;
         cameraEntity = activeScene->createEntity("Camera Entity");
-        cameraEntity.addComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+        auto& camera = cameraEntity.addComponent<CameraComponent>();
+        camera.fixedAspectRatio = false;
     }
 
     void EditorLayer::onDetach()
@@ -134,8 +135,10 @@ namespace Kaydee {
 
         //------------
         // Update
-        //------------
-        // Camera
+
+        // activeScene->onViewportResize((uint32_t)viewportSize.x,
+        // viewportSize.y);
+        //  Camera
         if (viewportFocused) {
             cameraController.onUpdate(ts);
         }
@@ -170,21 +173,35 @@ namespace Kaydee {
         // Statistics
         // ----------
         ImGui::Begin("Statistics");
-        auto stats = Renderer2D::getStats();
-        ImGui::Text("Renderer2D Stats:");
-        ImGui::Text("Draw Calls: %d", stats.drawCalls);
-        ImGui::Text("Quads: %d", stats.quadCount);
-        ImGui::Text("Vertices: %d", stats.getTotalVertexCount());
-        ImGui::Text("Indices: %d", stats.getTotalIndexCount());
+        {
+            auto stats = Renderer2D::getStats();
+            ImGui::Text("Renderer2D Stats:");
+            ImGui::Text("Draw Calls: %d", stats.drawCalls);
+            ImGui::Text("Quads: %d", stats.quadCount);
+            ImGui::Text("Vertices: %d", stats.getTotalVertexCount());
+            ImGui::Text("Indices: %d", stats.getTotalIndexCount());
 
-        if (squareEntity) {
-            ImGui::Separator();
-            ImGui::Text("%s", squareEntity.getComponent<TagComponent>().tag.c_str());
-            auto& squareColor =
-              squareEntity.getComponent<SpriteRendererComponent>().color;
+            if (squareEntity) {
+                ImGui::Separator();
+                ImGui::Text(
+                  "%s", squareEntity.getComponent<TagComponent>().tag.c_str());
+                auto& squareColor =
+                  squareEntity.getComponent<SpriteRendererComponent>().color;
 
-            ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
-            ImGui::Separator();
+                ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+                ImGui::Separator();
+            }
+            ImGui::End();
+
+            ImGui::Begin("Inspector");
+            {
+                auto& camera =
+                  cameraEntity.getComponent<CameraComponent>().camera;
+                float orthoSize = camera.getOrthographicSize();
+                if (ImGui::DragFloat("Camera Ortho Size", &orthoSize)) {
+                    camera.setOrthographicSize(orthoSize);
+                }
+            }
         }
         ImGui::End();
 
@@ -193,28 +210,32 @@ namespace Kaydee {
         // ----------
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
         ImGui::Begin("Viewport");
+        {
+            if ((viewportFocused = ImGui::IsWindowFocused())) {
+                Application::get().getImGuiLayer()->setBlockEvents(
+                  !viewportFocused);
+            }
 
-        if ((viewportFocused = ImGui::IsWindowFocused())) {
-            Application::get().getImGuiLayer()->setBlockEvents(
-              !viewportFocused);
+            cameraController.setEnableZooming(ImGui::IsWindowHovered());
+
+            ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+
+            // If ImGUI viewport's size changes, then we recreate the
+            // framebuffer.
+            if (viewportSize != *((glm::vec2*)&viewportPanelSize)) {
+                viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+                cameraController.onResize(viewportPanelSize.x,
+                                          viewportPanelSize.y);
+                activeScene->onViewportResize((uint32_t)viewportSize.x,
+                                              (uint32_t)viewportSize.y);
+            }
+
+            static auto textureID = framebuffer->getColorAttachmentRendererID();
+            ImGui::Image((void*)textureID,
+                         ImVec2{ viewportSize.x, viewportSize.y },
+                         ImVec2{ 0, 1 },
+                         ImVec2{ 1, 0 });
         }
-
-        cameraController.setEnableZooming(ImGui::IsWindowHovered());
-
-        ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-
-        // If ImGUI viewport's size changes, then we recreate the framebuffer.
-        if (viewportSize != *((glm::vec2*)&viewportPanelSize)) {
-            viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-
-            cameraController.onResize(viewportPanelSize.x, viewportPanelSize.y);
-        }
-
-        static auto textureID = framebuffer->getColorAttachmentRendererID();
-        ImGui::Image((void*)textureID,
-                     ImVec2{ viewportSize.x, viewportSize.y },
-                     ImVec2{ 0, 1 },
-                     ImVec2{ 1, 0 });
         ImGui::End();
         ImGui::PopStyleVar();
     }

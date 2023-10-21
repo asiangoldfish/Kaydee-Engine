@@ -19,6 +19,8 @@ namespace Kaydee {
 
     private:
         friend class Entity;
+        friend class SceneHierarchyPanel;
+
         entt::registry registry;
 
         uint32_t viewportWidth = 0, viewportHeight = 0;

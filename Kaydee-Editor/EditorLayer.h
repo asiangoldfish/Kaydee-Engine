@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Kaydee/Kaydee.h"
+#include "SceneHierarchyPanel.h"
 
 namespace Kaydee {
     /**
@@ -29,5 +30,8 @@ namespace Kaydee {
         Kaydee::ref<Kaydee::Framebuffer> framebuffer;
         glm::vec2 viewportSize = { 0.0f, 0.0f };
         bool viewportFocused = false;
+
+        // Panels
+        SceneHierarchyPanel sceneHierarchyPanel;
     };
 }

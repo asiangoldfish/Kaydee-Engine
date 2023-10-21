@@ -53,6 +53,18 @@ namespace Kaydee {
         }
 
         operator bool() const { return entityHandle != entt::null; }
+        operator uint32_t() const { return (uint32_t)entityHandle; }
+
+        // Compare two entities
+        bool operator==(const Entity& other) const
+        {
+            return entityHandle == other.entityHandle && scene == other.scene;
+        }
+
+        bool operator!=(const Entity& other) const
+        {
+            return !(*this == other);
+        }
 
     private:
         entt::entity entityHandle = entt::null;

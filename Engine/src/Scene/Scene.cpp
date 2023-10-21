@@ -19,7 +19,7 @@ namespace Kaydee {
         Entity entity = { registry.create(), this };
         entity.addComponent<TransformComponent>();
         auto& tag = entity.addComponent<TagComponent>();
-        tag.tag = name.empty() ? "Entity" : name;
+        tag.tag = name.empty() ? "Unnamed Entity" : name;
 
         return entity;
     }

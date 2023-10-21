@@ -19,7 +19,8 @@ add_library(${MODULE_NAME} STATIC
     ${MODULE_VENDOR}/stb/stb_image.h                        ${MODULE_VENDOR}/stb/stb_image.cpp
 )
     
-target_include_directories(${MODULE_NAME} PRIVATE
+target_include_directories(${MODULE_NAME} PUBLIC
+    include
     src
     vendor
 )

@@ -156,9 +156,10 @@ namespace Kaydee {
             
             }
         };
-        //secondCameraEntity = activeScene->createEntity("Second camera entity");
+        secondCameraEntity = activeScene->createEntity("Second camera entity");
         firstCameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
 
+        sceneHierarchyPanel.setContext(activeScene);
     }
 
     void EditorLayer::onDetach()
@@ -205,6 +206,8 @@ namespace Kaydee {
     void EditorLayer::onImGuiRender()
     {
         ImGuiDocking();
+
+        sceneHierarchyPanel.onImGuiRender();
 
         // ----------
         // Statistics

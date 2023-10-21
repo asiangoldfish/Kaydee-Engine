@@ -23,7 +23,8 @@ namespace Kaydee {
         Kaydee::OrthographicCameraController cameraController;
         ref<Scene> activeScene;
         Entity squareEntity;
-        Entity cameraEntity;
+        Entity firstCameraEntity;
+        Entity secondCameraEntity;
 
         Kaydee::ref<Kaydee::Framebuffer> framebuffer;
         glm::vec2 viewportSize = { 0.0f, 0.0f };

@@ -119,9 +119,46 @@ namespace Kaydee {
           glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 
         squareEntity = square;
-        cameraEntity = activeScene->createEntity("Camera Entity");
-        auto& camera = cameraEntity.addComponent<CameraComponent>();
+        firstCameraEntity = activeScene->createEntity("First Camera Entity");
+        auto& camera = firstCameraEntity.addComponent<CameraComponent>();
         camera.fixedAspectRatio = false;
+
+        
+        class CameraController : public ScriptableEntity
+        {
+        public:
+            void onCreate()
+            {
+
+            }
+
+            void onUpdate(Timestep ts)
+            { 
+                auto& transform = getComponent<TransformComponent>().transform;
+                float speed = 5.0f;
+
+                if (Input::isKeyPressed(KD_KEY_A)) {
+                    transform[3][0] -= speed * ts;
+                }
+                if (Input::isKeyPressed(KD_KEY_D)) {
+                    transform[3][0] += speed * ts;
+                }
+                if (Input::isKeyPressed(KD_KEY_W)) {
+                    transform[3][1] += speed * ts;
+                }
+                if (Input::isKeyPressed(KD_KEY_S)) {
+                    transform[3][1] -= speed * ts;
+                }
+            }
+
+            void onDestroy()
+            {
+            
+            }
+        };
+        //secondCameraEntity = activeScene->createEntity("Second camera entity");
+        firstCameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
+
     }
 
     void EditorLayer::onDetach()
@@ -196,11 +233,17 @@ namespace Kaydee {
             ImGui::Begin("Inspector");
             {
                 auto& camera =
-                  cameraEntity.getComponent<CameraComponent>().camera;
+                  firstCameraEntity.getComponent<CameraComponent>().camera;
                 float orthoSize = camera.getOrthographicSize();
                 if (ImGui::DragFloat("Camera Ortho Size", &orthoSize)) {
                     camera.setOrthographicSize(orthoSize);
                 }
+
+                glm::mat4& cameraTransform =
+                  firstCameraEntity.getComponent<TransformComponent>()
+                    .transform;
+                ImGui::DragFloat3("Camera Transform",
+                                  glm::value_ptr(cameraTransform[3]));
             }
         }
         ImGui::End();

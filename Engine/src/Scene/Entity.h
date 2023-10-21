@@ -56,6 +56,6 @@ namespace Kaydee {
 
     private:
         entt::entity entityHandle = entt::null;
-        Scene* scene;
+        Scene* scene = nullptr;
     };
 }

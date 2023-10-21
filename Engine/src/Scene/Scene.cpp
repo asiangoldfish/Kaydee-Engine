@@ -10,28 +10,7 @@
 
 namespace Kaydee {
 
-    Scene::Scene()
-    {
-#if ENTT_EXAMPLE_CODE
-        entt::entity entity = registry.create();
-        registry.emplace<TransformComponent>(entity, glm::mat4(1.0f));
-
-        auto view = registry.view<TransformComponent>();
-        for (auto entity : view) {
-            TransformComponent& transform =
-              view.get<TransformComponent>(entity);
-        }
-
-        auto group =
-          registry.group<TransformComponent>(entt::get<MeshComponent>);
-        for (auto entity : group) {
-            auto& [transform, mesh] =
-              group.get<TransformComponent, MeshComponent>(entity);
-
-            // Renderer::submit(mesh, transform
-        }
-#endif
-    }
+    Scene::Scene() {}
 
     Scene::~Scene() {}
 
@@ -47,14 +26,34 @@ namespace Kaydee {
 
     void Scene::onUpdate(Timestep ts)
     {
+        // ------------
+        // Update scripts
+        // ------------
+        // Simulate creating and destroying instances
+        {
+            registry.view<NativeScriptComponent>().each(
+              [=](auto entity, auto& nsc) {
+                  // TODO: Move to Scene::onScenePlay(...)
+                  if (!nsc.instance) {
+                      nsc.instance = nsc.instantiateScript();
+                      nsc.instance->entity = Entity{ entity, this };
+                      nsc.instance->onCreate();
+                  }
+
+                  nsc.instance->onUpdate(ts);
+              });
+        }
+
+        // ------------
         // Render sprites
+        // ------------
         Camera* mainCamera = nullptr;
         glm::mat4* cameraTransform = nullptr;
         {
             auto view = registry.view<CameraComponent, TransformComponent>();
             // Try to find the main camera
             for (auto entity : view) {
-                auto& [camera, transform] =
+                auto [camera, transform] =
                   registry.get<CameraComponent, TransformComponent>(entity);
 
                 if (camera.primary) {
@@ -75,7 +74,8 @@ namespace Kaydee {
                 auto& [transform, sprite] =
                   group.get<TransformComponent, SpriteRendererComponent>(
                     entity);
-                Renderer2D::drawQuad(&Quad2DProperties{ transform, sprite.color });
+                Renderer2D::drawQuad(
+                  &Quad2DProperties{ transform, sprite.color });
             }
 
             Renderer2D::endScene();

@@ -5,6 +5,7 @@ add_library(${PROJECT_NAME} STATIC
 	Components.h
 	Entity.h		Entity.cpp
 	SceneCamera.h	SceneCamera.cpp
+	ScriptableEntity.h
 )
 
 target_include_directories(${PROJECT_NAME} 

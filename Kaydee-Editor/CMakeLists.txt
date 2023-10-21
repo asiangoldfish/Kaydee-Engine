@@ -5,6 +5,14 @@ add_executable(${MODULE_NAME}
     KaydeeEditorApp.cpp
 )
 
+#############
+## Modules
+#############
+add_subdirectory(src)
+
+#############
+## Linking
+#############
 target_include_directories(${MODULE_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/Engine/include
     ${CMAKE_SOURCE_DIR}/Engine/src

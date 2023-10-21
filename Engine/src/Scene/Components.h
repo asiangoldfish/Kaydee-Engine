@@ -5,6 +5,7 @@
  */
 
 #include "SceneCamera.h"
+#include "ScriptableEntity.h"
 
 #include <glm/glm.hpp>
 #include <string>
@@ -58,5 +59,36 @@ namespace Kaydee {
 
         CameraComponent() = default;
         CameraComponent(const CameraComponent&) = default;
+    };
+
+    /**
+     * @brief Support for native scripting with C++
+     */
+    struct NativeScriptComponent
+    {
+        /**
+         * @brief When the runtime begins, the ScriptableEntity should be
+         * instantiated.
+         */
+        ScriptableEntity* instance = nullptr;
+
+        // Memory management handled by the engine
+        ScriptableEntity* (*instantiateScript)();
+        void (*destroyScript)(NativeScriptComponent*);
+
+        template<typename T>
+        void bind()
+        {
+            // Memory management handled by the engine
+            instantiateScript = []() {
+                return static_cast<ScriptableEntity*>(new T());
+            };
+            destroyScript = [](NativeScriptComponent* nsc) {
+                if (nsc->instance) {
+                    delete nsc->instance;
+                    nsc->instance = nullptr;
+                }
+            };
+        }
     };
 }

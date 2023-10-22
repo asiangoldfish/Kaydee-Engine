@@ -18,6 +18,12 @@ namespace Kaydee {
     private:
         void drawEntityNode(Entity entity);
 
+        /**
+         * @brief Draw an entity's properties
+         * @param entity Entity to display and manipulate
+        */
+        void drawComponents(Entity entity);
+
     private:
         ref<Scene> context;
         Entity selectionContext;

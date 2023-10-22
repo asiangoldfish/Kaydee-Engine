@@ -1,8 +1,13 @@
 #include "SceneHierarchyPanel.h"
+#include "SceneHierarchyPanel.h"
 
 #include <imgui.h>
 
 #include "Scene/Components.h"
+
+#include <glm/gtc/type_ptr.hpp>
+
+#include <typeinfo>
 
 namespace Kaydee {
     SceneHierarchyPanel::SceneHierarchyPanel(const ref<Scene>& context)
@@ -21,15 +26,24 @@ namespace Kaydee {
 
         context->registry.each([&](auto entityID) {
             Entity entity{ entityID, context.get() };
-
             drawEntityNode(entity);
-
-            /*
-            auto& tc = entity.getComponent<TagComponent>();
-            ImGui::Text("%s", tc.tag.c_str());
-            */
         });
 
+        // Deselect nodes
+        if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+        {
+            selectionContext = {};
+        }
+
+        ImGui::End();
+
+        // Property panel for entites
+        ImGui::Begin("Properties");
+        {
+            if (selectionContext) {
+                drawComponents(selectionContext);
+            }
+        }
         ImGui::End();
     }
 
@@ -39,7 +53,7 @@ namespace Kaydee {
 
         ImGuiTreeNodeFlags flags =
           ((selectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) |
-          ImGuiTreeNodeFlags_OpenOnArrow;
+          ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
         bool opened = ImGui::TreeNodeEx(
           (void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
 
@@ -56,6 +70,35 @@ namespace Kaydee {
                 ImGui::TreePop();
             }
             ImGui::TreePop();
+        }
+    }
+
+    void Kaydee::SceneHierarchyPanel::drawComponents(Entity entity)
+    {
+        if (entity.hasComponent<TagComponent>()) {
+            auto& tag = entity.getComponent<TagComponent>().tag;
+
+            // Example: Camera0
+
+            char buffer[256];
+            memset(buffer, 0, sizeof(buffer));
+            strcpy_s(buffer, sizeof(buffer), tag.c_str());
+            if (ImGui::InputText("Tag", buffer, sizeof(buffer))) {
+                tag = std::string(buffer);
+            }
+        }
+
+        if (entity.hasComponent<TransformComponent>()) {
+            if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(),
+                                  ImGuiTreeNodeFlags_DefaultOpen,
+                                  "Transform")) {
+                auto& transform =
+                  entity.getComponent<TransformComponent>().transform;
+                ImGui::DragFloat3(
+                  "Position", glm::value_ptr(transform[3]), 0.1f);
+
+                ImGui::TreePop();
+            }
         }
     }
 }

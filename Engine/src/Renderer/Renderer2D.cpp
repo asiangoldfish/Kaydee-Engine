@@ -259,7 +259,7 @@ namespace Kaydee {
         // --------
         // Translate
         glm::mat4 transform;
-        if (properties->transform == glm::mat4(1.0f)) {
+        if (properties->transform != glm::mat4(1.0f)) {
             transform = properties->transform;
         } else {
             transform = glm::translate(glm::mat4(1.0f), properties->position);

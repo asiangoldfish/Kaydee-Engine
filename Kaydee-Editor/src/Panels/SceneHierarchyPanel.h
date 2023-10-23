@@ -15,6 +15,11 @@ namespace Kaydee {
 
         void onImGuiRender();
 
+        template<class T>
+        void drawComponent(const std::string& label,
+                           Entity& entity, 
+                           std::function<void(Entity& entity)> func);
+
     private:
         void drawEntityNode(Entity entity);
 

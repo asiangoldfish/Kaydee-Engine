@@ -122,7 +122,7 @@ namespace Kaydee {
         auto redSquare = activeScene->createEntity("Red Square");
         redSquare.addComponent<SpriteRendererComponent>(glm::vec4({1.0f, 0.0f, 0.0f, 1.0f}));
 
-        firstCameraEntity = activeScene->createEntity("First Camera Entity");
+        firstCameraEntity = activeScene->createEntity("Scene Camera A");
         auto& camera = firstCameraEntity.addComponent<CameraComponent>();
         camera.fixedAspectRatio = false;
 
@@ -152,7 +152,7 @@ namespace Kaydee {
 
             void onDestroy() {}
         };
-        secondCameraEntity = activeScene->createEntity("Second camera entity");
+        secondCameraEntity = activeScene->createEntity("Scene Camera B");
         secondCameraEntity.addComponent<CameraComponent>();
         firstCameraEntity.addComponent<NativeScriptComponent>()
           .bind<CameraController>();
@@ -210,7 +210,7 @@ namespace Kaydee {
         // ----------
         // Statistics
         // ----------
-        ImGui::Begin("Statistics");
+        ImGui::Begin("Stats");
         {
             auto stats = Renderer2D::getStats();
             ImGui::Text("Renderer2D Stats:");
@@ -218,34 +218,6 @@ namespace Kaydee {
             ImGui::Text("Quads: %d", stats.quadCount);
             ImGui::Text("Vertices: %d", stats.getTotalVertexCount());
             ImGui::Text("Indices: %d", stats.getTotalIndexCount());
-
-            if (squareEntity) {
-                ImGui::Separator();
-                ImGui::Text(
-                  "%s", squareEntity.getComponent<TagComponent>().tag.c_str());
-                auto& squareColor =
-                  squareEntity.getComponent<SpriteRendererComponent>().color;
-
-                ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
-                ImGui::Separator();
-            }
-            ImGui::End();
-
-            ImGui::Begin("Inspector");
-            {
-                auto& camera =
-                  firstCameraEntity.getComponent<CameraComponent>().camera;
-                float orthoSize = camera.getOrthographicSize();
-                if (ImGui::DragFloat("Camera Ortho Size", &orthoSize)) {
-                    camera.setOrthographicSize(orthoSize);
-                }
-
-                glm::mat4& cameraTransform =
-                  firstCameraEntity.getComponent<TransformComponent>()
-                    .transform;
-                ImGui::DragFloat3("Camera Transform",
-                                  glm::value_ptr(cameraTransform[3]));
-            }
         }
         ImGui::End();
 

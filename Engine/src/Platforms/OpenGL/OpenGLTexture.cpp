@@ -104,7 +104,7 @@ namespace Kaydee {
     }
     void OpenGLTexture2D::unbind(uint32_t slot) const
     {
-        glBindTextureUnit(slot, rendererID);
+        glBindTextureUnit(slot, 0);
     }
 
     void OpenGLTexture2D::setData(void* data, uint32_t size)

@@ -28,6 +28,10 @@ namespace Kaydee {
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
         (void)io;
+
+        // When clicking on a drag component, user can enter a value
+        io.ConfigDragClickToInputText = true;
+
         io.ConfigFlags |=
           ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
         // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable

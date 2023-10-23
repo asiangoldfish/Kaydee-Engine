@@ -117,23 +117,22 @@ namespace Kaydee {
         Entity square = activeScene->createEntity("Green Square");
         square.addComponent<SpriteRendererComponent>(
           glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
-
         squareEntity = square;
+        
+        auto redSquare = activeScene->createEntity("Red Square");
+        redSquare.addComponent<SpriteRendererComponent>(glm::vec4({1.0f, 0.0f, 0.0f, 1.0f}));
+
         firstCameraEntity = activeScene->createEntity("First Camera Entity");
         auto& camera = firstCameraEntity.addComponent<CameraComponent>();
         camera.fixedAspectRatio = false;
 
-        
         class CameraController : public ScriptableEntity
         {
         public:
-            void onCreate()
-            {
-
-            }
+            void onCreate() {}
 
             void onUpdate(Timestep ts)
-            { 
+            {
                 auto& transform = getComponent<TransformComponent>().transform;
                 float speed = 5.0f;
 
@@ -151,13 +150,12 @@ namespace Kaydee {
                 }
             }
 
-            void onDestroy()
-            {
-            
-            }
+            void onDestroy() {}
         };
         secondCameraEntity = activeScene->createEntity("Second camera entity");
-        firstCameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
+        secondCameraEntity.addComponent<CameraComponent>();
+        firstCameraEntity.addComponent<NativeScriptComponent>()
+          .bind<CameraController>();
 
         sceneHierarchyPanel.setContext(activeScene);
     }

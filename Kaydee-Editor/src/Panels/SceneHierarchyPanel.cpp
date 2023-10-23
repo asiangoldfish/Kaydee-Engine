@@ -1,12 +1,11 @@
 #include "SceneHierarchyPanel.h"
-#include "SceneHierarchyPanel.h"
 
 #include <imgui.h>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Scene/Components.h"
 
-#include <glm/gtc/type_ptr.hpp>
-
+#include <array>
 #include <typeinfo>
 
 namespace Kaydee {
@@ -30,8 +29,7 @@ namespace Kaydee {
         });
 
         // Deselect nodes
-        if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
-        {
+        if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) {
             selectionContext = {};
         }
 
@@ -97,6 +95,94 @@ namespace Kaydee {
                 ImGui::DragFloat3(
                   "Position", glm::value_ptr(transform[3]), 0.1f);
 
+                ImGui::TreePop();
+            }
+        }
+
+        if (entity.hasComponent<CameraComponent>()) {
+            if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(),
+                                  ImGuiTreeNodeFlags_DefaultOpen,
+                                  "Camera")) {
+                auto& cameraComponent = entity.getComponent<CameraComponent>();
+
+                ImGui::Checkbox("Primary", &cameraComponent.primary);
+
+                std::array<std::string, 2> projectionTypeStrings = {
+                    "Perspective", "Orthographic"
+                };
+                std::string currentProjectionTypeString =
+                  projectionTypeStrings[(int)cameraComponent.camera
+                                          .getProjectionType()];
+
+                if (ImGui::BeginCombo("Projection",
+                                      currentProjectionTypeString.c_str())) {
+                    for (int i = 0; i < 2; i++) {
+                        bool isSelected = currentProjectionTypeString ==
+                                          projectionTypeStrings[i];
+
+                        if (ImGui::Selectable(projectionTypeStrings[i].c_str(),
+                                              isSelected)) {
+                            currentProjectionTypeString =
+                              projectionTypeStrings[i];
+                            cameraComponent.camera.setProjectionType(
+                              (SceneCamera::ProjectionType)i);
+                        }
+
+                        if (isSelected) {
+                            ImGui::SetItemDefaultFocus();
+                        }
+                    }
+                    ImGui::EndCombo();
+                }
+
+                if (cameraComponent.camera.getProjectionType() ==
+                    SceneCamera::ProjectionType::Perspective) {
+                    float verticalFOV = glm::degrees(
+                      cameraComponent.camera.getPerspectiveVerticalFOV());
+                    if (ImGui::DragFloat("Vertical FOV", &verticalFOV)) {
+                        cameraComponent.camera.setPerspectiveVerticalFOV(
+                          glm::radians(verticalFOV));
+                    }
+
+                    float perspectiveNear =
+                      cameraComponent.camera.getPerspectiveNearClip();
+                    if (ImGui::DragFloat("Near", &perspectiveNear)) {
+                        cameraComponent.camera.setPerspectiveNearClip(
+                          perspectiveNear);
+                    }
+
+                    float perspectiveFar =
+                      cameraComponent.camera.getPerspectiveFarClip();
+                    if (ImGui::DragFloat("Far", &perspectiveFar)) {
+                        cameraComponent.camera.setPerspectiveFarClip(
+                          perspectiveFar);
+                    }
+                }
+
+                if (cameraComponent.camera.getProjectionType() ==
+                    SceneCamera::ProjectionType::Orthographic) {
+                    float orthoSize =
+                      cameraComponent.camera.getOrthographicSize();
+                    if (ImGui::DragFloat("Size", &orthoSize)) {
+                        cameraComponent.camera.setOrthographicSize(orthoSize);
+                    }
+
+                    float orthoNear =
+                      cameraComponent.camera.getOrthographicNearClip();
+                    if (ImGui::DragFloat("Near", &orthoNear)) {
+                        cameraComponent.camera.setOrthographicNearClip(
+                          orthoNear);
+                    }
+
+                    float orthoFar =
+                      cameraComponent.camera.getOrthographicFarClip();
+                    if (ImGui::DragFloat("Far", &orthoFar)) {
+                        cameraComponent.camera.setOrthographicFarClip(orthoFar);
+                    }
+
+                    ImGui::Checkbox("Fixed Aspect Ratio",
+                                    &cameraComponent.fixedAspectRatio);
+                }
                 ImGui::TreePop();
             }
         }

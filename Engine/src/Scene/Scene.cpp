@@ -92,7 +92,7 @@ namespace Kaydee {
         // Try to find the main camera
         for (auto entity : view) {
             auto& cameraComponent = view.get<CameraComponent>(entity);
-            if (!cameraComponent.fixedAspectRatio) {
+            if (cameraComponent.fixedAspectRatio) {
                 cameraComponent.camera.setViewportSize(width, height);
             }
         }

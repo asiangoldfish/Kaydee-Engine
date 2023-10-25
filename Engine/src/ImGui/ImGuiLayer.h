@@ -11,7 +11,7 @@ namespace Kaydee {
     {
     public:
         ImGuiLayer();
-        ~ImGuiLayer();
+        virtual ~ImGuiLayer();
 
         virtual void onAttach() override;
         virtual void onDetach() override;

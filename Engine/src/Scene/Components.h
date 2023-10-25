@@ -8,6 +8,7 @@
 #include "ScriptableEntity.h"
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <string>
 
 namespace Kaydee {
@@ -25,17 +26,31 @@ namespace Kaydee {
 
     struct TransformComponent
     {
-        glm::mat4 transform{ 1.0f };
+        glm::vec3 translation = { 0.0f, 0.0f, 0.0f };
+        glm::vec3 rotation = { 0.0f, 0.0f, 0.0f };
+        glm::vec3 scale = { 1.0f, 1.0f, 1.0f };
 
         TransformComponent() = default;
         TransformComponent(const TransformComponent&) = default;
-        TransformComponent(const glm::mat4& transform)
-          : transform(transform)
+        TransformComponent(const glm::vec3& translation)
+          : translation(translation)
         {
         }
 
-        operator glm::mat4&() { return transform; }
-        operator const glm::mat4&() const { return transform; }
+        // TODO: implement a way to provide rotation in radians or degrees in
+        // the UI
+        glm::mat4 getTransform() const
+        {
+            // Construct rotation matrix
+            glm::mat4 rotation =
+              glm::rotate(glm::mat4(1.0f), this->rotation.x, { 1, 0, 0 }) *
+              glm::rotate(glm::mat4(1.0f), this->rotation.y, { 0, 1, 0 }) *
+              glm::rotate(glm::mat4(1.0f), this->rotation.z, { 0, 0, 1 });
+
+            // Construct transformation matrix
+            return glm::translate(glm::mat4(1.0f), translation) * rotation *
+                   glm::scale(glm::mat4(1.0f), scale);
+        }
     };
 
     struct SpriteRendererComponent
@@ -59,6 +74,7 @@ namespace Kaydee {
 
         CameraComponent() = default;
         CameraComponent(const CameraComponent&) = default;
+        virtual ~CameraComponent() {}
     };
 
     /**

@@ -118,9 +118,10 @@ namespace Kaydee {
         square.addComponent<SpriteRendererComponent>(
           glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
         squareEntity = square;
-        
+
         auto redSquare = activeScene->createEntity("Red Square");
-        redSquare.addComponent<SpriteRendererComponent>(glm::vec4({1.0f, 0.0f, 0.0f, 1.0f}));
+        redSquare.addComponent<SpriteRendererComponent>(
+          glm::vec4({ 1.0f, 0.0f, 0.0f, 1.0f }));
 
         firstCameraEntity = activeScene->createEntity("Scene Camera A");
         auto& camera = firstCameraEntity.addComponent<CameraComponent>();
@@ -129,28 +130,29 @@ namespace Kaydee {
         class CameraController : public ScriptableEntity
         {
         public:
-            void onCreate() {}
+            void onCreate() override {}
 
-            void onUpdate(Timestep ts)
+            void onUpdate(const Timestep ts) override
             {
-                auto& transform = getComponent<TransformComponent>().transform;
-                float speed = 5.0f;
+                auto& translation =
+                  getComponent<TransformComponent>().translation;
+                constexpr float speed = 5.0f;
 
                 if (Input::isKeyPressed(KD_KEY_A)) {
-                    transform[3][0] -= speed * ts;
+                    translation -= speed * ts;
                 }
                 if (Input::isKeyPressed(KD_KEY_D)) {
-                    transform[3][0] += speed * ts;
+                    translation += speed * ts;
                 }
                 if (Input::isKeyPressed(KD_KEY_W)) {
-                    transform[3][1] += speed * ts;
+                    translation += speed * ts;
                 }
                 if (Input::isKeyPressed(KD_KEY_S)) {
-                    transform[3][1] -= speed * ts;
+                    translation  -= speed * ts;
                 }
             }
 
-            void onDestroy() {}
+            void onDestroy() override {}
         };
         secondCameraEntity = activeScene->createEntity("Scene Camera B");
         secondCameraEntity.addComponent<CameraComponent>();
@@ -165,7 +167,7 @@ namespace Kaydee {
         KD_PROFILE_FUNCTION();
     }
 
-    void EditorLayer::onUpdate(Timestep ts)
+    void EditorLayer::onUpdate(const Timestep ts)
     {
         KD_PROFILE_FUNCTION();
 

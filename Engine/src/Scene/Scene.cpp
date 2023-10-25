@@ -48,7 +48,7 @@ namespace Kaydee {
         // Render sprites
         // ------------
         Camera* mainCamera = nullptr;
-        glm::mat4* cameraTransform = nullptr;
+        glm::mat4* cameraTransform;
         {
             auto view = registry.view<CameraComponent, TransformComponent>();
             // Try to find the main camera
@@ -58,7 +58,7 @@ namespace Kaydee {
 
                 if (camera.primary) {
                     mainCamera = &camera.camera;
-                    cameraTransform = &transform.transform;
+                    cameraTransform = &transform.getTransform();
                     break;
                 }
             }
@@ -75,7 +75,7 @@ namespace Kaydee {
                   group.get<TransformComponent, SpriteRendererComponent>(
                     entity);
                 Renderer2D::drawQuad(
-                  &Quad2DProperties{ transform, sprite.color });
+                  &Quad2DProperties{ transform.getTransform(), sprite.color });
             }
 
             Renderer2D::endScene();

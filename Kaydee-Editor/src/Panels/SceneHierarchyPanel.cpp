@@ -8,6 +8,8 @@
 #include <array>
 #include <typeinfo>
 
+#include "imgui_internal.h"
+
 namespace Kaydee {
     SceneHierarchyPanel::SceneHierarchyPanel(const ref<Scene>& context)
     {
@@ -87,6 +89,103 @@ namespace Kaydee {
         }
     }
 
+    /**
+     * @brief Draw a vec3 control with label on the left-hand side
+     * @param label Label to display
+     * @param values Editable values
+     * @param resetValue Default value
+     * @param columnWidth Width of the column between label and values
+     */
+    static void drawVec3Control(const std::string& label,
+                                glm::vec3& values,
+                                float resetValue = 0.0f,
+                                float columnWidth = 100.0f)
+    {
+        // Add ID to distinguish between multiple ImGui components that invoke
+        // this function
+        ImGui::PushID(label.c_str());
+
+        ImGui::Columns(2);
+
+        ImGui::SetColumnWidth(0, columnWidth);
+        ImGui::Text(label.c_str()); // Label to display
+        ImGui::NextColumn();
+
+        ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+
+        const float lineHeight =
+          GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+        const ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+
+        // --------------
+        // Draw the ImGui elements...
+        // --------------
+        // X
+        // TODO: Create UI library to store these color functions
+        ImGui::PushStyleColor(ImGuiCol_Button,
+                              ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
+                              ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive,
+                              ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+        if (ImGui::Button("X", buttonSize)) {
+            values.x = resetValue;
+        }
+
+        ImGui::PopStyleColor(3);
+
+        ImGui::SameLine();
+        ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::PopItemWidth();
+        ImGui::SameLine();
+
+        // Y
+        ImGui::PushStyleColor(ImGuiCol_Button,
+                              ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
+                              ImVec4{ 0.3f, 0.8f, 0.3f, 1.0f });
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive,
+                              ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f });
+        if (ImGui::Button("Y", buttonSize)) {
+            values.y = resetValue;
+        }
+        ImGui::PopStyleColor(3);
+
+        ImGui::SameLine();
+        ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::PopItemWidth();
+        ImGui::SameLine();
+
+        // Z
+        ImGui::PushStyleColor(ImGuiCol_Button,
+                              ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
+                              ImVec4{ 0.2f, 0.35f, 0.9f, 1.0f });
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive,
+                              ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f });
+        if (ImGui::Button("Z", buttonSize)) {
+            values.z = resetValue;
+        }
+        ImGui::PopStyleColor(3);
+
+        ImGui::SameLine();
+        ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
+        ImGui::PopItemWidth();
+        ImGui::SameLine();
+
+        // Reset all values
+        if (ImGui::Button("Reset", ImVec2{ lineHeight + 25.0f, lineHeight })) {
+            values.x = resetValue;
+            values.y = resetValue;
+            values.z = resetValue;
+        }
+
+        ImGui::Columns(1);
+        ImGui::PopStyleVar(1);
+        ImGui::PopID();
+    }
+
     void Kaydee::SceneHierarchyPanel::drawComponents(Entity entity)
     {
         // Tag component
@@ -95,8 +194,7 @@ namespace Kaydee {
 
             // Example: Camera0
 
-            char buffer[256];
-            memset(buffer, 0, sizeof(buffer));
+            char buffer[256] = {};
             strcpy_s(buffer, sizeof(buffer), tag.c_str());
             if (ImGui::InputText("Tag", buffer, sizeof(buffer))) {
                 tag = std::string(buffer);
@@ -106,9 +204,15 @@ namespace Kaydee {
         // Transform component
         drawComponent<TransformComponent>(
           "Transform", entity, [](Entity entity) {
-              auto& transform =
-                entity.getComponent<TransformComponent>().transform;
-              ImGui::DragFloat3("Position", glm::value_ptr(transform[3]), 0.1f);
+              auto& tc = entity.getComponent<TransformComponent>();
+
+              drawVec3Control("Translation", tc.translation);
+
+              glm::vec3 rotation = glm::degrees(tc.rotation);
+              drawVec3Control("Rotation", rotation);
+              tc.rotation = glm::radians(rotation);
+
+              drawVec3Control("Scale", tc.scale, 1.0f);
           }); // Transform component end
 
         // Camera component
@@ -117,7 +221,7 @@ namespace Kaydee {
 
             ImGui::Checkbox("Primary", &cameraComponent.primary);
 
-            std::array<std::string, 2> projectionTypeStrings = {
+            const std::array<std::string, 2> projectionTypeStrings = {
                 "Perspective", "Orthographic"
             };
             std::string currentProjectionTypeString =
@@ -129,14 +233,14 @@ namespace Kaydee {
             if (ImGui::BeginCombo("##Projection",
                                   currentProjectionTypeString.c_str())) {
                 for (int i = 0; i < 2; i++) {
-                    bool isSelected =
+                    const bool isSelected =
                       currentProjectionTypeString == projectionTypeStrings[i];
 
                     if (ImGui::Selectable(projectionTypeStrings[i].c_str(),
                                           isSelected)) {
                         currentProjectionTypeString = projectionTypeStrings[i];
                         cameraComponent.camera.setProjectionType(
-                          (SceneCamera::ProjectionType)i);
+                          static_cast<SceneCamera::ProjectionType>(i));
                     }
 
                     if (isSelected) {
